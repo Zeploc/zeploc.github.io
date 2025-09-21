@@ -1,7 +1,12 @@
 # Zeploc
 
 ## Sky Ability System
-Basic exposing of various GAS systems to blueprints
+Basic exposing of various GAS systems to blueprints.
+
+Very rudimentary, but exposes various things like default a default actor and character you can inherit from that have the ability system ready to go.
+A few helpers with the ability interface to further manipulate tags.
+
+If you want anything else further exposed, feel free to reach out.
 
 [Sky Ability System Plugin on GitHub](https://github.com/Zeploc/SkyAbilitySystem)
 
