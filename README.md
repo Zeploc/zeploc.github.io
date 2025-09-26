@@ -13,4 +13,4 @@ If you want anything else further exposed, feel free to reach out.
 ## Leveraging the Gameplay Ability System in Unreal Engine
 A New Zealand Game Developer Conference talk I did covering how to use the Gameplay Abiltiy System within unreal engine as base logic and agnostic interaction between actors
 
-[Google Slides View link](https://docs.google.com/presentation/d/1NHN6RFtQfbOz5A8e7vaCzUxRnfqTgGHolVaLywRYQ2I/edit?usp=sharing)
+[Google Slides View link](https://docs.google.com/presentation/d/1FlANFwPM4SdA2SbmdegOQgYRt71j6oNW1Q2gVbmtVZc/edit?usp=sharing)
