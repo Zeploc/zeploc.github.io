@@ -16,4 +16,4 @@ If you want anything else further exposed, feel free to reach out.
 
 For resources covering the talk I did at the New Zealand Game Developer Conference in 2025, covering how to use the Gameplay Abiltiy System within unreal engine as base logic and agnostic interaction between actors, follow the link to the resources page:
 
-<a href="../pages/Resources" class="btn">Presentation Slides & Resources</a>
+<a href="../pages/resources" class="btn">Presentation Slides & Resources</a>
