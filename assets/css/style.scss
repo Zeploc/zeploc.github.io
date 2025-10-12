@@ -1,0 +1,19 @@
+---
+---
+
+@import "{{ site.theme }}";
+
+.main-content h1 { 
+    color: #4c86b6;
+}
+.main-content h2, .main-content h3, .main-content h4, .main-content h5, .main-content h6 { 
+    color: #c9d8e9; 
+    font-weight: bold;
+}
+
+body { background-color: #222629; color: #adc2ca; }
+
+.btn-secondary { 
+    @extend .btn;
+    background-color: rgba(255, 255, 255, 0.1); 
+}
