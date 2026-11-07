@@ -5,7 +5,7 @@
     'spark-simulator', 'spark-boat-builder', 'wellington-digital-twin', 'superhorse', 'httyd', 'kinetic', 'lifeline',
     'retail-simulator', 'underforge', 'sky-engine', 'atlas', 'radar', 'dotzi', 'sky-ability-system', 'gameplay-flow',
     'sky-camera-system', 'university'];
-  const sections = ['top', 'work', 'clients', 'side', 'about', 'talk', 'experience', 'archive', 'made', 'end'];
+  const sections = ['top', 'work', 'clients', 'side', 'plugins', 'about', 'experience', 'archive', 'resources', 'talk', 'end'];
   const isHome = document.body.classList.contains('page-home');
 
   const panel = document.createElement('div');

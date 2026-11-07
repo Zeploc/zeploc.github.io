@@ -1231,6 +1231,7 @@ html:not(.js) .hero-slide + .hero-slide {
 .about__grid {
   display: grid;
   gap: var(--space-xl);
+  align-items: center;
 }
 
 .about__portrait {
@@ -1275,13 +1276,26 @@ html:not(.js) .hero-slide + .hero-slide {
   margin-top: var(--space-xl);
 }
 
+.hats > li {
+  display: flex;
+}
+
 .hat {
   display: flex;
+  flex: 1;
   flex-direction: column;
   padding: var(--space-m);
+  text-decoration: none;
   background: var(--colour-surface);
   border: 1px solid var(--colour-line);
   border-radius: var(--radius-m);
+  transition: border-color var(--duration-fast) var(--ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hat:hover {
+    border-color: var(--colour-blue);
+  }
 }
 
 .hat__label {
@@ -1436,36 +1450,94 @@ html:not(.js) .hero-slide + .hero-slide {
   }
 }
 
-/* === Experience: a sideways timeline with the toolkit right under it, on one screen === */
+/* === Experience: a vertical timeline, with the toolkit beside it on laptops === */
 
-.experience {
-  padding-top: var(--space-3xl);
-  scroll-margin-top: var(--header-height);
-}
-
-.experience .section-head {
-  width: min(100% - 2rem, var(--container));
-  margin-inline: auto;
-  margin-bottom: var(--space-l);
-}
-
-.experience__track {
+.experience__layout {
   display: grid;
-  gap: var(--space-m);
-  width: min(100% - 2rem, var(--container));
-  margin-inline: auto;
+  gap: var(--space-xl);
+}
+
+/* Phones and tablets: the line and logo dots run down the left of the cards. */
+.timeline {
+  position: relative;
+  display: grid;
+  gap: var(--space-l);
+}
+
+.timeline::before,
+.timeline::after {
+  position: absolute;
+  top: 0;
+  left: 1.5rem;
+  width: 2px;
+  content: '';
+  transform: translateX(-1px);
+}
+
+.timeline::before {
+  bottom: 0;
+  background: var(--colour-line-strong);
+}
+
+/* The filled part of the line: experience-timeline.js sets its length. */
+.timeline::after {
+  height: var(--timeline-fill, 0px);
+  background: linear-gradient(var(--colour-green), var(--colour-blue));
+}
+
+.timeline__row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 3rem minmax(0, 1fr);
+  gap: var(--space-s);
+  align-items: start;
+}
+
+.timeline__dot {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  margin-top: var(--space-m);
+  margin-left: 0.125rem;
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--colour-text-muted);
+  background: var(--colour-bg);
+  border: 2px solid var(--colour-line-strong);
+  border-radius: 50%;
+  transition: color var(--duration-fast), background var(--duration-fast), border-color var(--duration-fast), box-shadow var(--duration-fast), transform var(--duration-fast) var(--ease-out);
+}
+
+.timeline__row.is-past .timeline__dot {
+  color: var(--colour-pale);
+  background: var(--colour-surface-raised);
+  border-color: var(--colour-blue);
+}
+
+.timeline__row.is-active .timeline__dot {
+  color: var(--colour-text);
+  background: var(--colour-blue);
+  border-color: var(--colour-pale);
+  box-shadow: 0 0 0 7px rgba(76, 134, 182, 0.28);
+  transform: scale(1.1);
 }
 
 .job {
   position: relative;
   display: flex;
   flex-direction: column;
-  min-height: 15rem;
+  min-height: 13.5rem;
   padding: var(--space-l);
   overflow: hidden;
   background: var(--colour-surface);
   border: 1px solid rgba(76, 134, 182, 0.45);
   border-radius: var(--radius-xl);
+  transform-origin: 50% 0;
+  transition: transform var(--duration-m) var(--ease-out), filter var(--duration-m);
 }
 
 .job--now {
@@ -1477,7 +1549,7 @@ html:not(.js) .hero-slide + .hero-slide {
   position: absolute;
   top: var(--space-m);
   right: var(--space-m);
-  font-size: clamp(3rem, 6vw, 5rem);
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
   font-weight: 700;
   line-height: 0.85;
   letter-spacing: -0.05em;
@@ -1496,8 +1568,7 @@ html:not(.js) .hero-slide + .hero-slide {
 }
 
 .job__role {
-  margin-top: auto;
-  padding-top: var(--space-xl);
+  margin-top: var(--space-xs);
   font-size: var(--text-l);
 }
 
@@ -1532,13 +1603,11 @@ html:not(.js) .hero-slide + .hero-slide {
   color: var(--colour-pale);
 }
 
-.experience__rail {
+.experience__hint {
   display: none;
-}
-
-.experience__bring {
-  width: min(100% - 2rem, var(--container));
-  margin: var(--space-xl) auto 0;
+  margin-top: var(--space-xs);
+  font-size: var(--text-xs);
+  color: var(--colour-text-muted);
 }
 
 /* What I bring: one tile per group, with a small tile for each item (colour shows the group, not a rating). */
@@ -1605,54 +1674,89 @@ html:not(.js) .hero-slide + .hero-slide {
   }
 }
 
-/* Laptops and up: the section pins for one screen. The jobs scroll sideways; the toolkit stays under them. */
+/* Laptops and up: cards on the left of the line, the toolkit pinned on the right. As you scroll,
+   each role glides to the middle of the screen; earlier cards stack at the top once they reach it,
+   and the toolkit lights the skills of the role in view. experience-timeline.js moves the rows. */
 @media (min-width: 64rem) {
-  .bring {
-    grid-template-columns: 1.35fr 1.1fr 0.85fr 1fr;
+  .experience__layout {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    align-items: start;
   }
 
-  .js .experience__stick {
-    position: sticky;
-    top: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    height: 100vh;
-    height: 100svh;
-    padding-top: var(--header-height);
-    overflow: hidden;
+  .timeline::before,
+  .timeline::after {
+    right: 2.25rem;
+    left: auto;
+    transform: translateX(1px);
   }
 
-  .js .experience__track {
-    display: flex;
-    width: auto;
-    padding: 0 max(1rem, (100vw - var(--container)) / 2);
+  .timeline__row {
+    grid-template-columns: minmax(0, 1fr) 4.5rem;
+    gap: 0;
   }
 
-  .js .job {
-    flex: 0 0 25rem;
-    min-height: 0;
-    height: min(34vh, 17.5rem);
-  }
-
-  .js .experience__rail {
-    display: block;
-    width: min(100% - 2rem, var(--container));
-    height: 2px;
+  .timeline__dot {
+    grid-column: 2;
+    grid-row: 1;
+    width: 3rem;
+    height: 3rem;
     margin: var(--space-m) auto 0;
-    background: var(--colour-line);
   }
 
-  .experience__rail-fill {
+  .job__role {
+    padding-right: 5.5rem; /* clear of the outlined year */
+  }
+
+  .job {
+    grid-column: 1;
+    grid-row: 1;
+    box-shadow: 0 -14px 24px -12px rgba(0, 0, 0, 0.7);
+  }
+
+  .timeline__row.is-stacked .timeline__dot {
+    transform: scale(0.62);
+  }
+
+  .timeline__row.is-stacked .job {
+    filter: brightness(calc(1 - var(--depth, 0) * 0.12));
+    transform: scale(calc(1 - var(--depth, 0) * 0.025));
+  }
+
+  .experience__bring {
+    position: sticky;
+    top: calc(var(--header-height) + var(--space-m));
+  }
+
+  .bring {
+    grid-template-columns: 1fr;
+  }
+
+  .experience__bring .bring__group {
+    padding: var(--space-s) var(--space-m);
+  }
+
+  .experience__bring .bring__title {
+    margin-bottom: var(--space-xs);
+  }
+
+  .experience__bring .bring__tile {
+    padding: 0.15rem var(--space-xs);
+    transition: opacity var(--duration-fast), background var(--duration-fast), box-shadow var(--duration-fast), transform var(--duration-fast) var(--ease-out);
+  }
+
+  .js .experience__hint {
     display: block;
-    height: 100%;
-    background: linear-gradient(90deg, var(--colour-blue), var(--colour-blue-bright));
-    transform: scaleX(0);
-    transform-origin: left;
   }
 
-  .js .experience__bring {
-    margin-top: var(--space-l);
+  /* Tiles the role in view didn't use fade back; the ones it did use light up in their group's colour. */
+  .bring.is-filtering .bring__tile {
+    opacity: 0.38;
+  }
+
+  .bring.is-filtering .bring__tile.is-lit {
+    opacity: 1;
+    background: color-mix(in srgb, var(--group-colour) 22%, transparent);
+    box-shadow: 0 0 0 1px var(--group-colour);
   }
 }
 
@@ -2039,6 +2143,41 @@ html:not(.js) .hero-slide + .hero-slide {
   .made__half--theirs {
     border-top: 0;
     border-left: 1px dashed var(--colour-line);
+  }
+}
+
+/* Resources: the talk sits straight under the heading, with the recommended list under it in one panel. */
+.section-head + .talk {
+  margin-top: 0;
+}
+
+.made--single {
+  margin-top: var(--space-l);
+}
+
+.made--single .made__half--theirs {
+  border-top: 0;
+}
+
+@media (min-width: 64rem) {
+  .made--single {
+    grid-template-columns: 1fr;
+  }
+
+  .made--single .made__half--theirs {
+    border-left: 0;
+  }
+
+  .made--single .made__list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .made--single .made-item {
+    grid-template-columns: 2.75rem 1fr;
+  }
+
+  .made--single .made-item__go {
+    display: none;
   }
 }
 
