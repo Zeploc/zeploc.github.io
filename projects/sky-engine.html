@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Sky Engine — Alex Coultas, Game Engineer</title>
+  <meta name="description" content="My own game engine and editor in C++, built to learn how engines work from the inside. A Windows engine DLL powers an ImGui editor, a standalone game…">
+  <meta name="theme-color" content="#15181b">
+  <meta property="og:title" content="Sky Engine — Alex Coultas, Game Engineer">
+  <meta property="og:description" content="My own game engine and editor in C++, built to learn how engines work from the inside. A Windows engine DLL powers an ImGui editor, a standalone game…">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://zeploc.github.io/projects/sky-engine.html">
+  <meta property="og:site_name" content="Alex Coultas">
+  <meta property="og:image" content="https://zeploc.github.io/assets/img/previews/sky-engine.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="The Sky Engine editor">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@AlexCoultas">
+  <link rel="canonical" href="https://zeploc.github.io/projects/sky-engine.html">
+  <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/css/tokens.css">
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/layout.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body class="page-project">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header" data-site-header>
+  <div class="site-header__inner">
+    <a class="site-header__brand" href="../index.html">Alex Coultas</a>
+    <div class="site-header__actions" data-header-actions>
+      <a class="header-button header-button--cv" href="../assets/docs/alex-coultas-cv.pdf" target="_blank" rel="noopener">CV</a>
+    </div>
+    <nav class="site-nav" aria-label="Main">
+      <ul class="site-nav__list" data-site-nav>
+          <li><a class="site-nav__link" href="../index.html#work">Work</a></li>
+          <li><a class="site-nav__link" href="../index.html#clients">Clients</a></li>
+          <li><a class="site-nav__link" href="../index.html#side">Side projects</a></li>
+          <li><a class="site-nav__link" href="../index.html#about">About</a></li>
+          <li><a class="site-nav__link" href="../index.html#experience">Experience</a></li>
+          <li><a class="site-nav__link" href="../index.html#archive">Archive</a></li>
+          <li><a class="site-nav__link" href="../index.html#made">Made &amp; found</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="site-header__progress" aria-hidden="true"><span class="site-header__progress-fill" data-scroll-progress></span></div>
+</header>
+<main id="main" class="project">
+  <div class="project-hero"><img class="project-hero__image" src="../assets/img/sky-engine/editor-1280.webp" srcset="../assets/img/sky-engine/editor-640.webp 640w, ../assets/img/sky-engine/editor-1280.webp 1280w, ../assets/img/sky-engine/editor-1917.webp 1917w" sizes="100vw" width="1917" height="1108" alt="The Sky Engine editor with a scene, entity outliner, properties panel and content browser" decoding="async" fetchpriority="high"></div>
+  <div class="project__body">
+    <a class="back-link" href="../index.html#work">← All work</a>
+    <p class="kicker">Project · Personal project · C++</p>
+    <h1 class="project__title">Sky Engine</h1>
+    <p class="project__lead">My own game engine and editor in C++, built to learn how engines work from the inside. A Windows engine DLL powers an ImGui editor, a standalone game runtime and a game module that hot-reloads in the editor. OpenGL is fully supported, and a Vulkan back end is in development.</p>
+    <dl class="facts"><div class="facts__item"><dt>Type</dt><dd>Personal project</dd></div>
+<div class="facts__item"><dt>Language</dt><dd>C++20</dd></div>
+<div class="facts__item"><dt>Graphics</dt><dd>OpenGL · Vulkan in progress</dd></div>
+<div class="facts__item"><dt>Since</dt><dd>November 2018</dd></div>
+<div class="facts__item"><dt>Build</dt><dd>Premake · Visual Studio</dd></div></dl>
+    <div class="project-single"><h2 class="label">What it does</h2><ul class="did-list"><li>Platform, window and graphics API abstraction</li><li>Macro-based reflection for serialisation and editor inspection</li><li>An asset manager that scans, then loads assets only when needed</li><li>Entities and components, with a perspective and orthographic camera</li><li>Typed materials whose shader parameters appear in the editor automatically</li><li>Configs editable in the editor, with hot reload</li></ul></div>
+    <section class="project-section reveal"><h2 class="label">Showcase</h2><div class="video-grid"><figure class="video-card video-card--pending">
+          <span class="video-card__media"><img class="video-card__poster" src="../assets/img/sky-engine/showcase-1-1280.webp" srcset="../assets/img/sky-engine/showcase-1-640.webp 640w, ../assets/img/sky-engine/showcase-1-1280.webp 1280w, ../assets/img/sky-engine/showcase-1-1920.webp 1920w" sizes="(min-width: 64rem) 30vw, 100vw" width="1920" height="1080" alt="" loading="lazy" decoding="async"><span class="video-card__badge">Video coming soon</span></span>
+          <figcaption class="video-card__title">Sky Editor showcase</figcaption></figure></div></section><section class="project-section reveal"><h2 class="label">The editor</h2><ul class="feature-grid"><li class="feature"><h3 class="feature__title">Scene editing</h3><p>A scene outliner and a viewport with selection and transform gizmos.</p></li><li class="feature"><h3 class="feature__title">Property inspector</h3><p>Fields are built automatically from each class&#x27;s serialised variables.</p></li><li class="feature"><h3 class="feature__title">Content browser and tools</h3><p>A content browser, console log and material editor; materials and levels are created in the editor.</p></li><li class="feature"><h3 class="feature__title">Play in editor</h3><p>The scene is deep-copied by serialising it, and a free-fly camera can watch the running game.</p></li><li class="feature"><h3 class="feature__title">Hot reload</h3><p>The modules panel builds a game module and reloads the scene around it.</p></li><li class="feature"><h3 class="feature__title">Input</h3><p>Keyboard, mouse and Xbox controller.</p></li></ul></section><section class="project-section reveal"><h2 class="label">Screenshots</h2><div class="gallery" data-gallery><figure class="gallery__item">
+          <a class="gallery__link" href="../assets/img/sky-engine/showcase-2-1920.webp" data-lightbox="Editing a level"><img src="../assets/img/sky-engine/showcase-2-1280.webp" srcset="../assets/img/sky-engine/showcase-2-640.webp 640w, ../assets/img/sky-engine/showcase-2-1280.webp 1280w, ../assets/img/sky-engine/showcase-2-1920.webp 1920w" sizes="(min-width: 64rem) 33vw, (min-width: 40rem) 50vw, 100vw" width="1920" height="1080" alt="The Sky Editor with a brick wall, spheres and outliner panels" loading="lazy" decoding="async"></a>
+          <figcaption class="gallery__caption">Editing a level</figcaption></figure>
+<figure class="gallery__item">
+          <a class="gallery__link" href="../assets/img/sky-engine/showcase-4-1920.webp" data-lightbox="Scene view"><img src="../assets/img/sky-engine/showcase-4-1280.webp" srcset="../assets/img/sky-engine/showcase-4-640.webp 640w, ../assets/img/sky-engine/showcase-4-1280.webp 1280w, ../assets/img/sky-engine/showcase-4-1920.webp 1920w" sizes="(min-width: 64rem) 33vw, (min-width: 40rem) 50vw, 100vw" width="1920" height="1080" alt="Placing objects in the Sky Editor scene view" loading="lazy" decoding="async"></a>
+          <figcaption class="gallery__caption">Scene view</figcaption></figure>
+<figure class="gallery__item">
+          <a class="gallery__link" href="../assets/img/sky-engine/custom-meshes-1916.webp" data-lightbox="First custom meshes"><img src="../assets/img/sky-engine/custom-meshes-1280.webp" srcset="../assets/img/sky-engine/custom-meshes-640.webp 640w, ../assets/img/sky-engine/custom-meshes-1280.webp 1280w, ../assets/img/sky-engine/custom-meshes-1916.webp 1916w" sizes="(min-width: 64rem) 33vw, (min-width: 40rem) 50vw, 100vw" width="1916" height="1106" alt="Custom dragon and toy meshes loaded in the editor" loading="lazy" decoding="async"></a>
+          <figcaption class="gallery__caption">First custom meshes</figcaption></figure>
+<figure class="gallery__item">
+          <a class="gallery__link" href="../assets/img/sky-engine/mesh-editing-1000.webp" data-lightbox="Mesh editing"><img src="../assets/img/sky-engine/mesh-editing-1000.webp" srcset="../assets/img/sky-engine/mesh-editing-640.webp 640w, ../assets/img/sky-engine/mesh-editing-1000.webp 1000w" sizes="(min-width: 64rem) 33vw, (min-width: 40rem) 50vw, 100vw" width="1000" height="815" alt="A mesh selected for editing in the viewport" loading="lazy" decoding="async"></a>
+          <figcaption class="gallery__caption">Mesh editing</figcaption></figure></div></section><section class="project-section reveal"><h2 class="label">Architecture</h2><dl class="tech-list"><div class="tech-list__row"><dt>Projects</dt><dd>The engine (a shared library), the editor, a game runtime, a game module and a GoogleTest suite.</dd></div><div class="tech-list__row"><dt>Classes by name</dt><dd>Class registration and factories, so objects can be created by name from saved files.</dd></div><div class="tech-list__row"><dt>Assets</dt><dd>Plain-text asset and level files; the first line names the class. A handle is kept separate from the loaded content.</dd></div><div class="tech-list__row"><dt>Scene and world</dt><dd>A scene is the content; a world is a running instance with its own camera, tick policy and input routing.</dd></div><div class="tech-list__row"><dt>Rendering</dt><dd>A scene renderer with a framebuffer abstraction for off-screen rendering, behind the graphics API layer.</dd></div><div class="tech-list__row"><dt>Libraries</dt><dd>ImGui and ImGuizmo, glm, GLFW, GLEW, Assimp, FMOD, Box2D, FreeType and SOIL2.</dd></div></dl></section><section class="project-section reveal"><h2 class="label">Diagrams</h2><div class="gallery gallery--wide" data-gallery><figure class="gallery__item">
+          <a class="gallery__link" href="../assets/img/sky-engine/engine-structure-1920.webp" data-lightbox="Engine structure"><img src="../assets/img/sky-engine/engine-structure-1280.webp" srcset="../assets/img/sky-engine/engine-structure-640.webp 640w, ../assets/img/sky-engine/engine-structure-1280.webp 1280w, ../assets/img/sky-engine/engine-structure-1920.webp 1920w" sizes="(min-width: 64rem) 33vw, (min-width: 40rem) 50vw, 100vw" width="1920" height="824" alt="Diagram of the engine modules and how they depend on each other" loading="lazy" decoding="async"></a>
+          <figcaption class="gallery__caption">Engine structure</figcaption></figure>
+<figure class="gallery__item">
+          <a class="gallery__link" href="../assets/img/sky-engine/editor-structure-1485.webp" data-lightbox="Editor structure"><img src="../assets/img/sky-engine/editor-structure-1280.webp" srcset="../assets/img/sky-engine/editor-structure-640.webp 640w, ../assets/img/sky-engine/editor-structure-1280.webp 1280w, ../assets/img/sky-engine/editor-structure-1485.webp 1485w" sizes="(min-width: 64rem) 33vw, (min-width: 40rem) 50vw, 100vw" width="1485" height="496" alt="Diagram of the editor windows, tools and their links" loading="lazy" decoding="async"></a>
+          <figcaption class="gallery__caption">Editor structure</figcaption></figure></div></section><section class="project-section reveal"><h2 class="label">Process</h2><ol class="steps"><li class="steps__item"><h3 class="steps__title">Graphics beginnings</h3><p>Started in November 2018 as a graphics project.</p></li><li class="steps__item"><h3 class="steps__title">The big refactor</h3><p>Split into separate engine, editor and game projects, moved to 64-bit, and abstracted rendering, as planned in the early version&#x27;s own to-do list.</p></li><li class="steps__item"><h3 class="steps__title">A real editor</h3><p>Then the editor, reflection, assets, play in editor and hot reload; nearly 300 commits so far.</p></li><li class="steps__item"><h3 class="steps__title">Roadmap</h3><p>Milestones and plans live on a public Notion roadmap.</p></li></ol></section><section class="project-section reveal"><h2 class="label">Still to capture</h2><ul class="placeholder-grid"><li class="placeholder" data-placeholder><span class="placeholder__kind">Screenshot coming soon</span><span class="placeholder__text">The material editor with PBR shader parameters</span></li><li class="placeholder" data-placeholder><span class="placeholder__kind">Video coming soon</span><span class="placeholder__text">Play in editor, with the free-fly camera watching</span></li><li class="placeholder" data-placeholder><span class="placeholder__kind">Video coming soon</span><span class="placeholder__text">The modules panel hot-reloading a game module</span></li><li class="placeholder" data-placeholder><span class="placeholder__kind">Screenshot coming soon</span><span class="placeholder__text">A transform gizmo on a selected entity</span></li></ul></section>
+    <ul class="tag-list" aria-label="Tags"><li>Type.Project</li><li>Platform.PC</li><li>Topic.Engine</li><li>Topic.Tools</li><li>Source.Mine</li></ul>
+    <div class="button-row"><a class="button button--primary" href="https://polite-industry-b61.notion.site/233cc000ccef456ebc2d260418678f60?v=cc8052d72b1b46af95dda8e496a0bbfc" target="_blank" rel="noopener">Roadmap on Notion ↗</a></div>
+    
+    <!-- TODO: Upload the showcase video and capture the screens listed on the page. -->
+    <nav class="project-pager" aria-label="More projects">
+      <a class="project-pager__link" href="underforge.html"><span class="project-pager__label">← Previous</span>UnderForge</a>
+      <a class="project-pager__link project-pager__link--next" href="atlas.html"><span class="project-pager__label">Next →</span>Atlas</a>
+    </nav>
+  </div>
+</main>
+<footer class="site-footer" id="end">
+  <div class="site-footer__marquee" aria-hidden="true">
+    <div class="site-footer__track"><span>Let's make</span><span class="text-outline">something</span><span>✦</span></div>
+    <div class="site-footer__track"><span>Let's make</span><span class="text-outline">something</span><span>✦</span></div>
+  </div>
+  <div class="site-footer__row">
+    <ul class="site-footer__links">
+      <li><a class="button button--ghost" href="../assets/docs/alex-coultas-cv.pdf" target="_blank" rel="noopener">CV (PDF)</a></li>
+      <li><a class="button button--ghost" href="https://x.com/AlexCoultas" target="_blank" rel="noopener">@AlexCoultas</a></li>
+      <li><a class="button button--ghost" href="https://github.com/Zeploc" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a class="button button--ghost" href="https://skywardstudios.co.nz" target="_blank" rel="noopener">Skyward Studios</a></li>
+    </ul>
+    <p class="site-footer__note">© 2026 Alex Coultas · <span class="js-only">Press <kbd>~</kbd> for the console</span></p>
+  </div>
+</footer>
+<script src="../assets/js/motion.js" defer></script>
+<script src="../assets/js/achievements.js" defer></script>
+<script src="../assets/js/dev-console.js" defer></script>
+<script src="../assets/js/site-header.js" defer></script>
+<script src="../assets/js/reveal.js" defer></script>
+<script src="../assets/js/lightbox.js" defer></script>
+<script src="../assets/js/video-embed.js" defer></script>
+<script src="../assets/js/project-keys.js" defer></script>
+</body>
+</html>

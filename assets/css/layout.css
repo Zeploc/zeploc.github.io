@@ -1,0 +1,243 @@
+/* Page shell: header, footer, containers and section spacing. */
+
+/* === Helpers === */
+
+.container {
+  width: min(100% - 2rem, var(--container));
+  margin-inline: auto;
+}
+
+.section {
+  padding-top: var(--space-3xl);
+  scroll-margin-top: var(--header-height);
+}
+
+.section--tight {
+  padding-top: var(--space-xl);
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+html:not(.js) .js-only {
+  display: none;
+}
+
+.skip-link {
+  position: fixed;
+  top: var(--space-s);
+  left: var(--space-s);
+  z-index: 200;
+  padding: var(--space-s) var(--space-m);
+  font-weight: 600;
+  color: var(--colour-bg);
+  background: var(--colour-gold);
+  border-radius: var(--radius-s);
+  transform: translateY(-200%);
+}
+
+.skip-link:focus {
+  transform: none;
+}
+
+/* === Header === */
+
+.site-header {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 40;
+  padding-top: env(safe-area-inset-top);
+  background: rgba(21, 24, 27, 0.86);
+  border-bottom: 1px solid var(--colour-line);
+  backdrop-filter: blur(12px);
+  transition: transform var(--duration-m) var(--ease-out);
+}
+
+/* On the home page the header waits until the hero has scrolled away. */
+.js .site-header--home {
+  transform: translateY(-110%);
+}
+
+.js .site-header--home.is-shown,
+.js .site-header--home:focus-within {
+  transform: none;
+}
+
+.site-header__inner {
+  display: flex;
+  gap: var(--space-s);
+  align-items: center;
+  width: min(100% - 2rem, var(--container));
+  min-height: var(--header-height);
+  margin-inline: auto;
+}
+
+.site-header__brand {
+  margin-right: auto;
+  font-weight: 700;
+  color: var(--colour-text);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.site-header__actions {
+  display: flex;
+  gap: var(--space-2xs);
+  align-items: center;
+}
+
+/* Phones: tighter buttons, so the name and all three buttons fit on one row at 320px. */
+.site-header__actions .header-button {
+  padding-inline: var(--space-xs);
+}
+
+@media (min-width: 40rem) {
+  .site-header__actions {
+    gap: var(--space-xs);
+  }
+
+  .site-header__actions .header-button {
+    padding-inline: var(--space-s);
+  }
+}
+
+.site-header__progress {
+  height: 2px;
+}
+
+.site-header__progress-fill {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--colour-green), var(--colour-blue));
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+.site-header__inner {
+  flex-wrap: wrap;
+}
+
+/* Phones: the menu is a row of links under the name that scrolls sideways. */
+.site-nav {
+  order: 3;
+  width: 100%;
+  margin-inline: -0.25rem;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.site-nav__list {
+  display: flex;
+  gap: var(--space-2xs);
+}
+
+.site-nav__link {
+  display: flex;
+  align-items: center;
+  min-height: var(--tap);
+  padding: 0 var(--space-xs);
+  font-size: var(--text-s);
+  color: var(--colour-text-muted);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.site-nav__link.is-active {
+  color: var(--colour-text);
+  box-shadow: inset 0 -2px 0 var(--colour-blue);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .site-nav__link:hover {
+    color: var(--colour-text);
+  }
+}
+
+@media (min-width: 80rem) {
+  .site-header__inner {
+    flex-wrap: nowrap;
+    gap: var(--space-l);
+  }
+
+  .site-nav {
+    order: 1;
+    width: auto;
+    margin: 0;
+  }
+
+  .site-header__actions {
+    order: 2;
+  }
+
+  .site-nav__list {
+    gap: var(--space-m);
+  }
+
+  .site-nav__link {
+    padding: 0;
+  }
+}
+
+/* === Footer === */
+
+.site-footer {
+  margin-top: var(--space-3xl);
+  overflow: hidden;
+  border-top: 1px solid var(--colour-line);
+}
+
+.site-footer__marquee {
+  display: flex;
+  padding: var(--space-xl) 0 var(--space-xs);
+  white-space: nowrap;
+}
+
+.site-footer__track {
+  display: flex;
+  flex: none;
+  gap: var(--space-xl);
+  padding-right: var(--space-xl);
+  font-family: var(--font-display);
+  font-size: clamp(3.5rem, 11vw, 10rem);
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: var(--colour-text);
+  animation: marquee 26s linear infinite;
+}
+
+@keyframes marquee {
+  to {
+    transform: translateX(-100%);
+  }
+}
+
+.site-footer__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-m);
+  align-items: center;
+  justify-content: space-between;
+  width: min(100% - 2rem, var(--container));
+  margin-inline: auto;
+  padding: var(--space-xl) 0 calc(var(--space-2xl) + env(safe-area-inset-bottom));
+}
+
+.site-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+}
+
+.site-footer__note {
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  color: var(--colour-text-muted);
+}

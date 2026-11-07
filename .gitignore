@@ -1,24 +1,19 @@
-﻿# Jekyll build output
-_site/
-.sass-cache/
-.jekyll-cache/
-.jekyll-metadata
+﻿# Original, full-size media (photos, recordings, project media; over 1.5 GB). The site uses the
+# optimised copies in assets/img. Run tools/extract_frames.py and tools/optimise_images.py after a change.
+# It also holds the source CV. The public copy is assets/docs/alex-coultas-cv.pdf (no phone number).
+content/
 
-# Ruby / Bundler
-Gemfile.lock
-vendor/
-.bundle/
+# Output of tools/Capture-Devices.
+screenshots/
 
-# Node (if you use any JS tooling)
-node_modules/
-package-lock.json
-yarn.lock
+# Layout concepts. Kept locally for reference, not published.
+concepts/
 
-# OS / editor files
-.DS_Store
-Thumbs.db
-*.swp
-
-# Optional: VSCode or IDE
+# Python and editor files.
+__pycache__/
+*.pyc
 .vscode/
 .idea/
+Thumbs.db
+.DS_Store
+*.swp

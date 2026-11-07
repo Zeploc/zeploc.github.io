@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Radar — Alex Coultas, Game Engineer</title>
+  <meta name="description" content="A DIY LED matrix display, inspired by the FlightWall, built as a birthday gift for a friend. It shows the closest flight overhead with the techy details,…">
+  <meta name="theme-color" content="#15181b">
+  <meta property="og:title" content="Radar — Alex Coultas, Game Engineer">
+  <meta property="og:description" content="A DIY LED matrix display, inspired by the FlightWall, built as a birthday gift for a friend. It shows the closest flight overhead with the techy details,…">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://zeploc.github.io/projects/radar.html">
+  <meta property="og:site_name" content="Alex Coultas">
+  <meta property="og:image" content="https://zeploc.github.io/assets/img/previews/radar.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Radar LED display screens">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@AlexCoultas">
+  <link rel="canonical" href="https://zeploc.github.io/projects/radar.html">
+  <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/css/tokens.css">
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/layout.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body class="page-project">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header" data-site-header>
+  <div class="site-header__inner">
+    <a class="site-header__brand" href="../index.html">Alex Coultas</a>
+    <div class="site-header__actions" data-header-actions>
+      <a class="header-button header-button--cv" href="../assets/docs/alex-coultas-cv.pdf" target="_blank" rel="noopener">CV</a>
+    </div>
+    <nav class="site-nav" aria-label="Main">
+      <ul class="site-nav__list" data-site-nav>
+          <li><a class="site-nav__link" href="../index.html#work">Work</a></li>
+          <li><a class="site-nav__link" href="../index.html#clients">Clients</a></li>
+          <li><a class="site-nav__link" href="../index.html#side">Side projects</a></li>
+          <li><a class="site-nav__link" href="../index.html#about">About</a></li>
+          <li><a class="site-nav__link" href="../index.html#experience">Experience</a></li>
+          <li><a class="site-nav__link" href="../index.html#archive">Archive</a></li>
+          <li><a class="site-nav__link" href="../index.html#made">Made &amp; found</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="site-header__progress" aria-hidden="true"><span class="site-header__progress-fill" data-scroll-progress></span></div>
+</header>
+<main id="main" class="project">
+  <div class="project-hero"><img class="project-hero__image" src="../assets/img/radar/display-screens-1280.webp" srcset="../assets/img/radar/display-screens-640.webp 640w, ../assets/img/radar/display-screens-1280.webp 1280w" sizes="100vw" width="1280" height="1082" alt="Mock-ups of the Radar LED screens: closest flight, radar sweep, military alert and NFL score" decoding="async" fetchpriority="high"></div>
+  <div class="project__body">
+    <a class="back-link" href="../index.html#work">← All work</a>
+    <p class="kicker">App · Gadget · a gift for a friend</p>
+    <h1 class="project__title">Radar</h1>
+    <p class="project__lead">A DIY LED matrix display, inspired by the FlightWall, built as a birthday gift for a friend. It shows the closest flight overhead with the techy details, then rotates through a radar sweep, a clock with the weather, NFL scores and custom messages. An ESP32-S3 drives the panels, fetches free public data itself and serves its own web UI to any phone on the home Wi-Fi: no app, no cloud, no accounts.</p>
+    <dl class="facts"><div class="facts__item"><dt>Type</dt><dd>Hardware gadget</dd></div>
+<div class="facts__item"><dt>Board</dt><dd>ESP32-S3 · HUB75 LED panels</dd></div>
+<div class="facts__item"><dt>Code</dt><dd>C++ · TypeScript</dd></div>
+<div class="facts__item"><dt>Built</dt><dd>October 2026</dd></div>
+<div class="facts__item"><dt>Tagline</dt><dd>&quot;It&#x27;s on my radar.&quot;</dd></div></dl>
+    <div class="project-single"><h2 class="label">What it does</h2><ul class="did-list"><li>The closest flight: callsign, type, registration, route, altitude, speed and distance</li><li>Smooth numbers: altitude and distance are estimated between reports, so the digits keep ticking</li><li>A radar sweep with real blips at their true bearing and distance, military planes in red</li><li>Alerts for military aircraft, rare types and emergency squawks</li><li>Live NFL scores with a touchdown flash</li><li>A clock with live weather, and rainbow messages sent from the phone</li></ul></div>
+    <section class="project-section reveal"><h2 class="label">The simulator</h2><div class="video-grid"><figure class="video-card video-card--pending">
+          <span class="video-card__media"><img class="video-card__poster" src="../assets/img/radar/simulator-1-1280.webp" srcset="../assets/img/radar/simulator-1-640.webp 640w, ../assets/img/radar/simulator-1-1280.webp 1280w" sizes="(min-width: 64rem) 30vw, 100vw" width="1280" height="362" alt="" loading="lazy" decoding="async"><span class="video-card__badge">Video coming soon</span></span>
+          <figcaption class="video-card__title">Emirates overhead</figcaption></figure>
+<figure class="video-card video-card--pending">
+          <span class="video-card__media"><img class="video-card__poster" src="../assets/img/radar/simulator-2-1280.webp" srcset="../assets/img/radar/simulator-2-640.webp 640w, ../assets/img/radar/simulator-2-1280.webp 1280w" sizes="(min-width: 64rem) 30vw, 100vw" width="1280" height="367" alt="" loading="lazy" decoding="async"><span class="video-card__badge">Video coming soon</span></span>
+          <figcaption class="video-card__title">Air New Zealand, Auckland to Wellington</figcaption></figure>
+<figure class="video-card video-card--pending">
+          <span class="video-card__media"><img class="video-card__poster" src="../assets/img/radar/simulator-3-1280.webp" srcset="../assets/img/radar/simulator-3-640.webp 640w, ../assets/img/radar/simulator-3-1280.webp 1280w" sizes="(min-width: 64rem) 30vw, 100vw" width="1280" height="392" alt="" loading="lazy" decoding="async"><span class="video-card__badge">Video coming soon</span></span>
+          <figcaption class="video-card__title">Hamilton to Wellington</figcaption></figure>
+<figure class="video-card video-card--pending">
+          <span class="video-card__media"><img class="video-card__poster" src="../assets/img/radar/simulator-4-1280.webp" srcset="../assets/img/radar/simulator-4-640.webp 640w, ../assets/img/radar/simulator-4-1280.webp 1280w" sizes="(min-width: 64rem) 30vw, 100vw" width="1280" height="381" alt="" loading="lazy" decoding="async"><span class="video-card__badge">Video coming soon</span></span>
+          <figcaption class="video-card__title">Wellington to Auckland</figcaption></figure></div></section><section class="project-section reveal"><h2 class="label">More features</h2><ul class="feature-grid"><li class="feature"><h3 class="feature__title">First-run setup</h3><p>The board opens its own Wi-Fi hotspot with a setup page.</p></li><li class="feature"><h3 class="feature__title">Phone web UI</h3><p>A live copy of the panel, with skip, pin, brightness, a location map and debug tools.</p></li><li class="feature"><h3 class="feature__title">Safe updates over Wi-Fi</h3><p>An update installs only after a press of the board&#x27;s button, and rolls back on its own if the new firmware fails.</p></li><li class="feature"><h3 class="feature__title">Never blank</h3><p>The display degrades instead of freezing: a red pixel marks old data, and failed requests back off politely.</p></li></ul></section><section class="project-section reveal"><h2 class="label">How it works</h2><dl class="tech-list"><div class="tech-list__row"><dt>Portable core</dt><dd>All logic (data, parsing, screens, drawing) is plain C++ with no board code, so it runs on the board and in a PC simulator.</dd></div><div class="tech-list__row"><dt>Two cores</dt><dd>Networking runs on one core and drawing on the other, passing only the latest data between them.</dd></div><div class="tech-list__row"><dt>Free data</dt><dd>adsb.fi (adsb.lol as fallback) for flights, adsbdb for routes, Open-Meteo for weather, ESPN for NFL. No API keys.</dd></div><div class="tech-list__row"><dt>Memory budget</dt><dd>512 KB RAM, 8 MB PSRAM, 16 MB flash. JSON is parsed into a fixed PSRAM arena, so polling never allocates.</dd></div><div class="tech-list__row"><dt>Web UI</dt><dd>Vite, TypeScript and Preact with Leaflet maps, compressed into the firmware under a 500 KB budget.</dd></div><div class="tech-list__row"><dt>Simulator</dt><dd>Runs the real core and serves the real web UI with a virtual LED panel, using live data if wanted.</dd></div></dl></section><section class="project-section reveal"><h2 class="label">Hardware</h2><ul class="did-list did-list--columns"><li>Two 64×32 P3 HUB75 panels make a 128×32 strip, 384 × 96 mm</li><li>An ESP32-S3 dev board (16 MB flash, 8 MB PSRAM), wired with jumper wires and no adapter board</li><li>One 5 V supply with a shared ground; brightness is capped on USB power</li><li>Pinout mapped with a multimeter, with a step-by-step wiring guide for a first-time wirer</li><li>A smoked acrylic diffuser and frame to come</li></ul></section><section class="project-section reveal"><h2 class="label">Process</h2><ol class="steps"><li class="steps__item"><h3 class="steps__title">The board is the brain</h3><p>A phone-driven display would freeze when the phone sleeps, so the board fetches everything itself.</p></li><li class="steps__item"><h3 class="steps__title">Ship in two steps</h3><p>A single-panel demo on a video call on the birthday, then the finished two-panel display by hand about a month later.</p></li><li class="steps__item"><h3 class="steps__title">Decide on paper</h3><p>A log of 51 numbered decisions, each weighing the options.</p></li><li class="steps__item"><h3 class="steps__title">Test every pixel</h3><p>Golden-frame images for every screen at both sizes, Playwright tests on WebKit and Chromium against the simulator, and long soak tests.</p></li><li class="steps__item"><h3 class="steps__title">Bring-up</h3><p>Parts ordered 18 Oct, hardware brought up 28 Oct, then Wi-Fi setup, radar, alerts, NFL, the web UI and updates.</p></li></ol></section><section class="project-section reveal"><h2 class="label">Design</h2><div class="gallery" data-gallery><figure class="gallery__item">
+          <a class="gallery__link" href="../assets/img/radar/clock-faces-1028.webp" data-lightbox="Clock faces"><img src="../assets/img/radar/clock-faces-1028.webp" srcset="../assets/img/radar/clock-faces-640.webp 640w, ../assets/img/radar/clock-faces-1028.webp 1028w" sizes="(min-width: 64rem) 33vw, (min-width: 40rem) 50vw, 100vw" width="1028" height="1068" alt="Mock-ups of the clock and weather screens" loading="lazy" decoding="async"></a>
+          <figcaption class="gallery__caption">Clock faces</figcaption></figure>
+<figure class="gallery__item">
+          <a class="gallery__link" href="../assets/img/radar/web-ui-1280.webp" data-lightbox="Web UI"><img src="../assets/img/radar/web-ui-1280.webp" srcset="../assets/img/radar/web-ui-640.webp 640w, ../assets/img/radar/web-ui-1280.webp 1280w" sizes="(min-width: 64rem) 33vw, (min-width: 40rem) 50vw, 100vw" width="1280" height="715" alt="The web UI served by the board, with its main tabs" loading="lazy" decoding="async"></a>
+          <figcaption class="gallery__caption">Web UI</figcaption></figure>
+<figure class="gallery__item">
+          <a class="gallery__link" href="../assets/img/radar/first-run-setup-1280.webp" data-lightbox="First-run setup"><img src="../assets/img/radar/first-run-setup-1280.webp" srcset="../assets/img/radar/first-run-setup-640.webp 640w, ../assets/img/radar/first-run-setup-1280.webp 1280w" sizes="(min-width: 64rem) 33vw, (min-width: 40rem) 50vw, 100vw" width="1280" height="531" alt="The first-run Wi-Fi setup flow" loading="lazy" decoding="async"></a>
+          <figcaption class="gallery__caption">First-run setup</figcaption></figure></div></section><section class="project-section reveal"><h2 class="label">Still to capture</h2><ul class="placeholder-grid"><li class="placeholder" data-placeholder><span class="placeholder__kind">Photo coming soon</span><span class="placeholder__text">The real panel showing the flight screen</span></li><li class="placeholder" data-placeholder><span class="placeholder__kind">Video coming soon</span><span class="placeholder__text">The radar sweep with live blips</span></li><li class="placeholder" data-placeholder><span class="placeholder__kind">Video coming soon</span><span class="placeholder__text">A test alert: military aircraft or an emergency squawk</span></li><li class="placeholder" data-placeholder><span class="placeholder__kind">Screenshot coming soon</span><span class="placeholder__text">The phone web UI with the live panel</span></li><li class="placeholder" data-placeholder><span class="placeholder__kind">Photo coming soon</span><span class="placeholder__text">The finished display in its frame</span></li></ul></section>
+    <ul class="tag-list" aria-label="Tags"><li>Type.App</li><li>Platform.Hardware</li><li>Topic.Tools</li><li>Source.Mine</li></ul>
+    
+    
+    <!-- TODO: Upload the simulator videos, and capture the screens listed on the page. -->
+    <nav class="project-pager" aria-label="More projects">
+      <a class="project-pager__link" href="atlas.html"><span class="project-pager__label">← Previous</span>Atlas</a>
+      <a class="project-pager__link project-pager__link--next" href="dotzi.html"><span class="project-pager__label">Next →</span>Dotzi</a>
+    </nav>
+  </div>
+</main>
+<footer class="site-footer" id="end">
+  <div class="site-footer__marquee" aria-hidden="true">
+    <div class="site-footer__track"><span>Let's make</span><span class="text-outline">something</span><span>✦</span></div>
+    <div class="site-footer__track"><span>Let's make</span><span class="text-outline">something</span><span>✦</span></div>
+  </div>
+  <div class="site-footer__row">
+    <ul class="site-footer__links">
+      <li><a class="button button--ghost" href="../assets/docs/alex-coultas-cv.pdf" target="_blank" rel="noopener">CV (PDF)</a></li>
+      <li><a class="button button--ghost" href="https://x.com/AlexCoultas" target="_blank" rel="noopener">@AlexCoultas</a></li>
+      <li><a class="button button--ghost" href="https://github.com/Zeploc" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a class="button button--ghost" href="https://skywardstudios.co.nz" target="_blank" rel="noopener">Skyward Studios</a></li>
+    </ul>
+    <p class="site-footer__note">© 2026 Alex Coultas · <span class="js-only">Press <kbd>~</kbd> for the console</span></p>
+  </div>
+</footer>
+<script src="../assets/js/motion.js" defer></script>
+<script src="../assets/js/achievements.js" defer></script>
+<script src="../assets/js/dev-console.js" defer></script>
+<script src="../assets/js/site-header.js" defer></script>
+<script src="../assets/js/reveal.js" defer></script>
+<script src="../assets/js/lightbox.js" defer></script>
+<script src="../assets/js/video-embed.js" defer></script>
+<script src="../assets/js/project-keys.js" defer></script>
+</body>
+</html>

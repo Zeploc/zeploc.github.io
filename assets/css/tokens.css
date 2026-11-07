@@ -1,0 +1,87 @@
+/* Design tokens: every colour, font, size and timing the site uses. Custom properties only. */
+
+@font-face {
+  font-family: 'Space Grotesk';
+  src: url('../fonts/space-grotesk-variable.woff2') format('woff2');
+  font-weight: 300 700;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('../fonts/jetbrains-mono-variable.woff2') format('woff2');
+  font-weight: 100 800;
+  font-display: swap;
+}
+
+:root {
+  /* Colours */
+  --colour-bg: #15181b;
+  --colour-bg-deep: #0c0e10;
+  --colour-surface: #1c2024;
+  --colour-surface-raised: #23282d;
+  --colour-line: #323940;
+  --colour-line-strong: #46505a;
+  --colour-text: #f1f5f8;
+  --colour-text-body: #b4c6ce;
+  --colour-text-muted: #8697a0;
+  --colour-blue: #4c86b6;
+  --colour-blue-bright: #6aa3d4;
+  --colour-pale: #c9d8e9;
+  --colour-green: #1fae6a;
+  --colour-green-bright: #7be0a5;
+  --colour-gold: #f2b84b;
+  --colour-violet: #9b7bff;
+  --colour-coral: #ff8a65;
+  --colour-red: #e5484d;
+  --colour-on-light: #12304a;
+  --colour-shade: rgba(12, 14, 16, 0.88);
+  --colour-glass: rgba(0, 0, 0, 0.4);
+  --colour-glass-line: rgba(255, 255, 255, 0.18);
+
+  /* Fonts */
+  --font-display: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+  --font-body: 'Space Grotesk', 'Segoe UI', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', Consolas, ui-monospace, monospace;
+
+  /* Type scale */
+  --text-xs: 0.75rem;
+  --text-s: 0.875rem;
+  --text-m: 1rem;
+  --text-l: 1.25rem;
+  --text-xl: clamp(1.5rem, 2.6vw, 2.25rem);
+  --text-heading: clamp(2.25rem, 5vw, 4rem);
+  --text-display: clamp(3.25rem, 11vw, 9.5rem);
+  --text-title: clamp(2.75rem, 8vw, 7rem);
+
+  /* Spacing */
+  --space-2xs: 0.25rem;
+  --space-xs: 0.5rem;
+  --space-s: 0.75rem;
+  --space-m: 1rem;
+  --space-l: 1.5rem;
+  --space-xl: 2.5rem;
+  --space-2xl: 4rem;
+  --space-3xl: 7rem;
+
+  /* Shape */
+  --radius-s: 8px;
+  --radius-m: 12px;
+  --radius-l: 18px;
+  --radius-xl: 24px;
+  --radius-pill: 999px;
+  --container: 77.5rem;
+  --header-height: 3.75rem;
+  --tap: 44px;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --duration-fast: 0.2s;
+  --duration-m: 0.45s;
+  --duration-slow: 0.8s;
+
+  /* Breakpoints (for reference; custom properties do not work in media queries):
+     tablet  @media (min-width: 40rem)
+     laptop  @media (min-width: 64rem)
+     desktop @media (min-width: 80rem) */
+}

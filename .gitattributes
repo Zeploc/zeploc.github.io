@@ -1,0 +1,11 @@
+# Line endings to match .editorconfig: LF for the site, CRLF for Windows scripts.
+* text=auto eol=lf
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+
+*.webp binary
+*.woff2 binary
+*.jpg binary
+*.png binary
+*.gif binary
+*.pdf binary

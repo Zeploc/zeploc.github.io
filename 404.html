@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Page not found — Alex Coultas, Game Engineer</title>
+  <meta name="robots" content="noindex">
+  <!-- GitHub Pages serves this page at any missing address, at any folder depth, so it cannot
+       rely on relative paths to the stylesheets. Its styles are kept here instead. -->
+  <style>
+    :root { --bg: #15181b; --text: #f2f2f5; --muted: #8697a0; --accent: #f2b84b; }
+    * { box-sizing: border-box; margin: 0; }
+    body {
+      display: grid; place-items: center; min-height: 100vh; min-height: 100svh; padding: 1.5rem;
+      background: radial-gradient(ellipse at 50% 110%, rgba(76, 134, 182, 0.45), transparent 55%), var(--bg);
+      color: var(--text); font-family: 'Segoe UI', system-ui, sans-serif; text-align: center;
+    }
+    p.code { font-family: Consolas, monospace; color: var(--accent); letter-spacing: 0.2em; }
+    h1 { margin: 0.5rem 0 1rem; font-size: clamp(2.5rem, 8vw, 5rem); line-height: 1; }
+    p { color: var(--muted); }
+    a {
+      display: inline-flex; align-items: center; min-height: 44px; margin-top: 2rem; padding: 0 1.5rem;
+      background: var(--accent); color: var(--bg); font-weight: 700; text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="code">ERROR 404</p>
+    <h1>Out of bounds.</h1>
+    <p>That page does not exist, or it has moved. Respawning at the start is a click away.</p>
+    <a href="/" id="home">Back to the start</a>
+  </main>
+  <script>
+    // On a project site (user.github.io/repository/), the home page is the first folder, not "/".
+    const firstFolder = window.location.pathname.split('/')[1];
+    if (window.location.hostname.endsWith('github.io') && firstFolder) {
+      document.getElementById('home').href = `/${firstFolder}/`;
+    }
+  </script>
+</body>
+</html>

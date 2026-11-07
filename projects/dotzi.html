@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Dotzi — Alex Coultas, Game Engineer</title>
+  <meta name="description" content="A personal life-management app that starts as a &quot;task forcer&quot;. It holds my tasks and, during free time, picks one at random (weighted). It warns first,…">
+  <meta name="theme-color" content="#15181b">
+  <meta property="og:title" content="Dotzi — Alex Coultas, Game Engineer">
+  <meta property="og:description" content="A personal life-management app that starts as a &quot;task forcer&quot;. It holds my tasks and, during free time, picks one at random (weighted). It warns first,…">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://zeploc.github.io/projects/dotzi.html">
+  <meta property="og:site_name" content="Alex Coultas">
+  <meta property="og:image" content="https://zeploc.github.io/assets/img/previews/home.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Alex Coultas">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@AlexCoultas">
+  <link rel="canonical" href="https://zeploc.github.io/projects/dotzi.html">
+  <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/css/tokens.css">
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/layout.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body class="page-project">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header" data-site-header>
+  <div class="site-header__inner">
+    <a class="site-header__brand" href="../index.html">Alex Coultas</a>
+    <div class="site-header__actions" data-header-actions>
+      <a class="header-button header-button--cv" href="../assets/docs/alex-coultas-cv.pdf" target="_blank" rel="noopener">CV</a>
+    </div>
+    <nav class="site-nav" aria-label="Main">
+      <ul class="site-nav__list" data-site-nav>
+          <li><a class="site-nav__link" href="../index.html#work">Work</a></li>
+          <li><a class="site-nav__link" href="../index.html#clients">Clients</a></li>
+          <li><a class="site-nav__link" href="../index.html#side">Side projects</a></li>
+          <li><a class="site-nav__link" href="../index.html#about">About</a></li>
+          <li><a class="site-nav__link" href="../index.html#experience">Experience</a></li>
+          <li><a class="site-nav__link" href="../index.html#archive">Archive</a></li>
+          <li><a class="site-nav__link" href="../index.html#made">Made &amp; found</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="site-header__progress" aria-hidden="true"><span class="site-header__progress-fill" data-scroll-progress></span></div>
+</header>
+<main id="main" class="project">
+  <div class="project-hero project-hero--art"><div class="art art--dotzi" aria-hidden="true"><span class="art__blob"></span></div></div>
+  <div class="project__body">
+    <a class="back-link" href="../index.html#work">← All work</a>
+    <p class="kicker">App · Personal app · Android and Windows</p>
+    <h1 class="project__title">Dotzi</h1>
+    <p class="project__lead">A personal life-management app that starts as a &quot;task forcer&quot;. It holds my tasks and, during free time, picks one at random (weighted). It warns first, then takes over the screen until I start the task or say I&#x27;m busy. The phone is the base; a Windows desktop app is the companion. Its face is a blobby character that chirps.</p>
+    <dl class="facts"><div class="facts__item"><dt>Type</dt><dd>Personal app</dd></div>
+<div class="facts__item"><dt>Platforms</dt><dd>Android · Windows</dd></div>
+<div class="facts__item"><dt>Built with</dt><dd>Kotlin Multiplatform · Compose</dd></div>
+<div class="facts__item"><dt>Started</dt><dd>October 2026</dd></div></dl>
+    <div class="project-columns"><div><h2 class="label">About the project</h2><blockquote class="quote"><p>Never out of the blue. Busy beats force.</p><cite>— Dotzi&#x27;s design rules</cite></blockquote></div><div><h2 class="label">What it does</h2><ul class="did-list"><li>Escalating nudges: a warning, a due notification, then a full-screen takeover that returns if ignored</li><li>A weighted draw: priorities weigh 1, 3 or 9, and waiting tasks gain weight each day</li><li>Due and repeating tasks, with overdue tasks pushed first</li><li>Today&#x27;s energy (1–5) sets how many tasks, and how big, I get that day</li><li>Bedtime and sleep: wind-down and bedtime takeovers, a sleep estimate, an automatic alarm and a gym push</li><li>Busy blocks: I enter when I&#x27;m busy and Dotzi works out the free time</li></ul></div></div>
+    <section class="project-section reveal"><h2 class="label">Features</h2><ul class="feature-grid"><li class="feature"><h3 class="feature__title">Blob moods</h3><p>The blob&#x27;s face follows the nudge: happy, impatient, grumpy, focused, or &quot;shh&quot;.</p></li><li class="feature"><h3 class="feature__title">Takeover that sticks</h3><p>Works over the lock screen, survives a restart and fires in battery-saving Doze mode.</p></li><li class="feature"><h3 class="feature__title">Desktop companion</h3><p>A tray flyout, a Win+Shift+D shortcut, wide layouts and a takeover across every monitor.</p></li><li class="feature"><h3 class="feature__title">Done and left today</h3><p>A day strip and progress bars, worked out by running the real planner forward.</p></li><li class="feature"><h3 class="feature__title">Follows me between devices</h3><p>The phone plans, the PC mirrors it, and the nudge goes to the device I&#x27;m using.</p></li><li class="feature"><h3 class="feature__title">Generated sounds</h3><p>The chirps come from a synthesiser in shared code; alarm sounds are generated for day, dusk and night.</p></li></ul></section><section class="project-section reveal"><h2 class="label">How it works</h2><dl class="tech-list"><div class="tech-list__row"><dt>Shared code</dt><dd>One Kotlin Multiplatform module holds the domain, data, UI, theme, the blob and the sound synthesis. Android and Windows add thin platform code.</dd></div><div class="tech-list__row"><dt>Reliable alarms</dt><dd>Every nudge uses the alarm-clock API, because the test phone delayed ordinary exact alarms by up to 75% of the wait.</dd></div><div class="tech-list__row"><dt>Local sync</dt><dd>Phone and PC talk directly over home Wi-Fi (WebSocket, found by mDNS). Each row carries a hybrid logical clock; the latest write wins. No cloud database.</dd></div><div class="tech-list__row"><dt>Pairing and encryption</dt><dd>P-256 keys, a Noise-style handshake, HKDF and AES-256-GCM, with no new library. The phone picks the matching number from three.</dd></div><div class="tech-list__row"><dt>The blob</dt><dd>Drawn in code on a canvas, with props such as a mug and a dumbbell.</dd></div><div class="tech-list__row"><dt>Testing</dt><dd>kotlin.test with hand-written fakes, headless Compose UI tests, a failing test before each bug fix, and manual check tables for the takeover, link, pairing and sync.</dd></div></dl></section><section class="project-section reveal"><h2 class="label">Process</h2><ol class="steps"><li class="steps__item"><h3 class="steps__title">Choosing the stack</h3><p>Compared Kotlin Multiplatform, Flutter, MAUI and Tauri before starting (14 Oct 2026).</p></li><li class="steps__item"><h3 class="steps__title">Designing in rounds</h3><p>About 25 rounds of HTML mock-ups, with each decision logged as agreed, rejected or open.</p></li><li class="steps__item"><h3 class="steps__title">Worst-case testing</h3><p>Tested on a phone chosen for how hard it kills background apps.</p></li><li class="steps__item"><h3 class="steps__title">Building in steps</h3><p>Walking skeleton, scheduler, sync, pairing, energy, sleep, busy time, then a Windows installer, all in October 2026.</p></li></ol></section><section class="project-section reveal"><h2 class="label">Screens</h2><ul class="placeholder-grid"><li class="placeholder" data-placeholder><span class="placeholder__kind">Video coming soon</span><span class="placeholder__text">The phone takeover over the lock screen, with the grumpy blob and its alarm sound</span></li><li class="placeholder" data-placeholder><span class="placeholder__kind">Screenshot coming soon</span><span class="placeholder__text">The Today page: the big blob, the moment card and the day strip</span></li><li class="placeholder" data-placeholder><span class="placeholder__kind">Screenshot coming soon</span><span class="placeholder__text">The energy sheet with its five faces</span></li><li class="placeholder" data-placeholder><span class="placeholder__kind">Screenshot coming soon</span><span class="placeholder__text">The busy-time grid with wind-down and sleep</span></li><li class="placeholder" data-placeholder><span class="placeholder__kind">Screenshot coming soon</span><span class="placeholder__text">The desktop tray flyout, and the takeover across two monitors</span></li><li class="placeholder" data-placeholder><span class="placeholder__kind">Screenshot coming soon</span><span class="placeholder__text">Pairing: the PC wizard next to the phone&#x27;s three-number pick</span></li></ul></section>
+    <ul class="tag-list" aria-label="Tags"><li>Type.App</li><li>Platform.Mobile</li><li>Platform.PC</li><li>Topic.Tools</li><li>Source.Mine</li></ul>
+    
+    
+    <!-- TODO: Capture the screens listed on the page. -->
+    <nav class="project-pager" aria-label="More projects">
+      <a class="project-pager__link" href="radar.html"><span class="project-pager__label">← Previous</span>Radar</a>
+      <a class="project-pager__link project-pager__link--next" href="sky-ability-system.html"><span class="project-pager__label">Next →</span>Sky Ability System</a>
+    </nav>
+  </div>
+</main>
+<footer class="site-footer" id="end">
+  <div class="site-footer__marquee" aria-hidden="true">
+    <div class="site-footer__track"><span>Let's make</span><span class="text-outline">something</span><span>✦</span></div>
+    <div class="site-footer__track"><span>Let's make</span><span class="text-outline">something</span><span>✦</span></div>
+  </div>
+  <div class="site-footer__row">
+    <ul class="site-footer__links">
+      <li><a class="button button--ghost" href="../assets/docs/alex-coultas-cv.pdf" target="_blank" rel="noopener">CV (PDF)</a></li>
+      <li><a class="button button--ghost" href="https://x.com/AlexCoultas" target="_blank" rel="noopener">@AlexCoultas</a></li>
+      <li><a class="button button--ghost" href="https://github.com/Zeploc" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a class="button button--ghost" href="https://skywardstudios.co.nz" target="_blank" rel="noopener">Skyward Studios</a></li>
+    </ul>
+    <p class="site-footer__note">© 2026 Alex Coultas · <span class="js-only">Press <kbd>~</kbd> for the console</span></p>
+  </div>
+</footer>
+<script src="../assets/js/motion.js" defer></script>
+<script src="../assets/js/achievements.js" defer></script>
+<script src="../assets/js/dev-console.js" defer></script>
+<script src="../assets/js/site-header.js" defer></script>
+<script src="../assets/js/reveal.js" defer></script>
+<script src="../assets/js/lightbox.js" defer></script>
+<script src="../assets/js/video-embed.js" defer></script>
+<script src="../assets/js/project-keys.js" defer></script>
+</body>
+</html>
