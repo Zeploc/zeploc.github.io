@@ -2,7 +2,7 @@
 
 This is the portfolio website of **Alex Coultas, a Senior Game Engineer** (Unreal Engine gameplay, systems and tools). It shows Alex's studio projects, client work, side projects, apps, plugins, his NZGDC talk and his experience to studios and recruiters, and it replaces his ArtStation. It is a static site: plain HTML, CSS and JavaScript, with no framework and no build step. It is **hosted on GitHub Pages** at `https://zeploc.github.io/`, so every path is relative and the site must also work when opened from disk.
 
-The design comes from concept `05b` in `concepts/` (Showcase Particles): a title screen, a hero of featured projects drawn as interactive particles, full-screen work panels that step one per scroll, a client kiosk, side projects, plugins, about, a vertical experience timeline (one role per scroll, earlier roles stacking) with the toolkit beside it, a sentence-driven archive, and resources (the talk and the things Alex recommends). A developer console (`~`) and achievements add fun extras. `README.md` lists the content that is still needed.
+The design comes from concept `05b` in `concepts/` (Showcase Particles), reordered since: a title screen; a hero of featured projects (each photo pixelates into particles around the pointer); an About screen with the stats; a vertical experience timeline (one role per scroll, earlier roles stacking) with the toolkit beside it; full-screen work panels; a client kiosk; side projects; plugins; a sentence-driven archive; and resources (the talk and the things Alex recommends). One scroll moves one screen through the hero, About, each role and each work panel. A developer console (`~`) and achievements add fun extras. `README.md` lists the content that is still needed.
 
 ## Standards (authoritative)
 

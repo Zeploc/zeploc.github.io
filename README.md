@@ -36,6 +36,7 @@ Search the HTML for `TODO` to find each gap.
 - [ ] **Gameplay Flow** — a link if the GitHub repository becomes public (it is private now).
 - [ ] **Kyōryū** — clips of the systems I built, once they can be shown. The key art comes from kyoryuofficial.com; check it is fine to use.
 - [ ] **Mythos Party** — the development dates.
+- [ ] **Skyward Studios timeline entry** — check the dates ("Since 2019"), the role, the five items and the highlighted skills (all guessed) in the experience timeline.
 - [ ] **VRAF** — a clip of the physics interactions and what I built.
 - [ ] **SuperHorse** — the Steam link when the store page is live.
 - [ ] **Kinetic, Lifeline, Retail Simulator, Dotzi** — screenshots or clips.

@@ -2,7 +2,8 @@
 // into the middle of the screen. More input during the glide moves the target on again, so fast
 // scrolling chains through roles and is never blocked. Earlier cards scroll up as normal and stack
 // at the top of the window once they reach it. The line fills down to the current role, and the
-// toolkit beside it lights the skills that role used. On phones and tablets it is a plain timeline.
+// toolkit beside it lights the skills that role used (on the About screen above, it lights them all).
+// On phones and tablets it is a plain timeline.
 (() => {
   const layout = document.querySelector('[data-timeline]');
   if (!layout) {
@@ -13,6 +14,11 @@
   const dots = rows.map((row) => row.querySelector('.timeline__dot'));
   const kit = layout.querySelector('[data-timeline-kit]');
   const tiles = [...kit.querySelectorAll('[data-skill]')];
+  const hint = layout.querySelector('[data-timeline-hint]');
+  const hintText = {
+    all: 'Everything I work with. Scroll on to see what I used where.',
+    role: 'Lit: the skills I used in the role in view.',
+  };
   const header = document.querySelector('[data-site-header]');
   const wideScreen = window.matchMedia('(min-width: 64rem)');
   const pileGap = 32; // px between stacked cards
@@ -101,11 +107,17 @@
     }
     list.style.setProperty('--timeline-fill', `${Math.max(0, end - list.getBoundingClientRect().top)}px`);
 
+    // Up on the About screen every skill is lit; from the timeline on, only the role in view's.
+    const isOnAbout = stops.length > 0 && y < stops[0] - window.innerHeight * 0.5;
+    const state = isOnAbout ? 'all' : active;
     kit.classList.toggle('is-filtering', stops.length > 0);
-    if (active !== activeIndex) {
-      activeIndex = active;
-      const uses = new Set(rows[active].dataset.uses.split(' '));
-      tiles.forEach((tile) => tile.classList.toggle('is-lit', uses.has(tile.dataset.skill)));
+    if (state !== activeIndex) {
+      activeIndex = state;
+      const uses = isOnAbout ? null : new Set(rows[active].dataset.uses.split(' '));
+      tiles.forEach((tile) => tile.classList.toggle('is-lit', !uses || uses.has(tile.dataset.skill)));
+      if (hint) {
+        hint.textContent = isOnAbout ? hintText.all : hintText.role;
+      }
     }
   }
 
@@ -132,8 +144,12 @@
     const y = window.scrollY;
     const elapsed = Math.min(64, now - (lastFrameTime || now));
     lastFrameTime = now;
-    const next = y + (goal - y) * (1 - Math.exp(-elapsed / 110));
-    if (Math.abs(goal - next) < 0.6) {
+    // Ease out, but always move at least a pixel: the scroll position rounds to whole pixels, so
+    // tiny steps near the end would otherwise never arrive.
+    const distance = goal - y;
+    const move = distance * (1 - Math.exp(-elapsed / 110));
+    const next = y + Math.sign(distance) * Math.max(1, Math.abs(move));
+    if (Math.abs(distance) <= 1) {
       window.scrollTo({ top: goal, behavior: 'instant' });
       target = -1;
       frame = 0;
@@ -162,27 +178,22 @@
     }
   }
 
-  function isNear() {
+  // The timeline owns the scroll from its first role to its last. work-panels.js brings the page
+  // in from About or from the Kyōryū panel, and takes it on again past either end.
+  function isInside() {
     const y = window.scrollY;
-    const reach = window.innerHeight * 0.6;
-    return target !== -1 || (y > stops[0] - reach && y < stops[stops.length - 1] + reach);
+    return target !== -1 || (y >= stops[0] - 2 && y <= stops[stops.length - 1] + 2);
   }
 
   // Moves one role in the given direction. Returns false when the page should scroll as normal.
   function step(direction) {
-    if (!stops.length || !isNear()) {
+    if (!stops.length || !isInside()) {
       return false;
     }
     const y = window.scrollY;
-    const first = stops[0];
-    const last = stops[stops.length - 1];
     let from = target !== -1 ? target : nearest();
     if (target === -1) {
-      if (y < first - 2) {
-        from = direction > 0 ? -1 : 0; // above the timeline: down lands on the first role
-      } else if (y > last + 2) {
-        from = direction < 0 ? stops.length : last; // below it: up lands on the last role
-      } else if (direction > 0 && y < stops[from] - 2) {
+      if (direction > 0 && y < stops[from] - 2) {
         from -= 1; // part-way between roles: finish the move in that direction
       } else if (direction < 0 && y > stops[from] + 2) {
         from += 1;
@@ -190,15 +201,21 @@
     }
     const next = from + direction;
     if (next < 0 || next >= stops.length) {
+      if (target === -1) {
+        return false; // sitting on an end role: work-panels.js has already taken this one
+      }
+      // Mid-glide past either end: hand straight over to the screen before or after the timeline.
       stopGlide();
-      return false;
+      window.dispatchEvent(new CustomEvent('timeline:leave', { detail: direction }));
+      return true;
     }
     moveTo(next);
     return true;
   }
 
   window.addEventListener('wheel', (event) => {
-    if (!stops.length || event.ctrlKey || Math.abs(event.deltaY) < Math.abs(event.deltaX) || !isNear()) {
+    // work-panels.js runs first and cancels the event when it has used it (or is swallowing momentum).
+    if (event.defaultPrevented || !stops.length || event.ctrlKey || Math.abs(event.deltaY) < Math.abs(event.deltaX) || !isInside()) {
       return;
     }
     const now = performance.now();
@@ -227,13 +244,19 @@
   const keyDirections = { PageDown: 1, ArrowDown: 1, PageUp: -1, ArrowUp: -1 };
   window.addEventListener('keydown', (event) => {
     const direction = keyDirections[event.key];
-    if (!direction || Motion.isTyping() || document.querySelector('dialog[open], .dev-console.is-open')) {
+    if (event.defaultPrevented || !direction || Motion.isTyping() || document.querySelector('dialog[open], .dev-console.is-open')) {
       return;
     }
     if (step(direction)) {
       event.preventDefault();
     }
   });
+
+  // For work-panels.js: where the timeline's roles sit, and whether it is mid-glide.
+  window.ExperienceTimeline = {
+    stops: () => stops,
+    isGliding: () => target !== -1,
+  };
 
   // Dragging the scrollbar or touching the screen takes over from a glide.
   window.addEventListener('mousedown', stopGlide);

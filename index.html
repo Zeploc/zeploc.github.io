@@ -35,12 +35,12 @@
     </div>
     <nav class="site-nav" aria-label="Main">
       <ul class="site-nav__list" data-site-nav>
+          <li><a class="site-nav__link" href="#about">About</a></li>
+          <li><a class="site-nav__link" href="#experience">Experience</a></li>
           <li><a class="site-nav__link" href="#work">Work</a></li>
           <li><a class="site-nav__link" href="#clients">Clients</a></li>
           <li><a class="site-nav__link" href="#side">Side projects</a></li>
           <li><a class="site-nav__link" href="#plugins">Plugins</a></li>
-          <li><a class="site-nav__link" href="#about">About</a></li>
-          <li><a class="site-nav__link" href="#experience">Experience</a></li>
           <li><a class="site-nav__link" href="#archive">Archive</a></li>
           <li><a class="site-nav__link" href="#resources">Resources</a></li>
       </ul>
@@ -52,7 +52,7 @@
   <section class="hero" id="top" data-hero aria-label="Featured projects">
     <div class="hero__backdrop" data-hero-backdrop><img class="hero__image" src="assets/img/wanderer/key-art-1280.webp" srcset="assets/img/wanderer/key-art-640.webp 640w, assets/img/wanderer/key-art-1280.webp 1280w, assets/img/wanderer/key-art-1920.webp 1920w" sizes="100vw" width="1920" height="1080" alt="Wanderer: The Fragments of Fate key art: the hero holds a crowbar and a water gun in a cluttered, overgrown courtyard" decoding="async" fetchpriority="high"></div>
     <div class="hero__shade" aria-hidden="true"></div>
-    <p class="hero__hint js-only" aria-hidden="true">Move to look through · click to scatter</p>
+    <p class="hero__hint js-only" aria-hidden="true">Move to pixelate · click to scatter</p>
     <div class="hero__content" data-hero-content>
       <p class="hero__eyebrow"><span class="hero__live">Senior Game Engineer</span><span class="pill">Floating Rock Studio</span><span class="pill">Unreal Engine</span><span class="pill">New Zealand</span></p>
       <h1 class="hero__name"><span class="hero__name-row">Alex</span><span class="hero__name-row text-outline">Coultas</span></h1>
@@ -85,8 +85,97 @@
     </div>
   </section>
 
+  <!-- About and Experience share one "What I bring" panel. On laptops it sits on the right of About
+       with every skill lit, then stays pinned beside the timeline, lighting each role's skills. -->
+  <div class="container intro-split" data-timeline>
+    <div class="intro-split__main">
+      <section class="about about-screen" id="about" aria-labelledby="about-title">
+    <div class="section-head reveal"><div><p class="kicker">Chapter 01 · About</p><h2 class="section-head__title" id="about-title">Who I am</h2></div></div>
+    <div class="stats" data-stats>
+    <p class="stats__item" data-stat><span class="stats__value" data-stat-value="6">6</span><span class="stats__label">years in industry, since 2020</span></p>
+    <p class="stats__item" data-stat><span class="stats__value" data-stat-value="20" data-stat-suffix="+">20+</span><span class="stats__label">Realspace walkthroughs</span></p>
+    <p class="stats__item" data-stat><span class="stats__value" data-stat-value="13">13</span><span class="stats__label">side projects, apps &amp; plugins</span></p>
+    <p class="stats__item" data-stat><span class="stats__value" data-stat-value="6">6</span><span class="stats__label">platforms, PS5 to Quest</span></p>
+  </div>
+    <div class="about__grid reveal">
+      <div class="about__portrait"><img class="about__image" src="assets/img/about/headshot-800.webp" srcset="assets/img/about/headshot-400.webp 400w, assets/img/about/headshot-800.webp 800w" sizes="(min-width: 64rem) 20rem, 60vw" width="800" height="800" alt="Alex Coultas" loading="lazy" decoding="async"></div>
+      <div>
+        <p class="about__big">I'm a <b>technical lead</b> who cares about robust code structures, effective tools and meaningful experiences.</p>
+        <p class="about__text">Unreal Engine is my home, at work and in my own time: gameplay systems, plugins, editor tools and networking. At work I lead teams and mentor juniors. Outside work I build my own games, plugins and apps, from my own C++ engine to Mythos Party, an indie game I made with my small studio, <a href="https://skywardstudios.co.nz" target="_blank" rel="noopener">Skyward Studios</a>. I like sharing what I learn, too.</p>
+      </div>
+    </div>
+    <ul class="hats hats--grid reveal">
+      <li><a class="hat" href="#experience"><span class="hat__label">Unreal Engine</span><span class="hat__title">C++ and Blueprints</span><span class="hat__text">Gameplay, plugins, editor tools, networking and VR</span></a></li>
+      <li><a class="hat" href="#side"><span class="hat__label">Side projects</span><span class="hat__title">Games, apps &amp; plugins</span><span class="hat__text">From SuperHorse to my own engine</span></a></li>
+      <li><a class="hat" href="projects/mythos-party.html"><span class="hat__label">Indie games</span><span class="hat__title">Mythos Party on Steam</span><span class="hat__text">SuperHorse is coming to Steam next</span></a></li>
+      <li><a class="hat" href="#talk"><span class="hat__label">Sharing</span><span class="hat__title">NZGDC 2025 talk</span><span class="hat__text">Gameplay Ability System, and open-source plugins</span></a></li>
+    </ul>
+      </section>
+
+      <section class="section experience" id="experience" data-timeline-section aria-labelledby="experience-title">
+    <div class="section-head reveal"><div><p class="kicker">Chapter 02 · Experience</p><h2 class="section-head__title" id="experience-title">Where I've worked</h2></div></div>
+      <ol class="timeline" data-timeline-list>
+        <li class="timeline__row" data-timeline-row data-uses="plugin-modules editor-tools-utilities umg-slate cpp-blueprints cpp java-groovy-gradle playstation-5 windows steam github testing-framework animation-systems python perforce jenkins-ci-cd pull-merge-requests">
+          <span class="timeline__dot" aria-hidden="true">FR<!-- TODO: company logo --></span>
+          <article class="job job--now">
+            <span class="job__year" aria-hidden="true">2026</span><p class="job__when">Mar 2026 – present</p>
+            <h3 class="job__role">Senior Game Engineer</h3><p class="job__org">Floating Rock Studio</p>
+            <ul class="job__items"><li>Automation &amp; review systems</li><li>Gameplay</li><li>Systems</li><li>Tools</li><li>Leadership</li><li>Production tasks</li></ul>
+            <p class="job__projects">Project: <b>Kyōryū</b></p>
+          </article>
+        </li><li class="timeline__row" data-timeline-row data-uses="editor-tools-utilities umg-slate cpp-blueprints cpp multi-threading external-apis testing-framework python desktop-touchscreen github plugin-modules java-groovy-gradle jenkins-ci-cd windows perforce pull-merge-requests">
+          <span class="timeline__dot" aria-hidden="true">TB<!-- TODO: company logo --></span>
+          <article class="job">
+            <span class="job__year" aria-hidden="true">2025</span><p class="job__when">May 2025 – Mar 2026</p>
+            <h3 class="job__role">Senior Software Engineer</h3><p class="job__org">The Boundary</p>
+            <ul class="job__items"><li>Feature &amp; system design</li><li>Modular UE plugins</li><li>Jenkins CI/CD</li><li>Java libraries</li><li>SaaS deployments</li><li>Sprint management</li></ul>
+            
+          </article>
+        </li><li class="timeline__row" data-timeline-row data-uses="plugin-modules editor-tools-utilities umg-slate cpp-blueprints cpp batch-script meta-quest-2-3-pro steam github windows virtual-reality animation-systems playstation-5 csharp perforce">
+          <span class="timeline__dot" aria-hidden="true">ME<!-- TODO: company logo --></span>
+          <article class="job">
+            <span class="job__year" aria-hidden="true">2022</span><p class="job__when">Nov 2022 – Feb 2025</p>
+            <h3 class="job__role">Lead Game Developer</h3><p class="job__org">Mighty Eyes</p>
+            <ul class="job__items"><li>Gameplay &amp; interactions</li><li>Backend systems</li><li>Team leadership</li><li>Mentorship</li><li>Editor &amp; external tools</li><li>Milestones</li></ul>
+            <p class="job__projects">Projects: <b>Wanderer</b>, <b>VRAF</b></p>
+          </article>
+        </li><li class="timeline__row" data-timeline-row data-uses="umg-slate cpp-blueprints cpp csharp perforce github plugin-modules virtual-reality networking external-apis javascript-typescript react-babylon-js react-mui desktop-touchscreen windows meta-quest-2-3-pro net-windows-forms batch-script">
+          <span class="timeline__dot" aria-hidden="true">BM<!-- TODO: company logo --></span>
+          <article class="job">
+            <span class="job__year" aria-hidden="true">2020</span><p class="job__when">Mar 2020 – Oct 2022</p>
+            <h3 class="job__role">Software Engineer &amp; Tools Lead</h3><p class="job__org">Buildmedia</p>
+            <ul class="job__items"><li>UE plugins &amp; UI</li><li>Runtime systems</li><li>Networked deployment tools</li><li>React · MUI · Babylon.js</li><li>Rapid iteration</li></ul>
+            <p class="job__projects">Clients: <b>Toyota</b>, <b>ETNZ</b>, <b>Fisher &amp; Paykel</b> and more</p>
+          </article>
+        </li><li class="timeline__row" data-timeline-row data-uses="networking umg-slate cpp-blueprints cpp animation-systems editor-tools-utilities plugin-modules steam windows github">
+          <span class="timeline__dot" aria-hidden="true">SS<!-- TODO: company logo --></span>
+          <article class="job">
+            <span class="job__year" aria-hidden="true">2019</span><p class="job__when">Since 2019</p>
+            <h3 class="job__role">Director &amp; Lead Programmer</h3><p class="job__org">Skyward Studios</p>
+            <ul class="job__items"><li>Studio direction</li><li>Online multiplayer</li><li>Gameplay systems</li><li>Steam release</li><li>Primary programmer on team projects</li></ul>
+            <p class="job__projects">Projects: <a href="projects/mythos-party.html">Mythos Party</a>, <a href="projects/underforge.html">UnderForge</a>, <a href="projects/university.html">TossPots, Painted Wings, Stolen Time, Hardlight</a></p>
+          </article>
+        </li><li class="timeline__row" data-timeline-row data-uses="networking umg-slate virtual-reality cpp-blueprints cpp graphics-shaders multi-threading animation-systems windows mobile github csharp glsl opengl unity">
+          <span class="timeline__dot" aria-hidden="true">MDS<!-- TODO: company logo --></span>
+          <article class="job">
+            <span class="job__year" aria-hidden="true">2017</span><p class="job__when">2017 – 2019</p>
+            <h3 class="job__role">Bachelor of Software Engineering</h3><p class="job__org">Media Design School</p>
+            <ul class="job__items"><li>C++</li><li>Custom engine</li><li>Graphics</li></ul>
+            <p class="job__projects"><a href="projects/university.html">University projects →</a></p>
+          </article>
+        </li>
+      </ol>
+      </section>
+    </div>
+      <aside class="experience__bring" id="bring" aria-labelledby="bring-title">
+        <h3 class="kicker" id="bring-title">What I bring</h3>
+        <div class="bring" data-timeline-kit><div class="bring__group bring__group--gold"><h4 class="bring__title">Unreal Engine<span>11</span></h4><ul class="bring__tiles"><li class="bring__tile" data-skill="networking">Networking</li><li class="bring__tile" data-skill="plugin-modules">Plugin modules</li><li class="bring__tile" data-skill="editor-tools-utilities">Editor tools &amp; utilities</li><li class="bring__tile" data-skill="umg-slate">UMG &amp; Slate</li><li class="bring__tile" data-skill="virtual-reality">Virtual reality</li><li class="bring__tile" data-skill="cpp-blueprints">C++ &amp; Blueprints</li><li class="bring__tile" data-skill="graphics-shaders">Graphics &amp; shaders</li><li class="bring__tile" data-skill="multi-threading">Multi-threading</li><li class="bring__tile" data-skill="animation-systems">Animation systems</li><li class="bring__tile" data-skill="external-apis">External APIs</li><li class="bring__tile" data-skill="testing-framework">Testing framework</li></ul></div><div class="bring__group bring__group--violet"><h4 class="bring__title">Languages<span>9</span></h4><ul class="bring__tiles"><li class="bring__tile" data-skill="cpp">C++</li><li class="bring__tile" data-skill="csharp">C#</li><li class="bring__tile" data-skill="java-groovy-gradle">Java · Groovy · Gradle</li><li class="bring__tile" data-skill="python">Python</li><li class="bring__tile" data-skill="glsl">GLSL</li><li class="bring__tile" data-skill="javascript-typescript">JavaScript · TypeScript</li><li class="bring__tile" data-skill="react-babylon-js">React · Babylon.js</li><li class="bring__tile" data-skill="batch-script">Batch script</li><li class="bring__tile" data-skill="html-css">HTML &amp; CSS</li></ul></div><div class="bring__group bring__group--green"><h4 class="bring__title">Platforms<span>6</span></h4><ul class="bring__tiles"><li class="bring__tile" data-skill="playstation-5">PlayStation 5</li><li class="bring__tile" data-skill="meta-quest-2-3-pro">Meta Quest 2, 3 &amp; Pro</li><li class="bring__tile" data-skill="windows">Windows</li><li class="bring__tile" data-skill="steam">Steam</li><li class="bring__tile" data-skill="desktop-touchscreen">Desktop touchscreen</li><li class="bring__tile" data-skill="mobile">Mobile</li></ul></div><div class="bring__group bring__group--blue"><h4 class="bring__title">Pipeline &amp; frameworks<span>8</span></h4><ul class="bring__tiles"><li class="bring__tile" data-skill="perforce">Perforce</li><li class="bring__tile" data-skill="github">GitHub</li><li class="bring__tile" data-skill="pull-merge-requests">Pull/merge requests</li><li class="bring__tile" data-skill="jenkins-ci-cd">Jenkins CI/CD</li><li class="bring__tile" data-skill="unity">Unity</li><li class="bring__tile" data-skill="opengl">OpenGL</li><li class="bring__tile" data-skill="net-windows-forms">.NET / Windows Forms</li><li class="bring__tile" data-skill="react-mui">React · MUI</li></ul></div></div>
+        <p class="experience__hint" data-timeline-hint>Everything I work with. Scroll on to see what I used where.</p>
+      </aside>
+  </div>
+
   <section class="work-panels" id="work" data-work-panels aria-labelledby="work-title">
-    <h2 class="visually-hidden" id="work-title">Selected work</h2>
+    <h2 class="visually-hidden" id="work-title">Chapter 03 · Selected work</h2>
     <article class="work-panel">
       <div class="work-panel__inner" data-work-panel>
         <div class="work-panel__media"><img class="work-panel__image" src="assets/img/kyoryu/key-art-1280.webp" srcset="assets/img/kyoryu/key-art-640.webp 640w, assets/img/kyoryu/key-art-1280.webp 1280w, assets/img/kyoryu/key-art-1920.webp 1920w" sizes="100vw" width="1920" height="1080" alt="" loading="lazy" decoding="async"></div>
@@ -134,18 +223,9 @@
     </article>
   </section>
 
-  <div class="container" data-work-after>
-  <div class="stats" data-stats>
-    <p class="stats__item" data-stat><span class="stats__value" data-stat-value="6">6</span><span class="stats__label">years in industry, since 2020</span></p>
-    <p class="stats__item" data-stat><span class="stats__value" data-stat-value="20" data-stat-suffix="+">20+</span><span class="stats__label">Realspace walkthroughs</span></p>
-    <p class="stats__item" data-stat><span class="stats__value" data-stat-value="13">13</span><span class="stats__label">side projects, apps &amp; plugins</span></p>
-    <p class="stats__item" data-stat><span class="stats__value" data-stat-value="6">6</span><span class="stats__label">platforms, PS5 to Quest</span></p>
-  </div>
-  </div>
-
-  <section class="section container" id="clients" aria-labelledby="clients-title">
+  <section class="section container" id="clients" data-work-after aria-labelledby="clients-title">
     <div class="section-head reveal">
-      <div><p class="kicker">Chapter 02 · Client work · Buildmedia 2020 – 2022</p><h2 class="section-head__title" id="clients-title">Interactive &amp; visualisation</h2>
+      <div><p class="kicker">Chapter 04 · Client work · Buildmedia 2020 – 2022</p><h2 class="section-head__title" id="clients-title">Interactive &amp; visualisation</h2>
       <p class="section-head__text">VR, touchscreen and PC experiences in Unreal Engine for property, automotive, sailing, appliance and city-planning clients.</p></div>
     </div>
     <div class="kiosk reveal" data-kiosk>
@@ -211,7 +291,7 @@
   </section>
 
   <section class="section container" id="side" aria-labelledby="side-title">
-    <div class="section-head reveal"><div><p class="kicker">Chapter 03 · Side projects</p><h2 class="section-head__title" id="side-title">Made after hours</h2>
+    <div class="section-head reveal"><div><p class="kicker">Chapter 05 · Side projects</p><h2 class="section-head__title" id="side-title">Made after hours</h2>
       <p class="section-head__text">Indie games, my own engine, and apps and gadgets I've built for myself and friends.</p></div></div>
     <div class="side-grid">
       <a class="side-card side-card--big" href="projects/superhorse.html">
@@ -293,7 +373,7 @@
   </section>
 
   <section class="section container" id="plugins" aria-labelledby="plugins-title">
-    <div class="section-head reveal"><div><p class="kicker">Chapter 04 · Plugins</p><h2 class="section-head__title" id="plugins-title">Tools for Unreal</h2>
+    <div class="section-head reveal"><div><p class="kicker">Chapter 06 · Plugins</p><h2 class="section-head__title" id="plugins-title">Tools for Unreal</h2>
       <p class="section-head__text">Reusable Unreal Engine plugins I build for my own games. Sky Ability System is open source on GitHub.</p></div></div>
     <div class="side-grid side-grid--apps">
       <a class="side-card side-card--art" href="projects/sky-ability-system.html">
@@ -321,77 +401,7 @@
     </div>
   </section>
 
-  <section class="section container about" id="about" aria-labelledby="about-title">
-    <div class="section-head reveal"><div><p class="kicker">Chapter 05 · About</p><h2 class="section-head__title" id="about-title">Who I am</h2></div></div>
-    <div class="about__grid reveal">
-      <div class="about__portrait"><img class="about__image" src="assets/img/about/headshot-800.webp" srcset="assets/img/about/headshot-400.webp 400w, assets/img/about/headshot-800.webp 800w" sizes="(min-width: 64rem) 20rem, 60vw" width="800" height="800" alt="Alex Coultas" loading="lazy" decoding="async"></div>
-      <div>
-        <p class="about__big">I'm a <b>technical lead</b> who cares about robust code structures, effective tools and meaningful experiences.</p>
-        <p class="about__text">Unreal Engine is my home, at work and in my own time: gameplay systems, plugins, editor tools and networking. At work I lead teams and mentor juniors. Outside work I build my own games, plugins and apps, from my own C++ engine to Mythos Party, an indie game I made with my small studio, <a href="https://skywardstudios.co.nz" target="_blank" rel="noopener">Skyward Studios</a>. I like sharing what I learn, too.</p>
-      </div>
-    </div>
-    <ul class="hats reveal">
-      <li><a class="hat" href="#experience"><span class="hat__label">Unreal Engine</span><span class="hat__title">C++ and Blueprints</span><span class="hat__text">Gameplay, plugins, editor tools, networking and VR</span></a></li>
-      <li><a class="hat" href="#side"><span class="hat__label">Side projects</span><span class="hat__title">13 games, apps &amp; plugins</span><span class="hat__text">From SuperHorse to my own engine</span></a></li>
-      <li><a class="hat" href="projects/mythos-party.html"><span class="hat__label">Indie games</span><span class="hat__title">Mythos Party on Steam</span><span class="hat__text">SuperHorse is coming to Steam next</span></a></li>
-      <li><a class="hat" href="#talk"><span class="hat__label">Sharing</span><span class="hat__title">NZGDC 2025 talk</span><span class="hat__text">Gameplay Ability System, and open-source plugins</span></a></li>
-    </ul>
 
-  </section>
-
-  <section class="section container experience" id="experience" aria-labelledby="experience-title">
-    <div class="section-head reveal"><div><p class="kicker">Chapter 06 · Experience</p><h2 class="section-head__title" id="experience-title">Where I've worked</h2></div></div>
-    <div class="experience__layout" data-timeline>
-      <ol class="timeline" data-timeline-list>
-        <li class="timeline__row" data-timeline-row data-uses="plugin-modules editor-tools-utilities umg-slate cpp-blueprints cpp java-groovy-gradle playstation-5 windows steam github testing-framework animation-systems python perforce-with-streams jenkins-ci-cd">
-          <span class="timeline__dot" aria-hidden="true">FR<!-- TODO: company logo --></span>
-          <article class="job job--now">
-            <span class="job__year" aria-hidden="true">2026</span><p class="job__when">Mar 2026 – present</p>
-            <h3 class="job__role">Senior Game Engineer</h3><p class="job__org">Floating Rock Studio</p>
-            <ul class="job__items"><li>Automation &amp; review systems</li><li>Gameplay</li><li>Systems</li><li>Tools</li><li>Leadership</li><li>Production tasks</li></ul>
-            <p class="job__projects">Project: <b>Kyōryū</b></p>
-          </article>
-        </li><li class="timeline__row" data-timeline-row data-uses="editor-tools-utilities umg-slate cpp-blueprints cpp multi-threading external-apis testing-framework python desktop-touchscreen github plugin-modules java-groovy-gradle jenkins-ci-cd windows perforce-with-streams">
-          <span class="timeline__dot" aria-hidden="true">TB<!-- TODO: company logo --></span>
-          <article class="job">
-            <span class="job__year" aria-hidden="true">2025</span><p class="job__when">May 2025 – Mar 2026</p>
-            <h3 class="job__role">Senior Software Engineer</h3><p class="job__org">The Boundary</p>
-            <ul class="job__items"><li>Feature &amp; system design</li><li>Modular UE plugins</li><li>Jenkins CI/CD</li><li>Java libraries</li><li>SaaS deployments</li><li>Sprint management</li></ul>
-            
-          </article>
-        </li><li class="timeline__row" data-timeline-row data-uses="plugin-modules editor-tools-utilities umg-slate cpp-blueprints cpp batch-script meta-quest-2-3-pro steam github windows virtual-reality animation-systems playstation-5 csharp perforce-with-streams">
-          <span class="timeline__dot" aria-hidden="true">ME<!-- TODO: company logo --></span>
-          <article class="job">
-            <span class="job__year" aria-hidden="true">2022</span><p class="job__when">Nov 2022 – Feb 2025</p>
-            <h3 class="job__role">Lead Game Developer</h3><p class="job__org">Mighty Eyes</p>
-            <ul class="job__items"><li>Gameplay &amp; interactions</li><li>Backend systems</li><li>Team leadership</li><li>Mentorship</li><li>Editor &amp; external tools</li><li>Milestones</li></ul>
-            <p class="job__projects">Projects: <b>Wanderer</b>, <b>VRAF</b></p>
-          </article>
-        </li><li class="timeline__row" data-timeline-row data-uses="umg-slate cpp-blueprints cpp csharp perforce-with-streams github plugin-modules virtual-reality networking external-apis javascript-typescript react-babylon-js react-mui desktop-touchscreen windows meta-quest-2-3-pro net-windows-forms batch-script">
-          <span class="timeline__dot" aria-hidden="true">BM<!-- TODO: company logo --></span>
-          <article class="job">
-            <span class="job__year" aria-hidden="true">2020</span><p class="job__when">Mar 2020 – Oct 2022</p>
-            <h3 class="job__role">Software Engineer &amp; Tools Lead</h3><p class="job__org">Buildmedia</p>
-            <ul class="job__items"><li>UE plugins &amp; UI</li><li>Runtime systems</li><li>Networked deployment tools</li><li>React · MUI · Babylon.js</li><li>Rapid iteration</li></ul>
-            <p class="job__projects">Clients: <b>Toyota</b>, <b>ETNZ</b>, <b>Fisher &amp; Paykel</b> and more</p>
-          </article>
-        </li><li class="timeline__row" data-timeline-row data-uses="networking umg-slate virtual-reality cpp-blueprints cpp graphics-shaders multi-threading animation-systems windows mobile github csharp glsl opengl unity">
-          <span class="timeline__dot" aria-hidden="true">MDS<!-- TODO: company logo --></span>
-          <article class="job">
-            <span class="job__year" aria-hidden="true">2017</span><p class="job__when">2017 – 2019</p>
-            <h3 class="job__role">Bachelor of Software Engineering</h3><p class="job__org">Media Design School</p>
-            <ul class="job__items"><li>C++</li><li>Custom engine</li><li>Graphics</li></ul>
-            <p class="job__projects"><a href="projects/university.html">University projects →</a></p>
-          </article>
-        </li>
-      </ol>
-      <aside class="experience__bring" id="bring" aria-labelledby="bring-title">
-        <h3 class="kicker" id="bring-title">What I bring</h3>
-        <div class="bring" data-timeline-kit><div class="bring__group bring__group--gold"><h4 class="bring__title">Unreal Engine<span>11</span></h4><ul class="bring__tiles"><li class="bring__tile" data-skill="networking">Networking</li><li class="bring__tile" data-skill="plugin-modules">Plugin modules</li><li class="bring__tile" data-skill="editor-tools-utilities">Editor tools &amp; utilities</li><li class="bring__tile" data-skill="umg-slate">UMG &amp; Slate</li><li class="bring__tile" data-skill="virtual-reality">Virtual reality</li><li class="bring__tile" data-skill="cpp-blueprints">C++ &amp; Blueprints</li><li class="bring__tile" data-skill="graphics-shaders">Graphics &amp; shaders</li><li class="bring__tile" data-skill="multi-threading">Multi-threading</li><li class="bring__tile" data-skill="animation-systems">Animation systems</li><li class="bring__tile" data-skill="external-apis">External APIs</li><li class="bring__tile" data-skill="testing-framework">Testing framework</li></ul></div><div class="bring__group bring__group--violet"><h4 class="bring__title">Languages<span>9</span></h4><ul class="bring__tiles"><li class="bring__tile" data-skill="cpp">C++</li><li class="bring__tile" data-skill="csharp">C#</li><li class="bring__tile" data-skill="java-groovy-gradle">Java · Groovy · Gradle</li><li class="bring__tile" data-skill="python">Python</li><li class="bring__tile" data-skill="glsl">GLSL</li><li class="bring__tile" data-skill="javascript-typescript">JavaScript · TypeScript</li><li class="bring__tile" data-skill="react-babylon-js">React · Babylon.js</li><li class="bring__tile" data-skill="batch-script">Batch script</li><li class="bring__tile" data-skill="html-css">HTML &amp; CSS</li></ul></div><div class="bring__group bring__group--green"><h4 class="bring__title">Platforms<span>6</span></h4><ul class="bring__tiles"><li class="bring__tile" data-skill="playstation-5">PlayStation 5</li><li class="bring__tile" data-skill="meta-quest-2-3-pro">Meta Quest 2, 3 &amp; Pro</li><li class="bring__tile" data-skill="windows">Windows</li><li class="bring__tile" data-skill="steam">Steam</li><li class="bring__tile" data-skill="desktop-touchscreen">Desktop touchscreen</li><li class="bring__tile" data-skill="mobile">Mobile</li></ul></div><div class="bring__group bring__group--blue"><h4 class="bring__title">Pipeline &amp; frameworks<span>7</span></h4><ul class="bring__tiles"><li class="bring__tile" data-skill="perforce-with-streams">Perforce with streams</li><li class="bring__tile" data-skill="github">GitHub</li><li class="bring__tile" data-skill="jenkins-ci-cd">Jenkins CI/CD</li><li class="bring__tile" data-skill="unity">Unity</li><li class="bring__tile" data-skill="opengl">OpenGL</li><li class="bring__tile" data-skill="net-windows-forms">.NET / Windows Forms</li><li class="bring__tile" data-skill="react-mui">React · MUI</li></ul></div></div>
-        <p class="experience__hint">Lit: the skills I used in the role in view.</p>
-      </aside>
-    </div>
-  </section>
 
   <section class="section container" id="archive" aria-labelledby="archive-title">
     <div class="section-head reveal"><div><p class="kicker">Chapter 07 · Archive</p><h2 class="section-head__title" id="archive-title">Everything, queried</h2>

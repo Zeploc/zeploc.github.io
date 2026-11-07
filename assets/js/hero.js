@@ -1,7 +1,9 @@
-// The hero: a carousel of featured projects, each drawn as a grid of particles.
-// Changing slide sorts particles and grid cells by brightness and sends each particle to its new
-// cell, so the picture rebuilds itself. The pointer pushes particles apart and opens a lens onto
-// the full image underneath; a click scatters them. Reduced motion shows the photos instead.
+// The hero: a carousel of featured projects. Each photo shows as normal, and around the pointer it
+// breaks into a grid of particles, like a pixelating lens. Each particle carries its own piece of the
+// photo, with a blurred copy of the photo behind them showing through the gaps. Changing slide swaps
+// the photo for the particles full screen, without a visible seam, while they sort themselves by
+// brightness into the next picture over the blurred next photo; then they fade out over the new photo.
+// A click scatters the particles. Reduced motion shows the photos only.
 (() => {
   const hero = document.querySelector('[data-hero]');
   if (!hero) {
@@ -13,6 +15,8 @@
   const slideDuration = 7000;
   let activeIndex = 0;
   let autoplayTimer = null;
+  // A blurred copy of the photo behind the particles, seen through the gaps between them.
+  let blurImage = null;
   let isVisible = true;
 
   /* === Carousel === */
@@ -46,12 +50,14 @@
       pip.classList.toggle('is-active', pipIndex === activeIndex);
       pip.setAttribute('aria-current', pipIndex === activeIndex ? 'true' : 'false');
     });
-    if (!particles) {
-      backdropImage.removeAttribute('srcset');
-      backdropImage.src = slide.dataset.heroImage;
-    } else {
+    if (particles) {
       particles.morph(slide.dataset.heroSlide);
-      lens.style.backgroundImage = `url('${slide.dataset.heroImage}')`;
+      showParticles(1800);
+    }
+    backdropImage.removeAttribute('srcset');
+    backdropImage.src = slide.dataset.heroImage;
+    if (blurImage) {
+      blurImage.src = slide.dataset.heroImage;
     }
     scheduleNext();
   }
@@ -74,7 +80,28 @@
   const sampleHeight = 108;
   const samples = {};
   let particles = null;
-  let lens = null;
+  let particleTimer = null;
+  let settleTimer = null;
+  // Changing slide: each particle flies to its new place on an ease-out curve, fast off the mark
+  // and gentle into place, after a short random delay.
+  const morphDelay = 400;
+  const morphDuration = 1300;
+  const morphEase = (t) => Math.sqrt(1 - (t - 1) * (t - 1)); // ease-out circ
+
+  // Swaps the photo for the particle picture full screen while it rebuilds or scatters. The swap is
+  // seamless because the particles fill their whole cells at the start and the end. Afterwards the
+  // particles fade out over the photo ("settling"), then shrink back to dots inside the lens.
+  function showParticles(duration) {
+    particles.fillCells();
+    hero.classList.remove('is-settling');
+    hero.classList.add('is-morphing');
+    window.clearTimeout(particleTimer);
+    window.clearTimeout(settleTimer);
+    particleTimer = window.setTimeout(() => {
+      hero.classList.replace('is-morphing', 'is-settling');
+      settleTimer = window.setTimeout(() => hero.classList.remove('is-settling'), 600);
+    }, duration);
+  }
 
   function loadSample(key) {
     return new Promise((resolve) => {
@@ -98,6 +125,32 @@
     });
   }
 
+  // The full-size photos, so each particle can carry its own piece of the picture rather than one
+  // flat colour. They load in the background. Until one is ready, particles use flat colours.
+  // Opened from disk, the browser will not let a canvas read a photo: the lens then shows the photo
+  // through the dots instead, and the rebuild uses flat colours.
+  const photos = {};
+  // The pixelating lens around the pointer, in canvas pixels. The radius matches the mask in components.css.
+  const lens = { x: -9999, y: -9999, radius: 9 * parseFloat(getComputedStyle(document.documentElement).fontSize), isLeaving: false };
+
+  // Draws a photo over the whole canvas the way object-fit: cover draws the photo behind it.
+  function drawCover(target, photo, width, height) {
+    const scale = Math.max(width / photo.naturalWidth, height / photo.naturalHeight);
+    const drawWidth = photo.naturalWidth * scale;
+    const drawHeight = photo.naturalHeight * scale;
+    target.drawImage(photo, (width - drawWidth) / 2, (height - drawHeight) / 2, drawWidth, drawHeight);
+  }
+
+  function loadPhoto(key, onReady) {
+    const slide = slides.find((other) => other.dataset.heroSlide === key);
+    if (!slide || photos[key]) {
+      return;
+    }
+    photos[key] = new Image();
+    photos[key].onload = onReady;
+    photos[key].src = slide.dataset.heroImage;
+  }
+
   function createParticles() {
     const canvas = document.createElement('canvas');
     canvas.className = 'hero__canvas';
@@ -114,11 +167,38 @@
     let frameImage = null;
     let pixels = null;
     let isRunning = false;
-    let pointerX = -9999;
-    let pointerY = -9999;
     // Position, velocity, target position, colour, target colour, size, target size, start delay, scroll spread.
     let positionX, positionY, velocityX, velocityY, targetX, targetY;
     let red, green, blue, targetRed, targetGreen, targetBlue, size, targetSize, startTime, spread;
+    // Where each particle's piece of the photo sits (top-left of its cell), now and before the last morph.
+    let sourceX, sourceY, oldSourceX, oldSourceY;
+    // Where each particle set off from on the last slide change.
+    let fromX, fromY;
+    // The photo drawn at canvas size, now and before the last morph. Null means flat colours.
+    let texture = null;
+    let oldTexture = null;
+    let textureKey = null;
+    const textureCanvas = document.createElement('canvas');
+    const textureContext = textureCanvas.getContext('2d', { willReadFrequently: true });
+    let canReadPhotos = true;
+    // How far the dots have grown to fill their cells: 1 matches the photo exactly, 0 is the halftone.
+    let fill = 1;
+
+    function readTexture(key) {
+      const photo = photos[key];
+      if (!canReadPhotos || !photo || !photo.complete || !photo.naturalWidth) {
+        return null;
+      }
+      textureCanvas.width = width;
+      textureCanvas.height = height;
+      drawCover(textureContext, photo, width, height);
+      try {
+        return new Uint32Array(textureContext.getImageData(0, 0, width, height).data.buffer);
+      } catch {
+        canReadPhotos = false; // opened from disk: the browser blocks reading the photo
+        return null;
+      }
+    }
 
     function build() {
       width = canvas.width = hero.clientWidth;
@@ -131,6 +211,10 @@
       pixels = new Uint32Array(frameImage.data.buffer);
       [positionX, positionY, velocityX, velocityY, targetX, targetY, red, green, blue,
         targetRed, targetGreen, targetBlue, size, targetSize, startTime, spread] = Array.from({ length: 16 }, () => new Float32Array(count));
+      [sourceX, sourceY, oldSourceX, oldSourceY] = Array.from({ length: 4 }, () => new Int32Array(count));
+      [fromX, fromY] = Array.from({ length: 2 }, () => new Float32Array(count));
+      texture = oldTexture = null;
+      textureKey = null;
       for (let index = 0; index < count; index += 1) {
         positionX[index] = targetX[index] = Math.random() * width;
         positionY[index] = targetY[index] = Math.random() * height;
@@ -174,27 +258,74 @@
       const cellOrder = new Uint32Array(count).map((unused, index) => index).sort((a, b) => cellLight[a] - cellLight[b]);
       const particleOrder = new Uint32Array(count).map((unused, index) => index).sort((a, b) => particleLight[a] - particleLight[b]);
       const now = performance.now();
+      // Particles keep their old piece of photo until they set off, then carry the new one.
+      oldTexture = texture;
+      oldSourceX.set(sourceX);
+      oldSourceY.set(sourceY);
+      textureKey = key;
+      texture = readTexture(key);
+      if (!texture) {
+        loadPhoto(key, () => {
+          if (textureKey === key) {
+            texture = readTexture(key);
+          }
+        });
+      }
       for (let rank = 0; rank < count; rank += 1) {
         const particle = particleOrder[rank];
         const cell = cellOrder[rank];
-        targetX[particle] = (cell % columns) * cellSize + cellSize / 2;
-        targetY[particle] = Math.floor(cell / columns) * cellSize + cellSize / 2;
+        sourceX[particle] = (cell % columns) * cellSize;
+        sourceY[particle] = Math.floor(cell / columns) * cellSize;
+        targetX[particle] = sourceX[particle] + cellSize / 2;
+        targetY[particle] = sourceY[particle] + cellSize / 2;
         targetRed[particle] = Math.min(255, cellRed[cell] * 1.12 + 6);
         targetGreen[particle] = Math.min(255, cellGreen[cell] * 1.12 + 6);
         targetBlue[particle] = Math.min(255, cellBlue[cell] * 1.12 + 6);
         // Brighter cells get bigger dots, like a halftone print.
         targetSize[particle] = Math.max(1.4, cellSize * (0.3 + 0.7 * cellLight[cell]));
-        startTime[particle] = now + Math.random() * 600;
+        startTime[particle] = now + Math.random() * morphDelay;
+        fromX[particle] = positionX[particle];
+        fromY[particle] = positionY[particle];
       }
     }
 
     function step(now) {
       const scrollSpread = Motion.clamp(window.scrollY / height);
-      const radius = 115;
-      const radiusSquared = radius * radius;
       const spring = 0.045;
       const damping = 0.84;
-      pixels.fill(0);
+      // Only draw what can be seen: the whole screen while the particles rebuild or scatter, the
+      // box around the lens while the pointer is over the photo, and nothing otherwise.
+      let clipLeft = 0;
+      let clipTop = 0;
+      let clipRight = width;
+      let clipBottom = height;
+      const isMorphing = hero.classList.contains('is-morphing');
+      const isFullScreen = isMorphing || hero.classList.contains('is-settling');
+      const isDrawing = isFullScreen || hero.classList.contains('is-looking');
+      // The dots fill their cells while full screen and while the lens closes, and shrink to the halftone otherwise.
+      const fillTarget = isFullScreen || lens.isLeaving ? 1 : 0;
+      fill = Math.abs(fillTarget - fill) < 0.02 ? fillTarget : fill + (fillTarget - fill) * 0.1;
+      if (lens.isLeaving && fill === 1) {
+        lens.isLeaving = false;
+        hero.classList.remove('is-looking');
+      }
+      if (!isFullScreen) {
+        const reach = lens.radius + cellSize * 2;
+        clipLeft = Math.max(0, Math.floor(lens.x - reach));
+        clipTop = Math.max(0, Math.floor(lens.y - reach));
+        clipRight = Math.min(width, Math.ceil(lens.x + reach));
+        clipBottom = Math.min(height, Math.ceil(lens.y + reach));
+      }
+      const hasClip = isDrawing && clipRight > clipLeft && clipBottom > clipTop;
+      if (hasClip) {
+        for (let row = clipTop; row < clipBottom; row += 1) {
+          pixels.fill(0, row * width + clipLeft, row * width + clipRight);
+        }
+      }
+      // In the lens the dots are smallest at the pointer and grow to fill their cells towards the
+      // edge, so the lens blends into the photo by its gaps closing rather than by fading.
+      const lensInner = lens.radius * 0.2;
+      const lensOuter = lens.radius * 0.85;
       // A few random nudges keep the picture shimmering.
       for (let nudge = 0; nudge < 30; nudge += 1) {
         const index = Math.floor(Math.random() * count);
@@ -202,34 +333,63 @@
         velocityY[index] += Math.random() - 0.5;
       }
       for (let index = 0; index < count; index += 1) {
-        if (now > startTime[index]) {
-          velocityX[index] += (targetX[index] - positionX[index]) * spring;
-          velocityY[index] += (targetY[index] - positionY[index]) * spring;
-        }
-        const distanceX = positionX[index] - pointerX;
-        const distanceY = positionY[index] - pointerY;
-        if (distanceX > -radius && distanceX < radius && distanceY > -radius && distanceY < radius) {
-          const distanceSquared = distanceX * distanceX + distanceY * distanceY;
-          if (distanceSquared < radiusSquared) {
-            const distance = Math.sqrt(distanceSquared) + 0.01;
-            const push = (1 - distance / radius) * 5.5;
-            velocityX[index] += (distanceX / distance) * push;
-            velocityY[index] += (distanceY / distance) * push;
+        const hasStarted = now > startTime[index];
+        const progress = (now - startTime[index]) / morphDuration;
+        if (progress > 0 && progress < 1) {
+          // Mid-flight on a slide change: follow the ease-out curve.
+          const eased = morphEase(progress);
+          positionX[index] = fromX[index] + (targetX[index] - fromX[index]) * eased;
+          positionY[index] = fromY[index] + (targetY[index] - fromY[index]) * eased;
+          velocityX[index] = 0;
+          velocityY[index] = 0;
+        } else {
+          // At rest (or scattered): a spring holds each particle to its place.
+          if (hasStarted) {
+            velocityX[index] += (targetX[index] - positionX[index]) * spring;
+            velocityY[index] += (targetY[index] - positionY[index]) * spring;
           }
+          velocityX[index] *= damping;
+          velocityY[index] *= damping;
+          positionX[index] += velocityX[index];
+          positionY[index] += velocityY[index];
         }
-        velocityX[index] *= damping;
-        velocityY[index] *= damping;
-        positionX[index] += velocityX[index];
-        positionY[index] += velocityY[index];
         red[index] += (targetRed[index] - red[index]) * 0.05;
         green[index] += (targetGreen[index] - green[index]) * 0.05;
         blue[index] += (targetBlue[index] - blue[index]) * 0.05;
         size[index] += (targetSize[index] - size[index]) * 0.08;
 
-        const dotSize = Math.max(1, Math.floor(size[index]));
-        const left = Math.floor(positionX[index] - dotSize / 2);
-        const top = Math.floor(positionY[index] - dotSize / 2 - scrollSpread * spread[index] * height * 0.9);
-        if (left < 0 || top < 0 || left + dotSize > width || top + dotSize > height) {
+        const centreY = positionY[index] - scrollSpread * spread[index] * height * 0.9;
+        let dotFill = fill;
+        let drawX = positionX[index];
+        let drawY = centreY;
+        if (!isFullScreen) {
+          const distance = Math.hypot(positionX[index] - lens.x, centreY - lens.y);
+          const edge = Motion.clamp((distance - lensInner) / (lensOuter - lensInner));
+          const edgeFill = edge * edge * (3 - 2 * edge);
+          dotFill = Math.max(fill, edgeFill);
+          // Towards the edge the dots also sit exactly in their cells, so no shimmer opens a gap there.
+          if (hasStarted) {
+            drawX += (targetX[index] - drawX) * edgeFill;
+            drawY += (targetY[index] - scrollSpread * spread[index] * height * 0.9 - drawY) * edgeFill;
+          }
+        }
+        const dotSize = Math.max(1, Math.min(cellSize, Math.round(size[index] + (cellSize - size[index]) * dotFill)));
+        const left = Math.floor(drawX - dotSize / 2);
+        const top = Math.floor(drawY - dotSize / 2);
+        if (!hasClip || left < clipLeft || top < clipTop || left + dotSize > clipRight || top + dotSize > clipBottom) {
+          continue;
+        }
+        const source = hasStarted ? texture : oldTexture;
+        if (source) {
+          // Copy the middle of the particle's cell from the photo, so it carries its piece of the picture.
+          const inset = (cellSize - dotSize) >> 1;
+          const fromX = Math.min((hasStarted ? sourceX : oldSourceX)[index] + inset, width - dotSize);
+          const fromY = Math.min((hasStarted ? sourceY : oldSourceY)[index] + inset, height - dotSize);
+          for (let line = 0, offset = top * width + left, from = fromY * width + fromX; line < dotSize; line += 1, offset += width, from += width) {
+            for (let column = 0; column < dotSize; column += 1) {
+              pixels[offset + column] = source[from + column];
+            }
+          }
           continue;
         }
         // Pixels are little-endian ABGR.
@@ -238,7 +398,24 @@
           pixels.fill(colour, offset, offset + dotSize);
         }
       }
-      context.putImageData(frameImage, 0, 0);
+      if (hasClip) {
+        context.putImageData(frameImage, 0, 0, clipLeft, clipTop, clipRight - clipLeft, clipBottom - clipTop);
+        // Opened from disk: show the photo through the dots in the lens instead of their flat colours.
+        const photo = photos[textureKey];
+        if (!texture && !isMorphing && !canReadPhotos && photo && photo.complete) {
+          context.save();
+          context.beginPath();
+          context.rect(clipLeft, clipTop, clipRight - clipLeft, clipBottom - clipTop);
+          context.clip();
+          context.globalCompositeOperation = 'source-in';
+          drawCover(context, photo, width, height);
+          context.restore();
+        }
+      }
+    }
+
+    function fillCells() {
+      fill = 1;
     }
 
     function frame() {
@@ -264,6 +441,8 @@
         const distanceY = positionY[index] - centreY;
         const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY) + 0.01;
         if (distance < 360) {
+          // A scattered particle leaves any slide-change flight and springs back instead.
+          startTime[index] = Math.min(startTime[index], performance.now() - morphDuration);
           const push = (1 - distance / 360) * power;
           velocityX[index] += (distanceX / distance) * push;
           velocityY[index] += (distanceY / distance) * push;
@@ -271,35 +450,43 @@
       }
     }
 
-    function setPointer(x, y) {
-      pointerX = x;
-      pointerY = y;
-    }
-
     build();
-    return { build, morph, setRunning, scatter, setPointer };
+    return { build, morph, setRunning, scatter, fillCells };
   }
 
   function startParticles() {
-    lens = document.createElement('div');
-    lens.className = 'hero__lens';
-    lens.setAttribute('aria-hidden', 'true');
-    hero.querySelector('.hero__shade').before(lens);
     particles = createParticles();
+    blurImage = document.createElement('img');
+    blurImage.className = 'hero__blur';
+    blurImage.alt = '';
+    blurImage.setAttribute('aria-hidden', 'true');
+    blurImage.src = backdropImage.currentSrc || backdropImage.src;
+    hero.querySelector('.hero__canvas').before(blurImage);
     hero.classList.add('has-particles');
 
     hero.addEventListener('pointermove', (event) => {
+      // The lens opens with the photo and pixelates as the dots shrink.
+      if (!hero.classList.contains('is-looking')) {
+        particles.fillCells();
+      }
+      lens.isLeaving = false;
       const bounds = hero.getBoundingClientRect();
-      const x = event.clientX - bounds.left;
-      const y = event.clientY - bounds.top;
-      particles.setPointer(x, y);
-      hero.style.setProperty('--lens-x', `${x}px`);
-      hero.style.setProperty('--lens-y', `${y}px`);
+      lens.x = event.clientX - bounds.left;
+      lens.y = event.clientY - bounds.top;
+      hero.style.setProperty('--lens-x', `${lens.x}px`);
+      hero.style.setProperty('--lens-y', `${lens.y}px`);
       hero.classList.add('is-looking', 'is-paused');
     });
+    // The lens closes by growing the dots back into the photo, then hides.
     hero.addEventListener('pointerleave', () => {
-      particles.setPointer(-9999, -9999);
-      hero.classList.remove('is-looking', 'is-paused');
+      hero.classList.remove('is-paused');
+      lens.isLeaving = true;
+      window.setTimeout(() => {
+        if (lens.isLeaving) {
+          lens.isLeaving = false;
+          hero.classList.remove('is-looking');
+        }
+      }, 700);
     });
     hero.addEventListener('pointerdown', (event) => {
       if (event.target.closest('a, button')) {
@@ -307,10 +494,12 @@
       }
       const bounds = hero.getBoundingClientRect();
       particles.scatter(event.clientX - bounds.left, event.clientY - bounds.top);
+      showParticles(1800);
       Achievements.unlock('shock');
     });
     window.addEventListener('hero:scatter', () => {
       particles.scatter(undefined, undefined, 70);
+      showParticles(1800);
       Achievements.unlock('shock');
     });
 

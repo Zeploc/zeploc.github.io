@@ -1,8 +1,10 @@
 // The main projects as full-screen panels that stack. Each one sinks back as the next slides over it.
-// With a mouse wheel, trackpad or keyboard, one scroll moves cleanly from the hero to the first panel,
-// from each panel to the next, and from the last panel to the client work. Input that
-// arrives while it is still moving (or the trackpad's momentum after it lands) is ignored, so a
-// burst of scrolling moves one panel, not several. Touch screens use CSS scroll snapping instead.
+// With a mouse wheel, trackpad or keyboard, one scroll moves cleanly through the opening screens:
+// the hero, About, the experience timeline, each panel, then the client work. Inside the timeline,
+// experience-timeline.js takes over and steps role by role; leaving either end of it comes back here.
+// Input that arrives while a move is under way (or the trackpad's momentum after it lands) is
+// ignored, so a burst of scrolling moves one screen, not several. Touch screens use CSS scroll
+// snapping instead.
 (() => {
   const section = document.querySelector('[data-work-panels]');
   if (!section) {
@@ -47,28 +49,60 @@
   let lastInputTime = 0;
 
   const hero = document.querySelector('[data-hero]');
+  const about = document.querySelector('#about');
+  const experience = document.querySelector('[data-timeline-section]');
   const after = document.querySelector('[data-work-after]');
 
-  // The stops: the top of the hero, each panel, then the block after the panels (the stats and the
-  // start of the client work), just under the header. Each panel is one screen tall, so the panel
-  // tops sit one screen apart from the section top.
-  function panelTops() {
-    const sectionTop = section.getBoundingClientRect().top + window.scrollY;
-    const panelHeight = panels[0].offsetHeight;
-    const tops = panels.map((panel, index) => Math.round(sectionTop + index * panelHeight));
-    if (hero) {
-      tops.unshift(Math.round(hero.getBoundingClientRect().top + window.scrollY));
-    }
-    if (after) {
-      const headerHeight = document.querySelector('[data-site-header]')?.offsetHeight || 0;
-      tops.push(Math.round(after.getBoundingClientRect().top + window.scrollY - headerHeight - 24));
-    }
-    return tops;
+  function pageTop(element) {
+    return Math.round(element.getBoundingClientRect().top + window.scrollY);
   }
 
-  // The panel to move to, or null when the scroll should leave the panels as normal.
+  function headerHeight() {
+    return document.querySelector('[data-site-header]')?.offsetHeight || 0;
+  }
+
+  // The experience "zone": scroll positions this script leaves alone. On laptops it runs from the
+  // first role to the last (the timeline steps between them). On smaller screens the timeline is a
+  // plain list, so the zone is the whole section, scrolled as normal.
+  function experienceZone() {
+    const stops = window.ExperienceTimeline?.stops() || [];
+    if (stops.length) {
+      return [stops[0], stops[stops.length - 1]];
+    }
+    if (!experience) {
+      return null;
+    }
+    const start = pageTop(experience) - headerHeight();
+    const end = Math.max(start, pageTop(experience) + experience.offsetHeight - window.innerHeight);
+    return [start, end];
+  }
+
+  // The stops: the top of the hero, the About screen, both ends of the experience zone, each panel,
+  // then the client work just under the header. Each panel is one screen tall.
+  function stopList() {
+    const sectionTop = pageTop(section);
+    const panelHeight = panels[0].offsetHeight;
+    const tops = panels.map((panel, index) => Math.round(sectionTop + index * panelHeight));
+    const zone = experienceZone();
+    if (zone) {
+      tops.push(...zone);
+    }
+    if (about) {
+      tops.push(pageTop(about));
+    }
+    if (hero) {
+      tops.push(pageTop(hero));
+    }
+    if (after) {
+      tops.push(pageTop(after) - headerHeight() - 24);
+    }
+    return { tops: tops.sort((a, b) => a - b), zone };
+  }
+
+  // The stop to move to, or null when the scroll should carry on as normal (outside the stops, or
+  // inside the experience zone, where the timeline handles it).
   function targetFor(direction) {
-    const tops = panelTops();
+    const { tops, zone } = stopList();
     const position = window.scrollY;
     const viewportHeight = window.innerHeight;
     const first = tops[0];
@@ -77,9 +111,15 @@
       if (position < first - viewportHeight * 0.6 || position >= last - 2) {
         return null;
       }
+      if (zone && position >= zone[0] - 2 && position < zone[1] - 2) {
+        return null;
+      }
       return tops.find((top) => top > position + 2);
     }
     if (position <= first + 2 || position > last + viewportHeight * 0.6) {
+      return null;
+    }
+    if (zone && position > zone[0] + 2 && position <= zone[1] + 2) {
       return null;
     }
     return [...tops].reverse().find((top) => top < position - 2);
@@ -102,7 +142,7 @@
   }
 
   window.addEventListener('wheel', (event) => {
-    if (event.ctrlKey || Math.abs(event.deltaY) < Math.abs(event.deltaX)) {
+    if (event.ctrlKey || Math.abs(event.deltaY) < Math.abs(event.deltaX) || window.ExperienceTimeline?.isGliding()) {
       return;
     }
     const now = performance.now();
@@ -123,10 +163,24 @@
     moveTo(target);
   }, { passive: false });
 
+  // The timeline asks for this when you scroll past either end of it mid-glide.
+  window.addEventListener('timeline:leave', (event) => {
+    const { tops, zone } = stopList();
+    if (!zone) {
+      return;
+    }
+    const target = event.detail > 0
+      ? tops.find((top) => top > zone[1] + 2)
+      : [...tops].reverse().find((top) => top < zone[0] - 2);
+    if (target !== undefined) {
+      moveTo(target);
+    }
+  });
+
   const keyDirections = { PageDown: 1, ArrowDown: 1, ' ': 1, PageUp: -1, ArrowUp: -1 };
   window.addEventListener('keydown', (event) => {
     const direction = event.key === ' ' && event.shiftKey ? -1 : keyDirections[event.key];
-    if (!direction || Motion.isTyping() || document.querySelector('dialog[open], .dev-console.is-open')) {
+    if (!direction || Motion.isTyping() || document.querySelector('dialog[open], .dev-console.is-open') || window.ExperienceTimeline?.isGliding()) {
       return;
     }
     if (event.key === ' ' && event.target.closest && event.target.closest('button, a, [role="listbox"]')) {

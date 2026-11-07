@@ -399,8 +399,8 @@
 
 .hero__backdrop,
 .hero__image,
-.hero__canvas,
-.hero__lens {
+.hero__blur,
+.hero__canvas {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -412,25 +412,67 @@
   transition: opacity var(--duration-slow);
 }
 
-/* With particles running, the photo only shows through the lens around the pointer. */
-.hero.has-particles .hero__backdrop {
-  display: none;
+/* The photo shows as normal. Around the pointer it gives way to the particle picture, like a
+   pixelating lens. hero.js grows the dots to fill their cells towards the lens edge, so the edge
+   matches the photo and the mask only needs a short fade to hide the seam. While the particles rebuild into the next slide (or scatter), they replace the
+   photo full screen with no fade: hero.js makes the dots fill their cells so the swap is seamless.
+   Afterwards ("settling") the particles fade out over the photo. */
+/* The blurred photo behind the particles. Scaled up a little so the blur has no soft edges. */
+/* The blurred photo behind the particles. It overhangs the hero by --hero-blur-bleed on every side
+   so the blur has no soft edges (a transform would move its lens mask off the pointer). Its lens is
+   a little smaller than the particles' lens, so it never shows past the dots at the edge. */
+.hero__blur {
+  --hero-blur-bleed: 1.5rem;
+  inset: calc(var(--hero-blur-bleed) * -1);
+  width: calc(100% + var(--hero-blur-bleed) * 2);
+  height: calc(100% + var(--hero-blur-bleed) * 2);
+  object-fit: cover;
+  filter: blur(6px);
+  -webkit-mask-image: radial-gradient(circle 9rem at calc(var(--lens-x, -999px) + var(--hero-blur-bleed)) calc(var(--lens-y, -999px) + var(--hero-blur-bleed)), #000 72%, transparent 84%);
+  mask-image: radial-gradient(circle 9rem at calc(var(--lens-x, -999px) + var(--hero-blur-bleed)) calc(var(--lens-y, -999px) + var(--hero-blur-bleed)), #000 72%, transparent 84%);
+}
+
+.hero__canvas {
+  -webkit-mask-image: radial-gradient(circle 9rem at var(--lens-x, -999px) var(--lens-y, -999px), #000 88%, transparent 100%);
+  mask-image: radial-gradient(circle 9rem at var(--lens-x, -999px) var(--lens-y, -999px), #000 88%, transparent 100%);
+}
+
+.hero__blur,
+.hero__canvas {
+  opacity: 0;
 }
 
 .hero__canvas {
   image-rendering: pixelated;
 }
 
-.hero__lens {
-  background: var(--colour-bg-deep) center / cover no-repeat;
-  opacity: 0;
-  transition: opacity 0.35s;
-  -webkit-mask-image: radial-gradient(circle 10rem at var(--lens-x, -999px) var(--lens-y, -999px), #000 30%, transparent 75%);
-  mask-image: radial-gradient(circle 10rem at var(--lens-x, -999px) var(--lens-y, -999px), #000 30%, transparent 75%);
+.hero.is-looking .hero__blur,
+.hero.is-looking .hero__canvas {
+  opacity: 1;
 }
 
-.hero.is-looking .hero__lens {
+.hero.is-morphing .hero__blur,
+.hero.is-morphing .hero__canvas,
+.hero.is-settling .hero__blur,
+.hero.is-settling .hero__canvas {
   opacity: 1;
+  -webkit-mask-image: none;
+  mask-image: none;
+}
+
+.hero.is-settling .hero__blur,
+.hero.is-settling .hero__canvas {
+  opacity: 0;
+  transition: opacity 0.6s;
+}
+
+.hero.has-particles.is-morphing .hero__image,
+.hero.has-particles.is-settling .hero__image {
+  transition: none;
+}
+
+.hero.is-morphing .hero__image {
+  opacity: 0;
 }
 
 .hero__shade {
@@ -1339,14 +1381,120 @@ html:not(.js) .hero-slide + .hero-slide {
   margin-bottom: var(--space-l);
 }
 
+/* About opens the page as one full screen (the first stop after the hero), with the stats under it. */
+.about-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding-block: calc(var(--header-height) + var(--space-l)) var(--space-l);
+}
+
+.about-screen .section-head {
+  margin-bottom: var(--space-l);
+}
+
+.about-screen .stats {
+  margin: 0 0 var(--space-l);
+}
+
+.about-screen .hats {
+  margin-top: var(--space-l);
+}
+
+@media (min-width: 40rem) {
+  .hats--grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
 @media (min-width: 64rem) {
   .about__grid {
     grid-template-columns: 18rem 1fr;
   }
 
+  .about-screen .about__grid {
+    gap: var(--space-l);
+  }
+
+  .about-screen .about__big {
+    font-size: var(--text-l);
+  }
+
+  .about-screen .about__text {
+    margin-top: var(--space-s);
+    font-size: var(--text-m);
+  }
+
+  .about-screen .stats__item {
+    padding: var(--space-s) var(--space-m);
+  }
+
+  .about-screen .stats__value {
+    font-size: 2.5rem;
+  }
+
+  /* Everything on the About screen has to fit one laptop screen, beside the toolkit. */
+  .about-screen .section-head {
+    margin-bottom: var(--space-m);
+  }
+
+  .about-screen .section-head__title {
+    font-size: clamp(2.25rem, 4vw, 3.25rem);
+  }
+
+  .about-screen .about__grid {
+    grid-template-columns: 11rem 1fr;
+  }
+
+  .about-screen .about__portrait {
+    max-width: 11rem;
+  }
+
+  .about-screen .hats {
+    gap: var(--space-xs);
+  }
+
+  .about-screen .hat {
+    padding: var(--space-s) var(--space-m);
+  }
+
   .talk {
     grid-template-columns: minmax(0, 26rem) 1fr;
     padding: var(--space-xl);
+  }
+}
+
+/* Shorter laptop screens: a smaller photo and heading, so About and the stats still fit on one screen. */
+@media (min-width: 64rem) and (max-height: 56rem) {
+  .about-screen .about__grid {
+    grid-template-columns: 10.5rem 1fr;
+  }
+
+  .about-screen .about__portrait {
+    max-width: 10.5rem;
+  }
+
+  .about-screen .section-head__title {
+    font-size: clamp(2rem, 4vw, 3rem);
+  }
+
+  .about-screen .about__big {
+    font-size: var(--text-l);
+  }
+
+  .about-screen .about__text {
+    font-size: var(--text-m);
+  }
+
+  .about-screen .hat,
+  .about-screen .stats__item {
+    padding: var(--space-s) var(--space-m);
+  }
+
+  .about-screen .hat__text {
+    display: none;
   }
 }
 
@@ -1452,9 +1600,15 @@ html:not(.js) .hero-slide + .hero-slide {
 
 /* === Experience: a vertical timeline, with the toolkit beside it on laptops === */
 
-.experience__layout {
+/* About and Experience share a two-column layout on laptops: the left column scrolls, and the
+   "What I bring" panel on the right stays pinned from About down to the end of the timeline. */
+.intro-split {
   display: grid;
   gap: var(--space-xl);
+}
+
+.intro-split__main {
+  min-width: 0;
 }
 
 /* Phones and tablets: the line and logo dots run down the left of the cards. */
@@ -1678,9 +1832,16 @@ html:not(.js) .hero-slide + .hero-slide {
    each role glides to the middle of the screen; earlier cards stack at the top once they reach it,
    and the toolkit lights the skills of the role in view. experience-timeline.js moves the rows. */
 @media (min-width: 64rem) {
-  .experience__layout {
+  .intro-split {
     grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
     align-items: start;
+  }
+
+  /* Room under the last role, so it can sit mid-screen with nothing below it (the next scroll then
+     moves on to the work panels) and the pinned toolkit is never pushed up by them. */
+  .experience {
+    padding-bottom: 50vh;
+    padding-bottom: 50svh;
   }
 
   .timeline::before,
@@ -1722,9 +1883,15 @@ html:not(.js) .hero-slide + .hero-slide {
     transform: scale(calc(1 - var(--depth, 0) * 0.025));
   }
 
+  /* A screen-tall pinned box, so the panel inside sits in the middle of the screen below the header. */
   .experience__bring {
     position: sticky;
-    top: calc(var(--header-height) + var(--space-m));
+    top: var(--header-height);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: calc(100vh - var(--header-height));
+    height: calc(100svh - var(--header-height));
   }
 
   .bring {
@@ -2904,7 +3071,8 @@ html:not(.js) .hero-slide + .hero-slide {
     scroll-snap-type: y proximity;
   }
 
-  .hero {
+  .hero,
+  .about-screen {
     scroll-snap-align: start;
   }
 }
