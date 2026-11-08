@@ -118,11 +118,10 @@ ANIMATIONS = [
 ]
 
 # Square company and school logos for the timeline dots. They keep their transparency.
-# The Boundary's is a square made from its wordmark (content/Logos/the-boundary-wordmark.png).
+# The Boundary's is not here: assets/img/logos/the-boundary.svg is drawn by hand from its wordmark.
 LOGO_WIDTHS = (64, 128)
 LOGOS = [
     ('floating-rock', 'Logos/floating-rock.png'),
-    ('the-boundary', 'Logos/the-boundary.png'),
     ('mighty-eyes', 'Logos/mighty-eyes.jpg'),
     ('buildmedia', 'Logos/buildmedia.png'),
     ('skyward-studios', 'Logos/skyward-studios.png'),
