@@ -3,7 +3,8 @@
 // scrolling chains through roles and is never blocked. Earlier cards scroll up as normal and stack
 // at the top of the window once they reach it. The line fills down to the current role, and the
 // toolkit beside it lights the skills that role used (on the About screen above, it lights them all).
-// On phones and tablets it is a plain timeline.
+// On phones and tablets it is a plain timeline that fills and focuses the same way, and touch
+// screens snap to each role.
 (() => {
   const layout = document.querySelector('[data-timeline]');
   if (!layout) {
@@ -23,12 +24,31 @@
   const wideScreen = window.matchMedia('(min-width: 64rem)');
   const pileGap = 32; // px between stacked cards
   const stepSize = 60; // px of wheel movement that counts as one step (a mouse notch is about 100)
+  const skillSwitch = 0.8; // how far the next role is in (0–1) when the toolkit switches to its skills
 
-  let stops = []; // scroll positions that put each role in the middle of the screen
+  let stops = []; // laptops: scroll positions that put each role in the middle of the screen
+  let snaps = []; // the same on any screen: on phones, each role in the middle of the space below the header
   let naturalTops = [];
   let stackTop = 0;
   let activeIndex = -1;
   let isQueued = false;
+
+  // Touch screens snap to each role, as they do to the work panels (the CSS turns the snapping on).
+  // Each marker sits where the top of the screen, below the header, is when its role is in place.
+  const markers = rows.map(() => {
+    const marker = document.createElement('span');
+    marker.className = 'timeline__snap';
+    marker.setAttribute('aria-hidden', 'true');
+    document.body.append(marker);
+    return marker;
+  });
+
+  function placeSnaps() {
+    const padding = Number.parseFloat(window.getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+    markers.forEach((marker, i) => {
+      marker.style.top = `${snaps[i] + padding}px`;
+    });
+  }
 
   function headerHeight() {
     return header ? header.getBoundingClientRect().height : 0;
@@ -38,13 +58,21 @@
     rows.forEach((row) => {
       row.style.transform = '';
     });
+    const top = headerHeight();
     if (!wideScreen.matches) {
       stops = [];
+      // A role taller than the space shows its top instead.
+      const room = window.innerHeight - top;
+      snaps = rows.map((row) => {
+        const box = row.getBoundingClientRect();
+        const offset = box.height < room - 32 ? (room - box.height) / 2 : 16;
+        return Math.round(box.top + window.scrollY - top - offset);
+      });
+      placeSnaps();
       update();
       return;
     }
     const gap = Number.parseFloat(window.getComputedStyle(list).rowGap) || 0;
-    const top = headerHeight();
     const centre = Math.max(top + 16, (window.innerHeight - rows[0].offsetHeight) / 2 + top / 2);
     stackTop = top + 16;
     let y = list.getBoundingClientRect().top + window.scrollY;
@@ -54,6 +82,8 @@
       return natural;
     });
     stops = naturalTops.map((natural) => Math.round(natural - centre));
+    snaps = stops;
+    placeSnaps();
     update();
   }
 
@@ -67,15 +97,15 @@
     const y = window.scrollY;
     let active = 0;
     let progress = 0; // 0–1 on the way to the next role
-    if (stops.length) {
-      stops.forEach((stop, i) => {
-        if (y >= stop - 1) {
-          active = i;
-        }
-      });
-      if (active < stops.length - 1) {
-        progress = Motion.clamp((y - stops[active]) / (stops[active + 1] - stops[active]));
+    snaps.forEach((snap, i) => {
+      if (y >= snap - 1) {
+        active = i;
       }
+    });
+    if (active < snaps.length - 1) {
+      progress = Motion.clamp((y - snaps[active]) / (snaps[active + 1] - snaps[active]));
+    }
+    if (stops.length) {
       // A card keeps its normal scroll position until it reaches its place in the stack at the
       // top. After the last role, the stack scrolls away with the page.
       const over = Math.max(0, y - stops[stops.length - 1]);
@@ -86,18 +116,15 @@
         row.style.transform = shift ? `translateY(${shift.toFixed(1)}px)` : '';
         row.classList.toggle('is-stacked', shift > 0.5);
       });
-    } else {
-      const middle = window.innerHeight * 0.55;
-      dots.forEach((dot, i) => {
-        if (dot.getBoundingClientRect().top < middle) {
-          active = i;
-        }
-      });
     }
+    // Focus (0–1) passes from the current role to the next one as it arrives. The CSS brings in the
+    // dot, then the year, then the outline, and the role being left lets them go in reverse.
     rows.forEach((row, i) => {
+      const focus = i === active ? 1 - progress : i === active + 1 ? progress : 0;
       row.classList.toggle('is-past', i < active);
       row.classList.toggle('is-active', i === active);
       row.style.setProperty('--depth', Math.max(0, active - i));
+      row.style.setProperty('--focus', focus.toFixed(3));
     });
 
     // The line fills down to the current dot, and on towards the next one as it arrives.
@@ -108,12 +135,14 @@
     list.style.setProperty('--timeline-fill', `${Math.max(0, end - list.getBoundingClientRect().top)}px`);
 
     // Up on the About screen every skill is lit; from the timeline on, only the role in view's.
+    // The skills switch to the next role once it is most of the way in.
     const isOnAbout = stops.length > 0 && y < stops[0] - window.innerHeight * 0.5;
-    const state = isOnAbout ? 'all' : active;
+    const shown = progress >= skillSwitch ? active + 1 : active;
+    const state = isOnAbout ? 'all' : shown;
     kit.classList.toggle('is-filtering', stops.length > 0);
     if (state !== activeIndex) {
       activeIndex = state;
-      const uses = isOnAbout ? null : new Set(rows[active].dataset.uses.split(' '));
+      const uses = isOnAbout ? null : new Set(rows[shown].dataset.uses.split(' '));
       tiles.forEach((tile) => tile.classList.toggle('is-lit', !uses || uses.has(tile.dataset.skill)));
       if (hint) {
         hint.textContent = isOnAbout ? hintText.all : hintText.role;

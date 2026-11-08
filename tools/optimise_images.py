@@ -117,6 +117,18 @@ ANIMATIONS = [
     ('mythos-party', 'peaceful-day', f'{MYTHOS}/PeacefuldayVol2smol.gif'),
 ]
 
+# Square company and school logos for the timeline dots. They keep their transparency.
+# The Boundary's is a square made from its wordmark (content/Logos/the-boundary-wordmark.png).
+LOGO_WIDTHS = (64, 128)
+LOGOS = [
+    ('floating-rock', 'Logos/floating-rock.png'),
+    ('the-boundary', 'Logos/the-boundary.png'),
+    ('mighty-eyes', 'Logos/mighty-eyes.jpg'),
+    ('buildmedia', 'Logos/buildmedia.png'),
+    ('skyward-studios', 'Logos/skyward-studios.png'),
+    ('media-design-school', 'Logos/media-design-school.png'),
+]
+
 # Link preview images (og:image), one per page. JPG, because some sites do not show WebP previews.
 PREVIEW_SIZE = (1200, 630)
 PREVIEW_QUALITY = 85
@@ -191,6 +203,16 @@ def save_animation(folder, name, source, max_width=ANIMATION_MAX_WIDTH):
     print(f'{folder}/{name}: {frames[0].width}x{frames[0].height}, {len(frames)} frames, {size_mb:.1f} MB')
 
 
+def save_logo(name, source):
+    image = Image.open(CONTENT / source).convert('RGBA')
+    target = OUTPUT / 'logos'
+    target.mkdir(parents=True, exist_ok=True)
+    for width in LOGO_WIDTHS:
+        image.resize((width, width), Image.LANCZOS).save(
+            target / f'{name}-{width}.webp', 'WEBP', quality=90, method=6)
+    print(f'logos/{name}: widths {list(LOGO_WIDTHS)}')
+
+
 def save_preview(name, source):
     image = Image.open(CONTENT / source)
     image.seek(0)
@@ -220,6 +242,8 @@ def main():
         save_still(*still)
     for animation in ANIMATIONS:
         save_animation(*animation)
+    for logo in LOGOS:
+        save_logo(*logo)
     for name, source in PREVIEWS:
         save_preview(name, source)
     save_hero_samples()
