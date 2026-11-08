@@ -95,7 +95,7 @@
   }
 
   const commands = {
-    help: () => print('help · ls · open <project> · goto <section> · next · prev · scatter · talk\nslomo <0.1–2> · stat fps · show collision · god · achievements · clear · exit'),
+    help: () => print('help · ls · open <project> · goto <section> · next · prev · warp · talk\nslomo <0.1–2> · stat fps · show collision · god · achievements · clear · exit'),
     ls: () => print(`projects: ${projects.join('  ')}\nsections: ${sections.join('  ')}`),
     open: (name) => {
       if (!projects.includes(name)) {
@@ -114,9 +114,14 @@
     },
     next: () => window.dispatchEvent(new CustomEvent('hero:step', { detail: 1 })),
     prev: () => window.dispatchEvent(new CustomEvent('hero:step', { detail: -1 })),
-    scatter: () => {
-      window.dispatchEvent(new Event('hero:scatter'));
-      print('Boom.');
+    warp: () => {
+      if (!window.HeroScreen) {
+        print('No viewscreen on this page.', 'error');
+        return;
+      }
+      setOpen(false);
+      window.scrollTo({ top: 0, behavior: 'instant' });
+      window.dispatchEvent(new Event('hero:enter'));
     },
     talk: () => {
       setOpen(false);

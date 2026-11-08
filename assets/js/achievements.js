@@ -4,7 +4,7 @@ window.Achievements = (() => {
   const storageKey = 'alex-coultas-achievements';
   const goals = [
     { id: 'start', name: 'Press Start', hint: 'Got past the title screen', medal: '🎮' },
-    { id: 'shock', name: 'Particle Physicist', hint: 'Scattered the hero particles', medal: '💥' },
+    { id: 'warp', name: 'Engage', hint: 'Zoomed into a project from the viewscreen', medal: '🚀' },
     { id: 'console', name: 'Developer Console', hint: 'Opened the console', medal: '⌨️' },
     { id: 'project', name: 'Open Sesame', hint: 'Opened a project page', medal: '📂' },
     { id: 'all-work', name: 'Completionist', hint: 'Opened all four main projects', medal: '💯' },
@@ -16,7 +16,7 @@ window.Achievements = (() => {
     { id: 'god', name: 'God Mode', hint: 'Entered the Konami code', medal: '⭐' },
     { id: 'end', name: 'The Long Way Round', hint: 'Scrolled to the very end', medal: '🏁' },
   ];
-  const mainProjects = ['kyoryu', 'wanderer', 'mythos-party', 'vraf'];
+  const mainProjects = ['kyoryu', 'wanderer', 'mythos-party', 'httyd'];
   const unlocked = new Set(Motion.storage.read(storageKey, []));
 
   const toasts = document.createElement('div');

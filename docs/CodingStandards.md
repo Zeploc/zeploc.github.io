@@ -53,7 +53,6 @@ assets/
   js/
     motion.js                   Shared helpers (reduced motion, storage, root path). Loads first.
     achievements.js             Shared achievements (window.Achievements). Loads second.
-    hero-samples.js             Made by tools/optimise_images.py. Do not edit by hand.
     <behaviour>.js              One file per behaviour: hero.js, kiosk.js, archive-query.js
   img/<project-slug>/           Optimised images for one project (made by tools/optimise_images.py)
   img/previews/                 Link previews (og:image)
@@ -297,7 +296,7 @@ Images and video are most of the page weight. On a phone, they decide whether th
 - **Small functions that do one thing,** with guard clauses instead of deep nesting.
 - **Use `IntersectionObserver`** for scroll effects that start or stop (reveals, the stats banner, highlighting the menu). Do not listen to `scroll` for this.
 - **Effects that follow the exact scroll position** (the stacked work panels, the experience timeline, the reading progress bar) may listen to `scroll`, as a passive listener that does its work at most once per frame with `requestAnimationFrame`. Say so in a comment.
-- **Canvas effects** (the hero particles, the title screen starfield) stop when they are off screen and do not run when the visitor prefers reduced motion.
+- **Canvas effects** (the hero star field, the title screen starfield) stop when they are off screen and do not run when the visitor prefers reduced motion.
 - **No errors in the console** on any page, on any device.
 - **Store user choices only for convenience** (for example, the last open tab), and wrap `localStorage` in `try`/`catch`. The site must work when storage is blocked.
 

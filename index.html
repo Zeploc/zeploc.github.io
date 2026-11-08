@@ -35,9 +35,9 @@
     </div>
     <nav class="site-nav" aria-label="Main">
       <ul class="site-nav__list" data-site-nav>
+          <li><a class="site-nav__link" href="#work">Work</a></li>
           <li><a class="site-nav__link" href="#about">About</a></li>
           <li><a class="site-nav__link" href="#experience">Experience</a></li>
-          <li><a class="site-nav__link" href="#work">Work</a></li>
           <li><a class="site-nav__link" href="#clients">Clients</a></li>
           <li><a class="site-nav__link" href="#side">Side projects</a></li>
           <li><a class="site-nav__link" href="#plugins">Plugins</a></li>
@@ -49,40 +49,123 @@
   <div class="site-header__progress" aria-hidden="true"><span class="site-header__progress-fill" data-scroll-progress></span></div>
 </header>
 <main id="main">
-  <section class="hero" id="top" data-hero aria-label="Featured projects">
-    <div class="hero__backdrop" data-hero-backdrop><img class="hero__image" src="assets/img/wanderer/key-art-1280.webp" srcset="assets/img/wanderer/key-art-640.webp 640w, assets/img/wanderer/key-art-1280.webp 1280w, assets/img/wanderer/key-art-1920.webp 1920w" sizes="100vw" width="1920" height="1080" alt="Wanderer: The Fragments of Fate key art: the hero holds a crowbar and a water gun in a cluttered, overgrown courtyard" decoding="async" fetchpriority="high"></div>
-    <div class="hero__shade" aria-hidden="true"></div>
-    <p class="hero__hint js-only" aria-hidden="true">Move to pixelate · click to scatter</p>
-    <div class="hero__content" data-hero-content>
-      <p class="hero__eyebrow"><span class="hero__live">Senior Game Engineer</span><span class="pill">Floating Rock Studio</span><span class="pill">Unreal Engine</span><span class="pill">New Zealand</span></p>
-      <h1 class="hero__name"><span class="hero__name-row">Alex</span><span class="hero__name-row text-outline">Coultas</span></h1>
-      <div class="hero__now">
-        <ol class="hero__slides" data-hero-slides>
-<li class="hero-slide is-active" data-hero-slide="wanderer" data-hero-image="assets/img/wanderer/key-art-1920.webp">
-          <p class="hero-slide__kicker">Mighty Eyes · Lead · 2022 – 2025</p>
-          <h2 class="hero-slide__title">Wanderer: The Fragments of Fate</h2>
-          <p class="hero-slide__text">A time-travel puzzle VR game. I led engineering and gameplay development.</p>
-          <a class="button button--primary" href="projects/wanderer.html">Open project →</a></li><li class="hero-slide" data-hero-slide="mythos-party" data-hero-image="assets/img/mythos-party/capsule-art-1920.webp">
-          <p class="hero-slide__kicker">Skyward Studios · Director</p>
-          <h2 class="hero-slide__title">Mythos Party</h2>
-          <p class="hero-slide__text">A free-to-play party brawler for up to 8 players. I direct the studio and do all the programming.</p>
-          <a class="button button--primary" href="projects/mythos-party.html">Open project →</a></li><li class="hero-slide" data-hero-slide="superhorse" data-hero-image="assets/img/superhorse/splash-1376.webp">
-          <p class="hero-slide__kicker">Personal project · coming to Steam</p>
-          <h2 class="hero-slide__title">SuperHorse</h2>
-          <p class="hero-slide__text">A third-person skate shooter about a time loop.</p>
-          <a class="button button--primary" href="projects/superhorse.html">Open project →</a></li><li class="hero-slide" data-hero-slide="httyd" data-hero-image="assets/img/httyd/mountains-2-1920.webp">
-          <p class="hero-slide__kicker">Personal fan project</p>
-          <h2 class="hero-slide__title">HTTYD</h2>
-          <p class="hero-slide__text">Fly Toothless through a mountain range, from placeholder shapes to an animated dragon.</p>
-          <a class="button button--primary" href="projects/httyd.html">Open project →</a></li><li class="hero-slide" data-hero-slide="kyoryu" data-hero-image="assets/img/kyoryu/key-art-1920.webp">
-          <p class="hero-slide__kicker">Floating Rock Studio · 2026 – now</p>
-          <h2 class="hero-slide__title">Kyōryū</h2>
-          <p class="hero-slide__text">A story-driven third-person adventure game. Automation, review systems, gameplay and tools.</p>
-          <a class="button button--primary" href="projects/kyoryu.html">Open project →</a></li>
+  <section class="hero" id="top" data-hero aria-label="Introduction and featured projects">
+    <canvas class="hero__stars" data-hero-stars aria-hidden="true"></canvas>
+    <div class="container hero__grid">
+      <div class="hero__intro" data-hero-shield data-hero-recede>
+        <p class="hero__eyebrow"><span class="hero__live">Senior Game Engineer</span><span class="pill">Floating Rock Studio</span><span class="pill">Unreal Engine</span><span class="pill">New Zealand</span></p>
+        <h1 class="hero__name"><span class="hero__name-row">Alex</span><span class="hero__name-row text-outline">Coultas</span></h1>
+        <p class="hero__lede">I'm a <b>technical lead</b> who cares about robust code structures, effective tools and meaningful experiences.</p>
+        <div class="button-row hero__actions"><a class="button" href="#about">About me</a></div>
+      </div>
+
+      <!-- The viewscreen: one picture per featured project. hero.js runs the jumps between them and
+           the zoom into the work panels; the panels below list the same projects. -->
+      <div class="viewscreen" data-viewscreen>
+        <p class="viewscreen__bar" aria-hidden="true" data-hero-recede><span>Featured · <span data-viewscreen-count>01 / 04</span></span><span class="viewscreen__stardate js-only" data-viewscreen-stardate></span></p>
+        <div class="viewscreen__body">
+          <div class="viewscreen__rail" aria-hidden="true" data-hero-recede><span class="viewscreen__rail-label">Course</span><i class="viewscreen__mark is-on" data-viewscreen-mark></i><i class="viewscreen__mark" data-viewscreen-mark></i><i class="viewscreen__mark" data-viewscreen-mark></i><i class="viewscreen__mark" data-viewscreen-mark></i></div>
+          <div class="viewscreen__frame" data-viewscreen-frame>
+            <div class="viewscreen__view" data-viewscreen-view>
+              <img class="viewscreen__image is-active" data-viewscreen-image src="assets/img/kyoryu/key-art-1280.webp" srcset="assets/img/kyoryu/key-art-640.webp 640w, assets/img/kyoryu/key-art-1280.webp 1280w, assets/img/kyoryu/key-art-1920.webp 1920w" sizes="(min-width: 64rem) 60vw, 100vw" width="1920" height="1080" alt="Kyōryū key art: a samurai T-rex and raptors fight beneath torii gates and cherry blossom" decoding="async" fetchpriority="high">
+              <img class="viewscreen__image" data-viewscreen-image data-src="assets/img/wanderer/key-art-1280.webp" data-srcset="assets/img/wanderer/key-art-640.webp 640w, assets/img/wanderer/key-art-1280.webp 1280w, assets/img/wanderer/key-art-1920.webp 1920w" sizes="(min-width: 64rem) 60vw, 100vw" width="1920" height="1080" alt="Wanderer: The Fragments of Fate key art: the hero holds a crowbar and a water gun in a cluttered, overgrown courtyard" decoding="async">
+              <img class="viewscreen__image" data-viewscreen-image data-src="assets/img/mythos-party/capsule-art-1280.webp" data-srcset="assets/img/mythos-party/capsule-art-640.webp 640w, assets/img/mythos-party/capsule-art-1280.webp 1280w, assets/img/mythos-party/capsule-art-1920.webp 1920w" sizes="(min-width: 64rem) 60vw, 100vw" width="1920" height="1080" alt="Mythos Party capsule art: Zeus, Ares and the gods tower over the heroes and the game logo" decoding="async">
+              <img class="viewscreen__image" data-viewscreen-image data-src="assets/img/httyd/mountains-2-1280.webp" data-srcset="assets/img/httyd/mountains-2-640.webp 640w, assets/img/httyd/mountains-2-1280.webp 1280w, assets/img/httyd/mountains-2-1920.webp 1920w" sizes="(min-width: 64rem) 60vw, 100vw" width="1920" height="1080" alt="Toothless glides over a snowy mountain range under a cloudy sky" decoding="async">
+              <span class="viewscreen__shade" aria-hidden="true"></span>
+              <span class="viewscreen__flash" data-viewscreen-flash aria-hidden="true"></span>
+            </div>
+            <span class="viewscreen__corner viewscreen__corner--top-left" aria-hidden="true"></span><span class="viewscreen__corner viewscreen__corner--top-right" aria-hidden="true"></span>
+            <span class="viewscreen__corner viewscreen__corner--bottom-left" aria-hidden="true"></span><span class="viewscreen__corner viewscreen__corner--bottom-right" aria-hidden="true"></span>
+          </div>
+          <div class="viewscreen__rail" aria-hidden="true" data-hero-recede><span class="viewscreen__rail-label">Warp</span><span class="viewscreen__gauge"><i data-viewscreen-gauge></i></span><span class="viewscreen__warp" data-viewscreen-warp>1.0</span></div>
+        </div>
+        <div class="viewscreen__ticks" aria-hidden="true" data-hero-recede></div>
+        <ol class="viewscreen__slides" data-hero-shield data-hero-recede>
+          <li class="hero-slide is-active" data-hero-slide="kyoryu">
+            <p class="hero-slide__cells"><span>Floating Rock Studio</span><span>2026 – now</span></p>
+            <h2 class="hero-slide__title">Kyōryū</h2>
+            <p class="hero-slide__text">A story-driven third-person adventure game. Automation, review systems, gameplay and tools.</p>
+            <a class="button button--primary" href="projects/kyoryu.html" data-hero-open>Open project →</a></li>
+          <li class="hero-slide" data-hero-slide="wanderer">
+            <p class="hero-slide__cells"><span>Mighty Eyes</span><span>Lead</span><span>2022 – 2025</span></p>
+            <h2 class="hero-slide__title">Wanderer: The Fragments of Fate</h2>
+            <p class="hero-slide__text">A time-travel puzzle VR game. I led engineering and gameplay development.</p>
+            <a class="button button--primary" href="projects/wanderer.html" data-hero-open>Open project →</a></li>
+          <li class="hero-slide" data-hero-slide="mythos-party">
+            <p class="hero-slide__cells"><span>Skyward Studios</span><span>Director</span></p>
+            <h2 class="hero-slide__title">Mythos Party</h2>
+            <p class="hero-slide__text">A free-to-play party brawler for up to 8 players. I direct the studio and do all the programming.</p>
+            <a class="button button--primary" href="projects/mythos-party.html" data-hero-open>Open project →</a></li>
+          <li class="hero-slide" data-hero-slide="httyd">
+            <p class="hero-slide__cells"><span>Personal fan project</span></p>
+            <h2 class="hero-slide__title">How to Train Your Dragon</h2>
+            <p class="hero-slide__text">Fly Toothless through a mountain range, from placeholder shapes to an animated dragon.</p>
+            <a class="button button--primary" href="projects/httyd.html" data-hero-open>Open project →</a></li>
         </ol>
-        <div class="hero__controls js-only" data-hero-controls></div>
+        <div class="viewscreen__controls js-only" data-hero-recede>
+          <button class="viewscreen__bubble" type="button" data-hero-step="-1" aria-label="Previous project">❮</button>
+          <ul class="viewscreen__beacons" aria-label="Featured projects">
+            <li><button class="viewscreen__beacon" type="button" data-hero-beacon aria-current="true">Kyōryū<span class="viewscreen__fill"></span></button></li>
+            <li><button class="viewscreen__beacon" type="button" data-hero-beacon aria-current="false">Wanderer<span class="viewscreen__fill"></span></button></li>
+            <li><button class="viewscreen__beacon" type="button" data-hero-beacon aria-current="false">Mythos Party<span class="viewscreen__fill"></span></button></li>
+            <li><button class="viewscreen__beacon" type="button" data-hero-beacon aria-current="false">HTTYD<span class="viewscreen__fill"></span></button></li>
+          </ul>
+          <button class="viewscreen__bubble" type="button" data-hero-step="1" aria-label="Next project">❯</button>
+          <button class="viewscreen__bubble viewscreen__bubble--pause" type="button" data-hero-pause aria-pressed="false" aria-label="Pause the slideshow">❚❚</button>
+        </div>
       </div>
     </div>
+  </section>
+
+  <!-- The work panels start with the project on the viewscreen (work-panels.js reorders them), so
+       the zoom from the hero lands on the matching panel. -->
+  <section class="work-panels" id="work" data-work-panels aria-labelledby="work-title">
+    <h2 class="visually-hidden" id="work-title">Chapter 01 · Selected work</h2>
+    <article class="work-panel" data-work-key="kyoryu">
+      <div class="work-panel__inner" data-work-panel>
+        <div class="work-panel__media"><img class="work-panel__image" src="assets/img/kyoryu/key-art-1280.webp" srcset="assets/img/kyoryu/key-art-640.webp 640w, assets/img/kyoryu/key-art-1280.webp 1280w, assets/img/kyoryu/key-art-1920.webp 1920w" sizes="100vw" width="1920" height="1080" alt="" loading="lazy" decoding="async"></div>
+        <div class="work-panel__content">
+          <p class="work-panel__index"><b>01</b><span aria-hidden="true"></span>Floating Rock Studio · 2026 – now</p>
+          <h3 class="work-panel__title">Kyōryū</h3>
+          <p class="work-panel__text">A story-driven third-person adventure game, where I work as a Senior Game Engineer.</p>
+          <ul class="chip-list"><li class="chip">Third-person adventure</li><li class="chip">Senior Game Engineer</li><li class="chip">Unreal Engine</li></ul>
+          <div class="button-row"><a class="button button--primary" href="projects/kyoryu.html">Open project →</a><a class="button" href="https://kyoryuofficial.com/" target="_blank" rel="noopener">Official site ↗</a></div>
+        </div>
+      </div>
+    </article><article class="work-panel" data-work-key="wanderer">
+      <div class="work-panel__inner" data-work-panel>
+        <div class="work-panel__media"><img class="work-panel__image" src="assets/img/wanderer/key-art-1280.webp" srcset="assets/img/wanderer/key-art-640.webp 640w, assets/img/wanderer/key-art-1280.webp 1280w, assets/img/wanderer/key-art-1920.webp 1920w" sizes="100vw" width="1920" height="1080" alt="" loading="lazy" decoding="async"></div>
+        <div class="work-panel__content">
+          <p class="work-panel__index"><b>02</b><span aria-hidden="true"></span>Mighty Eyes · 2022 – 2025</p>
+          <h3 class="work-panel__title">Wanderer: The Fragments of Fate</h3>
+          <p class="work-panel__text">A time-travel adventure puzzle VR game, and a remake of the original Wanderer. I was the Lead Game Developer at Mighty Eyes: I managed the interactives team, and designed and developed systems for the game and for the VRAF framework.</p>
+          <ul class="chip-list"><li class="chip">VR</li><li class="chip">Lead Game Developer</li><li class="chip">Gameplay &amp; tools</li></ul>
+          <div class="button-row"><a class="button button--primary" href="projects/wanderer.html">Open project →</a><a class="button" href="https://www.wanderervr.com/" target="_blank" rel="noopener">Official site ↗</a></div>
+        </div>
+      </div>
+    </article><article class="work-panel" data-work-key="mythos-party">
+      <div class="work-panel__inner" data-work-panel>
+        <div class="work-panel__media"><img class="work-panel__image" src="assets/img/mythos-party/capsule-art-1280.webp" srcset="assets/img/mythos-party/capsule-art-640.webp 640w, assets/img/mythos-party/capsule-art-1280.webp 1280w, assets/img/mythos-party/capsule-art-1920.webp 1920w" sizes="100vw" width="1920" height="1080" alt="" loading="lazy" decoding="async"></div>
+        <div class="work-panel__content">
+          <p class="work-panel__index"><b>03</b><span aria-hidden="true"></span>Skyward Studios · my studio</p>
+          <h3 class="work-panel__title">Mythos Party</h3>
+          <p class="work-panel__text">An online multiplayer arena brawler on Steam with a collection of mythologies, where you fight other players for the glory of your chosen god. It is a team project that started at university, which we have kept developing at Skyward Studios.</p>
+          <ul class="chip-list"><li class="chip">PC · Steam</li><li class="chip">Director</li><li class="chip">All programming</li><li class="chip">3 videos · 2 maps · 8 abilities</li></ul>
+          <div class="button-row"><a class="button button--primary" href="projects/mythos-party.html">Open project →</a><a class="button" href="https://store.steampowered.com/app/1340690/Mythos_Party/" target="_blank" rel="noopener">Steam ↗</a></div>
+        </div>
+      </div>
+    </article><article class="work-panel" data-work-key="httyd">
+      <div class="work-panel__inner" data-work-panel>
+        <div class="work-panel__media"><img class="work-panel__image" src="assets/img/httyd/mountains-2-1280.webp" srcset="assets/img/httyd/mountains-2-640.webp 640w, assets/img/httyd/mountains-2-1280.webp 1280w, assets/img/httyd/mountains-2-1920.webp 1920w" sizes="100vw" width="1920" height="1080" alt="" loading="lazy" decoding="async"></div>
+        <div class="work-panel__content">
+          <p class="work-panel__index"><b>04</b><span aria-hidden="true"></span>Personal fan project</p>
+          <h3 class="work-panel__title">How to Train Your Dragon</h3>
+          <p class="work-panel__text">A dragon flight game: fly Toothless through a mountain range. Flight, animation and a lot of Blender.</p>
+          <ul class="chip-list"><li class="chip">Flight</li><li class="chip">Animation</li><li class="chip">Unreal Engine 5</li></ul>
+          <div class="button-row"><a class="button button--primary" href="projects/httyd.html">Open project →</a></div>
+        </div>
+      </div>
+    </article>
   </section>
 
   <!-- About and Experience share one "What I bring" panel. On laptops it sits on the right of About
@@ -90,7 +173,7 @@
   <div class="container intro-split" data-timeline>
     <div class="intro-split__main">
       <section class="about about-screen" id="about" aria-labelledby="about-title">
-    <div class="section-head reveal"><div><p class="kicker">Chapter 01 · About</p><h2 class="section-head__title" id="about-title">Who I am</h2></div></div>
+    <div class="section-head reveal"><div><p class="kicker">Chapter 02 · About</p><h2 class="section-head__title" id="about-title">Who I am</h2></div></div>
     <div class="stats" data-stats>
     <p class="stats__item" data-stat><span class="stats__value" data-stat-value="6">6</span><span class="stats__label">years in industry, since 2020</span></p>
     <p class="stats__item" data-stat><span class="stats__value" data-stat-value="20" data-stat-suffix="+">20+</span><span class="stats__label">Realspace walkthroughs</span></p>
@@ -100,7 +183,6 @@
     <div class="about__grid reveal">
       <div class="about__portrait"><img class="about__image" src="assets/img/about/headshot-800.webp" srcset="assets/img/about/headshot-400.webp 400w, assets/img/about/headshot-800.webp 800w" sizes="(min-width: 64rem) 20rem, 60vw" width="800" height="800" alt="Alex Coultas" loading="lazy" decoding="async"></div>
       <div>
-        <p class="about__big">I'm a <b>technical lead</b> who cares about robust code structures, effective tools and meaningful experiences.</p>
         <p class="about__text">Unreal Engine is my home, at work and in my own time: gameplay systems, plugins, editor tools and networking. At work I lead teams and mentor juniors. Outside work I build my own games, plugins and apps, from my own C++ engine to Mythos Party, an indie game I made with my small studio, <a href="https://skywardstudios.co.nz" target="_blank" rel="noopener">Skyward Studios</a>. I like sharing what I learn, too.</p>
       </div>
     </div>
@@ -113,7 +195,7 @@
       </section>
 
       <section class="section experience" id="experience" data-timeline-section aria-labelledby="experience-title">
-    <div class="section-head reveal"><div><p class="kicker">Chapter 02 · Experience</p><h2 class="section-head__title" id="experience-title">Where I've worked</h2></div></div>
+    <div class="section-head reveal"><div><p class="kicker">Chapter 03 · Experience</p><h2 class="section-head__title" id="experience-title">Where I've worked</h2></div></div>
       <ol class="timeline" data-timeline-list>
         <li class="timeline__row" data-timeline-row data-uses="plugin-modules editor-tools-utilities umg-slate cpp-blueprints cpp java-groovy-gradle playstation-5 windows steam github testing-framework animation-systems python perforce jenkins-ci-cd pull-merge-requests">
           <span class="timeline__dot" aria-hidden="true"><img class="timeline__logo" src="assets/img/logos/floating-rock-64.webp" srcset="assets/img/logos/floating-rock-64.webp 64w, assets/img/logos/floating-rock-128.webp 128w" sizes="3rem" width="64" height="64" alt="" loading="lazy" decoding="async"></span>
@@ -173,55 +255,6 @@
         <p class="experience__hint" data-timeline-hint>Everything I work with. Scroll on to see what I used where.</p>
       </aside>
   </div>
-
-  <section class="work-panels" id="work" data-work-panels aria-labelledby="work-title">
-    <h2 class="visually-hidden" id="work-title">Chapter 03 · Selected work</h2>
-    <article class="work-panel">
-      <div class="work-panel__inner" data-work-panel>
-        <div class="work-panel__media"><img class="work-panel__image" src="assets/img/kyoryu/key-art-1280.webp" srcset="assets/img/kyoryu/key-art-640.webp 640w, assets/img/kyoryu/key-art-1280.webp 1280w, assets/img/kyoryu/key-art-1920.webp 1920w" sizes="100vw" width="1920" height="1080" alt="" loading="lazy" decoding="async"></div>
-        <div class="work-panel__content">
-          <p class="work-panel__index"><b>01</b><span aria-hidden="true"></span>Floating Rock Studio · 2026 – now</p>
-          <h3 class="work-panel__title">Kyōryū</h3>
-          <p class="work-panel__text">A story-driven third-person adventure game, where I work as a Senior Game Engineer.</p>
-          <ul class="chip-list"><li class="chip">Third-person adventure</li><li class="chip">Senior Game Engineer</li><li class="chip">Unreal Engine</li></ul>
-          <div class="button-row"><a class="button button--primary" href="projects/kyoryu.html">Open project →</a><a class="button" href="https://kyoryuofficial.com/" target="_blank" rel="noopener">Official site ↗</a></div>
-        </div>
-      </div>
-    </article><article class="work-panel">
-      <div class="work-panel__inner" data-work-panel>
-        <div class="work-panel__media"><img class="work-panel__image" src="assets/img/wanderer/key-art-1280.webp" srcset="assets/img/wanderer/key-art-640.webp 640w, assets/img/wanderer/key-art-1280.webp 1280w, assets/img/wanderer/key-art-1920.webp 1920w" sizes="100vw" width="1920" height="1080" alt="" loading="lazy" decoding="async"></div>
-        <div class="work-panel__content">
-          <p class="work-panel__index"><b>02</b><span aria-hidden="true"></span>Mighty Eyes · 2022 – 2025</p>
-          <h3 class="work-panel__title">Wanderer: The Fragments of Fate</h3>
-          <p class="work-panel__text">A time-travel adventure puzzle VR game, and a remake of the original Wanderer. I was the Lead Game Developer at Mighty Eyes: I managed the interactives team, and designed and developed systems for the game and for the VRAF framework.</p>
-          <ul class="chip-list"><li class="chip">VR</li><li class="chip">Lead Game Developer</li><li class="chip">Gameplay &amp; tools</li></ul>
-          <div class="button-row"><a class="button button--primary" href="projects/wanderer.html">Open project →</a><a class="button" href="https://www.wanderervr.com/" target="_blank" rel="noopener">Official site ↗</a></div>
-        </div>
-      </div>
-    </article><article class="work-panel">
-      <div class="work-panel__inner" data-work-panel>
-        <div class="work-panel__media"><img class="work-panel__image" src="assets/img/mythos-party/capsule-art-1280.webp" srcset="assets/img/mythos-party/capsule-art-640.webp 640w, assets/img/mythos-party/capsule-art-1280.webp 1280w, assets/img/mythos-party/capsule-art-1920.webp 1920w" sizes="100vw" width="1920" height="1080" alt="" loading="lazy" decoding="async"></div>
-        <div class="work-panel__content">
-          <p class="work-panel__index"><b>03</b><span aria-hidden="true"></span>Skyward Studios · my studio</p>
-          <h3 class="work-panel__title">Mythos Party</h3>
-          <p class="work-panel__text">An online multiplayer arena brawler on Steam with a collection of mythologies, where you fight other players for the glory of your chosen god. It is a team project that started at university, which we have kept developing at Skyward Studios.</p>
-          <ul class="chip-list"><li class="chip">PC · Steam</li><li class="chip">Director</li><li class="chip">All programming</li><li class="chip">3 videos · 2 maps · 8 abilities</li></ul>
-          <div class="button-row"><a class="button button--primary" href="projects/mythos-party.html">Open project →</a><a class="button" href="https://store.steampowered.com/app/1340690/Mythos_Party/" target="_blank" rel="noopener">Steam ↗</a></div>
-        </div>
-      </div>
-    </article><article class="work-panel">
-      <div class="work-panel__inner" data-work-panel>
-        <div class="work-panel__media"><div class="art art--vraf" aria-hidden="true"><span class="art__floor"></span><span class="art__cube"></span><span class="art__cube"></span><span class="art__cube"></span><span class="art__cube"></span></div></div>
-        <div class="work-panel__content">
-          <p class="work-panel__index"><b>04</b><span aria-hidden="true"></span>Mighty Eyes · tool kit</p>
-          <h3 class="work-panel__title">VR Adventure Framework</h3>
-          <p class="work-panel__text">VRAF: an Unreal Engine tool kit for physics-based game development in VR, built alongside Wanderer.</p>
-          <ul class="chip-list"><li class="chip">VR</li><li class="chip">Physics</li><li class="chip">Framework</li></ul>
-          <div class="button-row"><a class="button button--primary" href="projects/vraf.html">Open project →</a><a class="button" href="https://www.vraf.games/" target="_blank" rel="noopener">vraf.games ↗</a></div>
-        </div>
-      </div>
-    </article>
-  </section>
 
   <section class="section container" id="clients" data-work-after aria-labelledby="clients-title">
     <div class="section-head reveal">
@@ -652,7 +685,6 @@
 <script src="assets/js/achievements.js" defer></script>
 <script src="assets/js/dev-console.js" defer></script>
 <script src="assets/js/title-screen.js" defer></script>
-<script src="assets/js/hero-samples.js" defer></script>
 <script src="assets/js/hero.js" defer></script>
 <script src="assets/js/site-header.js" defer></script>
 <script src="assets/js/reveal.js" defer></script>

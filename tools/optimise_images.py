@@ -3,16 +3,12 @@
 Each still image gets one WebP for each width in STILL_WIDTHS that is not wider than the original,
 plus one at the original width if that is smaller than the largest step. Each GIF becomes an
 animated WebP and a still poster from its first frame. Each page gets a 1200 x 630 JPG link
-preview. The hero gets tiny inline copies of its slides in assets/js/hero-samples.js: the particles
-read their colours from these, which also works when the site is opened from disk.
+preview.
 
 Run it after you add or change a file in content/ (and after tools/extract_frames.py for video
 frames), then copy the printed sizes into the HTML. Needs Python 3 with Pillow (pip install pillow).
 """
 
-import base64
-import io
-import json
 from pathlib import Path
 
 from PIL import Image, ImageSequence
@@ -20,7 +16,6 @@ from PIL import Image, ImageSequence
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 CONTENT = PROJECT_ROOT / 'content'
 OUTPUT = PROJECT_ROOT / 'assets' / 'img'
-HERO_SAMPLES = PROJECT_ROOT / 'assets' / 'js' / 'hero-samples.js'
 
 STILL_WIDTHS = (640, 1280, 1920)
 STILL_QUALITY = 80
@@ -144,17 +139,6 @@ PREVIEWS = [
     ('radar', 'Radar/Docs/display-screens.png'),
 ]
 
-# Hero slides: tiny copies that give the particles their colours. Keys match data-hero-slide in index.html.
-HERO_SAMPLE_SIZE = (192, 108)
-HERO_SLIDES = [
-    ('wanderer', 'Wanderer/Wanderer_KeyArt_16_9.png'),
-    ('mythos-party', f'{MYTHOS}/Mythos_Party_Capsule_Art_Revised.png'),
-    ('superhorse', 'SuperHorse/SuperHorse_Splash.jpg'),
-    ('httyd', f'{HTTYD}/Mountain range flying/frames/mountains-2.png'),
-    ('kyoryu', 'Kyoryu/Kyoryu-Sakuras-Fight.webp'),
-]
-
-
 def resized(image, width):
     height = round(image.height * width / image.width)
     return image.resize((width, height), Image.LANCZOS)
@@ -222,20 +206,6 @@ def save_preview(name, source):
     print(f'previews/{name}.jpg')
 
 
-def save_hero_samples():
-    samples = {}
-    for key, source in HERO_SLIDES:
-        sample = covered(Image.open(CONTENT / source).convert('RGB'), HERO_SAMPLE_SIZE)
-        buffer = io.BytesIO()
-        sample.save(buffer, 'JPEG', quality=82)
-        samples[key] = 'data:image/jpeg;base64,' + base64.b64encode(buffer.getvalue()).decode('ascii')
-    HERO_SAMPLES.write_text(
-        '// Made by tools/optimise_images.py. Do not edit by hand.\n'
-        '// Tiny copies of the hero slides; the particles take their colours from these.\n'
-        f'window.HeroSamples = {json.dumps(samples, indent=2)};\n', encoding='utf-8')
-    print(f'{HERO_SAMPLES.relative_to(PROJECT_ROOT)}: {len(samples)} slides')
-
-
 def main():
     for still in STILLS:
         save_still(*still)
@@ -245,7 +215,6 @@ def main():
         save_logo(*logo)
     for name, source in PREVIEWS:
         save_preview(name, source)
-    save_hero_samples()
 
 
 if __name__ == '__main__':

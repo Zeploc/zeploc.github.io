@@ -1,7 +1,10 @@
 // The main projects as full-screen panels that stack. Each one sinks back as the next slides over it.
 // With a mouse wheel, trackpad or keyboard, one scroll moves cleanly through the opening screens:
-// the hero, About, the experience timeline, each panel, then the client work. Inside the timeline,
+// the hero, each panel, About, the experience timeline, then the client work. Inside the timeline,
 // experience-timeline.js takes over and steps role by role; leaving either end of it comes back here.
+// Between the hero and the first panel the move is a zoom (hero.js): the viewscreen grows until its
+// project fills the window, and the page lands on that project's panel. So the panels start with
+// the project on the viewscreen, and wrap round. A click on the viewscreen takes the same route.
 // Input that arrives while a move is under way (or the trackpad's momentum after it lands) is
 // ignored, so a burst of scrolling moves one screen, not several. Touch screens use CSS scroll
 // snapping instead.
@@ -10,8 +13,9 @@
   if (!section) {
     return;
   }
+  // In page order at the start; currentPanels() gives the order after the hero has rearranged them.
   const panels = [...section.querySelectorAll('.work-panel')];
-  const inners = panels.map((panel) => panel.querySelector('[data-work-panel]'));
+  const currentPanels = () => [...section.querySelectorAll('.work-panel')];
   const quietGap = 180;
   const arrivalTimeout = 1400;
 
@@ -25,14 +29,13 @@
       return;
     }
     const viewportHeight = window.innerHeight;
-    panels.forEach((panel, index) => {
-      const next = panels[index + 1];
-      if (!next) {
-        return;
-      }
-      const covered = Motion.clamp(1 - next.getBoundingClientRect().top / viewportHeight);
-      inners[index].style.transform = `scale(${1 - covered * 0.1})`;
-      inners[index].style.filter = `brightness(${1 - covered * 0.6})`;
+    const ordered = currentPanels();
+    ordered.forEach((panel, index) => {
+      const next = ordered[index + 1];
+      const inner = panel.querySelector('[data-work-panel]');
+      const covered = next ? Motion.clamp(1 - next.getBoundingClientRect().top / viewportHeight) : 0;
+      inner.style.transform = covered ? `scale(${1 - covered * 0.1})` : '';
+      inner.style.filter = covered ? `brightness(${1 - covered * 0.6})` : '';
     });
   }
   window.addEventListener('scroll', () => {
@@ -77,7 +80,13 @@
     return [start, end];
   }
 
-  // The stops: the top of the hero, the About screen, both ends of the experience zone, each panel,
+  // The hero is a stop when it fits the window (laptops). On smaller windows it is taller, so it
+  // scrolls as normal and the first stop is the first panel.
+  function heroFits() {
+    return Boolean(hero) && hero.offsetHeight <= window.innerHeight + 2;
+  }
+
+  // The stops: the top of the hero, each panel, the About screen, both ends of the experience zone,
   // then the client work just under the header. Each panel is one screen tall.
   function stopList() {
     const sectionTop = pageTop(section);
@@ -90,7 +99,7 @@
     if (about) {
       tops.push(pageTop(about));
     }
-    if (hero) {
+    if (heroFits()) {
       tops.push(pageTop(hero));
     }
     if (after) {
@@ -125,7 +134,41 @@
     return [...tops].reverse().find((top) => top < position - 2);
   }
 
+  // The zoom between the hero and the first panel, when the hero is at the top of the window.
+  const canZoom = () => Boolean(window.HeroScreen) && window.HeroScreen.canZoom() && heroFits();
+
+  async function zoomToPanels() {
+    isMoving = true;
+    const first = currentPanels()[0];
+    await window.HeroScreen.zoomIn(() => {
+      // The panel shows the same picture as the full viewscreen, so the jump does not show.
+      first.classList.add('is-arriving');
+      window.scrollTo({ top: pageTop(section), behavior: 'instant' });
+      void first.offsetWidth; // starts the arrival from its first frame
+      first.classList.remove('is-arriving');
+    });
+    isMoving = false;
+    isSettling = true;
+  }
+
+  async function zoomToHero() {
+    isMoving = true;
+    const key = currentPanels()[0].dataset.workKey;
+    await window.HeroScreen.zoomOut(key, () => window.scrollTo({ top: pageTop(hero), behavior: 'instant' }));
+    isMoving = false;
+    isSettling = true;
+  }
+
   function moveTo(target) {
+    const position = window.scrollY;
+    if (canZoom() && Math.abs(position - pageTop(hero)) < 2 && Math.abs(target - pageTop(section)) < 2) {
+      zoomToPanels();
+      return;
+    }
+    if (canZoom() && Math.abs(position - pageTop(section)) < 2 && Math.abs(target - pageTop(hero)) < 2) {
+      zoomToHero();
+      return;
+    }
     isMoving = true;
     window.scrollTo({ top: target, behavior: Motion.reduceMotion ? 'auto' : 'smooth' });
     const startTime = performance.now();
@@ -196,6 +239,33 @@
     }
     event.preventDefault();
     moveTo(target);
+  });
+
+  /* === The panels follow the hero === */
+
+  // They start with the project on the viewscreen and wrap round. They only move while they are
+  // out of sight below, so nothing jumps in view.
+  function orderPanels(key) {
+    const startIndex = panels.findIndex((panel) => panel.dataset.workKey === key);
+    if (startIndex < 0 || section.getBoundingClientRect().top < window.innerHeight - 2) {
+      return;
+    }
+    for (let offset = 0; offset < panels.length; offset += 1) {
+      const panel = panels[(startIndex + offset) % panels.length];
+      panel.querySelector('.work-panel__index b').textContent = String(offset + 1).padStart(2, '0');
+      section.appendChild(panel);
+    }
+  }
+  window.addEventListener('hero:change', (event) => orderPanels(event.detail));
+  if (window.HeroScreen) {
+    orderPanels(window.HeroScreen.activeKey());
+  }
+
+  // A click on the viewscreen: on to the work, the same way a scroll goes.
+  window.addEventListener('hero:enter', () => {
+    if (!isMoving) {
+      moveTo(pageTop(section));
+    }
   });
 
   updateStack();

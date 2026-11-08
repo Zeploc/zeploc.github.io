@@ -385,123 +385,44 @@
   object-fit: cover;
 }
 
-/* === Hero: featured projects as particles === */
+/* === Hero: my name and who I am beside a viewscreen of featured projects === */
 
+/* A star field fills the hero and streams out of the viewscreen; each project arrives in it with a
+   warp jump. One scroll (work-panels.js) zooms the viewscreen until the project fills the window,
+   then the page lands on that project's work panel. hero.js runs the stars, the jumps and the zoom. */
 .hero {
   position: relative;
-  min-height: 40rem;
-  height: 100vh;
-  height: 100svh;
+  isolation: isolate;
+  min-height: 100vh;
+  min-height: 100svh;
   overflow: hidden;
-  background: var(--colour-bg-deep);
-  touch-action: pan-y;
+  background: radial-gradient(55% 45% at 68% 45%, rgba(76, 134, 182, 0.16), transparent 70%),
+    radial-gradient(40% 40% at 12% 85%, rgba(155, 123, 255, 0.09), transparent 70%),
+    var(--colour-bg-deep);
 }
 
-.hero__backdrop,
-.hero__image,
-.hero__blur,
-.hero__canvas {
+.hero__stars {
   position: absolute;
   inset: 0;
+  z-index: -1;
   width: 100%;
   height: 100%;
 }
 
-.hero__image {
-  object-fit: cover;
-  transition: opacity var(--duration-slow);
+.hero__grid {
+  display: grid;
+  grid-template-areas:
+    'intro'
+    'screen';
+  gap: var(--space-xl);
+  align-content: center;
+  min-height: inherit;
+  padding-block: calc(var(--header-height) + var(--space-m)) var(--space-2xl);
 }
 
-/* The photo shows as normal. Around the pointer it gives way to the particle picture, like a
-   pixelating lens. hero.js grows the dots to fill their cells towards the lens edge, so the edge
-   matches the photo and the mask only needs a short fade to hide the seam. While the particles rebuild into the next slide (or scatter), they replace the
-   photo full screen with no fade: hero.js makes the dots fill their cells so the swap is seamless.
-   Afterwards ("settling") the particles fade out over the photo. */
-/* The blurred photo behind the particles. Scaled up a little so the blur has no soft edges. */
-/* The blurred photo behind the particles. It overhangs the hero by --hero-blur-bleed on every side
-   so the blur has no soft edges (a transform would move its lens mask off the pointer). Its lens is
-   a little smaller than the particles' lens, so it never shows past the dots at the edge. */
-.hero__blur {
-  --hero-blur-bleed: 1.5rem;
-  inset: calc(var(--hero-blur-bleed) * -1);
-  width: calc(100% + var(--hero-blur-bleed) * 2);
-  height: calc(100% + var(--hero-blur-bleed) * 2);
-  object-fit: cover;
-  filter: blur(6px);
-  -webkit-mask-image: radial-gradient(circle 9rem at calc(var(--lens-x, -999px) + var(--hero-blur-bleed)) calc(var(--lens-y, -999px) + var(--hero-blur-bleed)), #000 72%, transparent 84%);
-  mask-image: radial-gradient(circle 9rem at calc(var(--lens-x, -999px) + var(--hero-blur-bleed)) calc(var(--lens-y, -999px) + var(--hero-blur-bleed)), #000 72%, transparent 84%);
-}
-
-.hero__canvas {
-  -webkit-mask-image: radial-gradient(circle 9rem at var(--lens-x, -999px) var(--lens-y, -999px), #000 88%, transparent 100%);
-  mask-image: radial-gradient(circle 9rem at var(--lens-x, -999px) var(--lens-y, -999px), #000 88%, transparent 100%);
-}
-
-.hero__blur,
-.hero__canvas {
-  opacity: 0;
-}
-
-.hero__canvas {
-  image-rendering: pixelated;
-}
-
-.hero.is-looking .hero__blur,
-.hero.is-looking .hero__canvas {
-  opacity: 1;
-}
-
-.hero.is-morphing .hero__blur,
-.hero.is-morphing .hero__canvas,
-.hero.is-settling .hero__blur,
-.hero.is-settling .hero__canvas {
-  opacity: 1;
-  -webkit-mask-image: none;
-  mask-image: none;
-}
-
-.hero.is-settling .hero__blur,
-.hero.is-settling .hero__canvas {
-  opacity: 0;
-  transition: opacity 0.6s;
-}
-
-.hero.has-particles.is-morphing .hero__image,
-.hero.has-particles.is-settling .hero__image {
-  transition: none;
-}
-
-.hero.is-morphing .hero__image {
-  opacity: 0;
-}
-
-.hero__shade {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background: linear-gradient(0deg, var(--colour-bg) 0%, rgba(21, 24, 27, 0.55) 35%, rgba(12, 14, 16, 0.25) 70%),
-    linear-gradient(90deg, var(--colour-shade) 0%, rgba(12, 14, 16, 0.3) 60%, transparent 85%);
-}
-
-.hero__hint {
-  position: absolute;
-  top: calc(var(--space-xl) + env(safe-area-inset-top));
-  right: var(--space-m);
-  display: none;
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--colour-pale);
-  opacity: 0.75;
-}
-
-.hero__content {
-  position: absolute;
-  inset: auto 0 var(--space-xl);
-  z-index: 2;
-  width: min(100% - 2rem, var(--container));
-  margin-inline: auto;
+.hero__intro {
+  grid-area: intro;
+  min-width: 0;
 }
 
 .hero__eyebrow {
@@ -509,17 +430,21 @@
   flex-wrap: wrap;
   gap: var(--space-xs);
   align-items: center;
+  margin-bottom: var(--space-l);
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   letter-spacing: 0.06em;
-  text-transform: uppercase;
   color: var(--colour-pale);
 }
 
+/* The role on its own line, the pills under it. */
 .hero__live {
-  display: inline-flex;
+  display: flex;
+  flex-basis: 100%;
   gap: var(--space-xs);
   align-items: center;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
 }
 
 .hero__live::before {
@@ -542,12 +467,11 @@
 }
 
 .hero__name {
-  margin: var(--space-m) 0 var(--space-l);
-  font-size: var(--text-display);
+  margin: 0 0 var(--space-l);
+  font-size: clamp(2.75rem, 13vw, 5rem);
   font-weight: 700;
-  line-height: 0.86;
-  letter-spacing: -0.05em;
-  user-select: none;
+  line-height: 0.88;
+  letter-spacing: -0.04em;
 }
 
 .hero__name-row {
@@ -555,159 +479,475 @@
 }
 
 .hero__name-row.text-outline {
-  -webkit-text-stroke-color: rgba(255, 255, 255, 0.85);
+  -webkit-text-stroke-color: var(--colour-pale);
   letter-spacing: 0.02em;
 }
 
-.hero__now {
-  display: grid;
-  gap: var(--space-m);
+.hero__lede {
+  max-width: 32rem;
+  font-size: 1.125rem;
+  line-height: 1.45;
 }
 
-.hero-slide__kicker {
+.hero__lede b {
+  font-weight: 600;
+  color: var(--colour-text);
+}
+
+.hero__actions {
+  margin-top: var(--space-l);
+}
+
+/* The viewscreen: a bar, the picture in a frame between two rails, then the project's readout and
+   the buttons that pick a project. Everything under the picture lines up with it (--viewscreen-inset). */
+.viewscreen {
+  --viewscreen-inset: 14px;
+  grid-area: screen;
+  min-width: 0;
+}
+
+.viewscreen__bar {
+  display: flex;
+  gap: var(--space-s);
+  justify-content: space-between;
+  padding: 0 var(--viewscreen-inset) var(--space-xs);
   font-family: var(--font-mono);
   font-size: var(--text-xs);
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: var(--colour-gold);
-}
-
-.hero-slide__title {
-  margin: var(--space-2xs) 0 var(--space-xs);
-  font-size: var(--text-xl);
-  letter-spacing: -0.015em;
-}
-
-.hero-slide__text {
-  display: none;
-  max-width: 34rem;
-  margin-bottom: var(--space-m);
   color: var(--colour-pale);
 }
 
-.js .hero-slide:not(.is-active) {
+.viewscreen__bar > span {
+  white-space: nowrap;
+}
+
+.viewscreen__stardate {
   display: none;
+  color: var(--colour-text-muted);
+}
+
+.viewscreen__body {
+  position: relative;
+}
+
+.viewscreen__rail {
+  display: none;
+}
+
+.viewscreen__rail-label {
+  margin-bottom: var(--space-xs);
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.viewscreen__mark {
+  width: 3px;
+  height: 22px;
+  background: rgba(201, 216, 233, 0.18);
+  border-radius: 2px;
+  transition: background var(--duration-m), box-shadow var(--duration-m);
+}
+
+.viewscreen__mark.is-on {
+  background: var(--colour-blue-bright);
+  box-shadow: 0 0 8px rgba(106, 163, 212, 0.8);
+}
+
+.viewscreen__gauge {
+  position: relative;
+  flex: 1;
+  width: 4px;
+  overflow: hidden;
+  background: rgba(201, 216, 233, 0.12);
+  border-radius: 2px;
+}
+
+.viewscreen__gauge i {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(var(--colour-green-bright), var(--colour-blue-bright));
+  transform: scaleY(0.05);
+  transform-origin: bottom;
+}
+
+.viewscreen__warp {
+  letter-spacing: 0;
+  color: var(--colour-pale);
+}
+
+.viewscreen__frame {
+  position: relative;
+  z-index: 5;
+  margin: 14px;
+  transform-origin: 50% 50%;
+}
+
+.viewscreen__view {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  cursor: pointer;
+  background: rgba(5, 7, 9, 0.3);
+  border: 1px solid rgba(201, 216, 233, 0.22);
+  border-radius: var(--radius-m);
+  box-shadow: 0 0 0 6px rgba(12, 14, 16, 0.6), 0 0 0 7px rgba(201, 216, 233, 0.08), 0 30px 90px -20px rgba(76, 134, 182, 0.5);
+}
+
+/* Scan lines and a soft vignette over the picture. They fade out during the zoom (--takeover). */
+.viewscreen__view::after {
+  position: absolute;
+  inset: 0;
+  content: '';
+  pointer-events: none;
+  background: repeating-linear-gradient(rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 3px),
+    radial-gradient(120% 90% at 50% 50%, transparent 60%, rgba(5, 7, 9, 0.55));
+  opacity: calc(1 - var(--takeover, 0));
+}
+
+/* Each picture waits small and blurred; the active one grows into place, and the one leaving rushes
+   past. With no script, the first picture shows. */
+.viewscreen__image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  filter: blur(14px) brightness(1.7);
+  transform: scale(0.35);
+}
+
+.viewscreen__image.is-active,
+html:not(.js) .viewscreen__image:first-child {
+  opacity: 1;
+  filter: none;
+  transform: none;
+  transition: opacity 0.45s ease-out, transform 0.8s var(--ease-out), filter 0.8s var(--ease-out);
+}
+
+.viewscreen__image.is-leaving {
+  opacity: 0;
+  filter: blur(10px) brightness(2);
+  transform: scale(1.5);
+  transition: opacity 0.4s ease-in, transform 0.45s cubic-bezier(0.5, 0, 0.9, 0.4), filter 0.45s ease-in;
+}
+
+/* The work panel's shade. It fades in while the viewscreen zooms, so the panel's text lands on it. */
+.viewscreen__shade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(0deg, rgba(10, 12, 14, 0.95) 0%, rgba(10, 12, 14, 0.6) 45%, rgba(10, 12, 14, 0.05) 80%),
+    linear-gradient(90deg, rgba(10, 12, 14, 0.6), transparent 60%);
+  opacity: var(--takeover, 0);
+}
+
+.viewscreen__flash {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.95), rgba(201, 216, 233, 0.35) 30%, transparent 65%);
+  opacity: 0;
+}
+
+.viewscreen__flash.is-on {
+  animation: viewscreen-flash 0.55s ease-out;
+}
+
+@keyframes viewscreen-flash {
+  15% {
+    opacity: 0.9;
+  }
+}
+
+/* Corner brackets that open out during a jump and close in on the new project. */
+.viewscreen__corner {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  pointer-events: none;
+  border: 0 solid var(--colour-blue-bright);
+  transition: transform 0.6s var(--ease-out), opacity 0.6s;
+}
+
+.viewscreen__corner--top-left {
+  top: -14px;
+  left: -14px;
+  border-width: 2px 0 0 2px;
+}
+
+.viewscreen__corner--top-right {
+  top: -14px;
+  right: -14px;
+  border-width: 2px 2px 0 0;
+}
+
+.viewscreen__corner--bottom-left {
+  bottom: -14px;
+  left: -14px;
+  border-width: 0 0 2px 2px;
+}
+
+.viewscreen__corner--bottom-right {
+  right: -14px;
+  bottom: -14px;
+  border-width: 0 2px 2px 0;
+}
+
+.viewscreen.is-jumping .viewscreen__corner {
+  opacity: 0.3;
+  transition: transform 0.2s ease-in, opacity 0.2s;
+}
+
+.viewscreen.is-jumping .viewscreen__corner--top-left {
+  transform: translate(-12px, -12px);
+}
+
+.viewscreen.is-jumping .viewscreen__corner--top-right {
+  transform: translate(12px, -12px);
+}
+
+.viewscreen.is-jumping .viewscreen__corner--bottom-left {
+  transform: translate(-12px, 12px);
+}
+
+.viewscreen.is-jumping .viewscreen__corner--bottom-right {
+  transform: translate(12px, 12px);
+}
+
+.viewscreen__ticks {
+  height: 8px;
+  margin: var(--space-xs) var(--viewscreen-inset) 0;
+  background: repeating-linear-gradient(90deg, rgba(201, 216, 233, 0.28) 0 1px, transparent 1px 12px);
+  mask-image: linear-gradient(90deg, transparent, #000 15%, #000 85%, transparent);
+}
+
+/* The project's readout, centred under the picture. Every slide shares one grid cell, so the height
+   never jumps. */
+.viewscreen__slides {
+  display: grid;
+  margin: var(--space-m) var(--viewscreen-inset) 0;
+  text-align: center;
+}
+
+.hero-slide {
+  grid-area: 1 / 1;
+}
+
+.js .hero-slide {
+  transition: opacity 0.4s, transform 0.4s var(--ease-out), visibility 0s;
+}
+
+.js .hero-slide.is-active {
+  transition-delay: 0.25s, 0.25s, 0s;
+}
+
+.js .hero-slide:not(.is-active) {
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(8px);
+  transition-delay: 0s, 0s, 0.4s;
 }
 
 html:not(.js) .hero-slide + .hero-slide {
   display: none;
 }
 
-.hero-slide.is-active > * {
-  animation: rise 0.7s var(--ease-out) both;
-}
-
-.hero-slide.is-active > :nth-child(2) {
-  animation-delay: 0.06s;
-}
-
-.hero-slide.is-active > :nth-child(3) {
-  animation-delay: 0.12s;
-}
-
-.hero-slide.is-active > :nth-child(4) {
-  animation-delay: 0.18s;
-}
-
-@keyframes rise {
-  from {
-    opacity: 0;
-    transform: translateY(14px);
-  }
-}
-
-.hero__controls {
-  display: flex;
-  gap: var(--space-m);
-  align-items: center;
-}
-
-.hero-arrow {
-  width: var(--tap);
-  height: var(--tap);
-  font-size: var(--text-l);
-  color: var(--colour-text);
-  background: var(--colour-glass);
-  border: 1px solid var(--colour-glass-line);
-  border-radius: 50%;
-  backdrop-filter: blur(6px);
-}
-
-.hero-pips {
-  display: flex;
-  gap: var(--space-xs);
-}
-
-.hero-pip {
-  display: flex;
-  align-items: center;
-  width: 2.75rem;
-  height: var(--tap);
-}
-
-.hero-pip span {
-  display: block;
-  width: 100%;
-  height: 3px;
+.hero-slide__cells {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
   overflow: hidden;
-  background: rgba(255, 255, 255, 0.22);
-  border-radius: 2px;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--colour-pale);
+  border: 1px solid rgba(201, 216, 233, 0.2);
+  border-radius: var(--radius-s);
 }
 
-.hero-pip span::after {
-  display: block;
+.hero-slide__cells span {
+  padding: 2px var(--space-xs);
+}
+
+.hero-slide__cells span + span {
+  border-left: 1px solid rgba(201, 216, 233, 0.2);
+}
+
+.hero-slide__title {
+  margin: var(--space-xs) 0 var(--space-2xs);
+  font-size: 1.5rem;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+}
+
+.hero-slide__text {
+  max-width: 38rem;
+  margin: 0 auto var(--space-m);
+}
+
+/* Project buttons framed by round previous and next buttons, with pause at the end. */
+.viewscreen__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  align-items: center;
+  justify-content: center;
+  margin: var(--space-m) var(--viewscreen-inset) 0;
+}
+
+.viewscreen__beacons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xs);
+  justify-content: center;
+}
+
+.viewscreen__beacon {
+  position: relative;
+  min-height: var(--tap);
+  padding: 0 var(--space-m);
+  overflow: hidden;
+  font-size: var(--text-s);
+  font-weight: 500;
+  color: var(--colour-text-body);
+  background: rgba(12, 14, 16, 0.6);
+  border: 1px solid var(--colour-line-strong);
+  border-radius: var(--radius-pill);
+  transition: border-color var(--duration-fast), color var(--duration-fast);
+}
+
+.viewscreen__beacon[aria-current='true'] {
+  color: var(--colour-text);
+  border-color: var(--colour-blue-bright);
+}
+
+/* A thin bar fills along the active project's button until the next jump. */
+.viewscreen__fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
   width: 100%;
-  height: 100%;
-  content: '';
-  background: var(--colour-text);
+  height: 2px;
+  background: var(--colour-blue-bright);
   transform: scaleX(0);
   transform-origin: left;
 }
 
-.hero-pip.is-active span::after {
-  animation: pip-fill 7s linear forwards;
+.viewscreen__beacon[aria-current='true'] .viewscreen__fill {
+  animation: viewscreen-fill var(--slide-duration, 7s) linear forwards;
 }
 
-.hero.is-paused .hero-pip.is-active span::after {
+.viewscreen.is-paused .viewscreen__fill {
   animation-play-state: paused;
 }
 
-@keyframes pip-fill {
+@keyframes viewscreen-fill {
   to {
     transform: scaleX(1);
   }
 }
 
-@media (min-width: 40rem) {
-  .hero-slide__text {
-    display: block;
+.viewscreen__bubble {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: var(--tap);
+  height: var(--tap);
+  color: var(--colour-text);
+  background: rgba(12, 14, 16, 0.6);
+  border: 1px solid var(--colour-line-strong);
+  border-radius: 50%;
+  transition: border-color var(--duration-fast);
+}
+
+.viewscreen__bubble--pause {
+  font-size: var(--text-xs);
+  color: var(--colour-text-muted);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .viewscreen__beacon:hover,
+  .viewscreen__bubble:hover {
+    color: var(--colour-text);
+    border-color: var(--colour-pale);
+  }
+}
+
+/* Opening a project: the picture grows to fill the window and the rest of the hero fades. */
+.hero.is-engaging .viewscreen__frame {
+  transition: transform 0.75s cubic-bezier(0.6, 0, 0.9, 0.5);
+}
+
+.hero.is-engaging [data-hero-recede] {
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+@media (min-width: 30rem) {
+  .viewscreen__stardate {
+    display: inline;
   }
 }
 
 @media (min-width: 64rem) {
-  .hero__content {
-    bottom: 8vh;
+  .hero__grid {
+    grid-template-areas: 'intro screen';
+    grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+    column-gap: clamp(1.5rem, 3vw, 3.5rem);
+    align-items: center;
+    padding-bottom: var(--space-l);
   }
 
-  .hero__hint {
+  .hero__name {
+    font-size: clamp(3.75rem, 6vw, 6rem);
+  }
+
+  .hero__lede {
+    font-size: 1.375rem;
+  }
+
+  /* As big as the column allows, but never taller than the window leaves room for. */
+  .viewscreen {
+    --viewscreen-inset: 44px;
+    justify-self: center;
+    width: 100%;
+    max-width: calc((100vh - 27rem) * 16 / 9 + 88px);
+    max-width: calc((100svh - 27rem) * 16 / 9 + 88px);
+  }
+
+  .viewscreen__body {
+    display: grid;
+    grid-template-columns: 28px minmax(0, 1fr) 28px;
+    column-gap: 2px;
+  }
+
+  .viewscreen__rail {
     display: flex;
-  }
-
-  .hero__now {
-    grid-template-columns: minmax(0, 38rem) auto;
-    align-items: end;
-    justify-content: space-between;
-  }
-
-  .hero__controls {
     flex-direction: column;
-    align-items: flex-end;
+    gap: 6px;
+    align-items: center;
+    padding: 14px 0;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--colour-text-muted);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .viewscreen__image,
+  .viewscreen__image.is-leaving {
+    filter: none;
+    transform: none;
   }
 
-  @media (hover: hover) {
-    .hero__name-row {
-      transition: transform var(--duration-m) var(--ease-out);
-    }
+  .viewscreen__fill,
+  .viewscreen__bubble--pause {
+    display: none;
   }
 }
 
@@ -826,6 +1066,27 @@ html:not(.js) .hero-slide + .hero-slide {
   z-index: 2;
   width: min(100% - 2rem, var(--container));
   margin-inline: auto;
+}
+
+/* Arriving from the hero's zoom (work-panels.js): the photo starts at the zoom's size and settles,
+   and the text fades in over the shade, which the viewscreen already faded in. */
+.work-panel__image {
+  transition: transform 0.9s var(--ease-out);
+}
+
+.work-panel__content {
+  transition: opacity 0.6s ease-out 0.1s, transform 0.6s var(--ease-out) 0.1s;
+}
+
+.work-panel.is-arriving .work-panel__image {
+  transform: scale(1.06);
+  transition: none;
+}
+
+.work-panel.is-arriving .work-panel__content {
+  opacity: 0;
+  transform: translateY(16px);
+  transition: none;
 }
 
 .work-panel__index {
@@ -1290,17 +1551,6 @@ html:not(.js) .hero-slide + .hero-slide {
   object-fit: cover;
 }
 
-.about__big {
-  font-size: var(--text-xl);
-  font-weight: 300;
-  line-height: 1.3;
-  color: var(--colour-text);
-}
-
-.about__big b {
-  font-weight: 700;
-}
-
 .about__text {
   max-width: 42rem;
   margin-top: var(--space-m);
@@ -1418,10 +1668,6 @@ html:not(.js) .hero-slide + .hero-slide {
     gap: var(--space-l);
   }
 
-  .about-screen .about__big {
-    font-size: var(--text-l);
-  }
-
   .about-screen .about__text {
     margin-top: var(--space-s);
     font-size: var(--text-m);
@@ -1478,10 +1724,6 @@ html:not(.js) .hero-slide + .hero-slide {
 
   .about-screen .section-head__title {
     font-size: clamp(2rem, 4vw, 3rem);
-  }
-
-  .about-screen .about__big {
-    font-size: var(--text-l);
   }
 
   .about-screen .about__text {
@@ -3146,23 +3388,10 @@ html:not(.js) .hero-slide + .hero-slide {
   pointer-events: none;
 }
 
-/* Phones on their side: the screen is wide but very short, so the hero text shrinks to fit. */
+/* Phones on their side: the screen is wide but very short, so the big titles shrink. */
 @media (orientation: landscape) and (max-height: 32rem) {
-  .hero {
-    min-height: 0;
-  }
-
-  .hero__eyebrow {
-    display: none;
-  }
-
   .hero__name {
-    margin: 0 0 var(--space-xs);
     font-size: 3rem;
-  }
-
-  .hero__content {
-    bottom: var(--space-m);
   }
 
   .work-panel__title {

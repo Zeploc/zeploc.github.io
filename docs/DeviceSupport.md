@@ -125,7 +125,8 @@ Record the result here:
 
 ## Known Device Behaviour
 
-- **The hero particles are the heaviest part of the site.** Check the frame rate on a mid-range phone (console: `stat fps`). Phones use a coarser particle grid.
+- **The hero star field is the heaviest part of the site.** Check the frame rate on a mid-range phone (console: `stat fps`). Smaller screens draw fewer stars.
+- **One scroll from the hero zooms into the viewscreen** and lands on that project's work panel; one scroll up from the first panel zooms back out. It only runs when the hero fits the window (laptops); smaller windows scroll the hero as normal. Check both ways.
 - **The work panels step one screen per scroll with a wheel or trackpad.** Touch screens use CSS scroll snapping instead. Check both.
 
 - **iPhone Safari zooms in on a form field** with text smaller than 16px. Form fields use at least `1rem`.

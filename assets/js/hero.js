@@ -1,546 +1,544 @@
-// The hero: a carousel of featured projects. Each photo shows as normal, and around the pointer it
-// breaks into a grid of particles, like a pixelating lens. Each particle carries its own piece of the
-// photo, with a blurred copy of the photo behind them showing through the gaps. Changing slide swaps
-// the photo for the particles full screen, without a visible seam, while they sort themselves by
-// brightness into the next picture over the blurred next photo; then they fade out over the new photo.
-// A click scatters the particles. Reduced motion shows the photos only.
-(() => {
+// The hero: my name and who I am beside a ship's viewscreen of featured projects. A star field fills
+// the hero and streams out of the viewscreen; each project arrives in it with a warp jump. Previous,
+// next and project buttons pick one, and it moves on by itself every few seconds. Opening a project
+// warps into it, and a click on the viewscreen moves on to the work panels.
+// work-panels.js asks for the zoom (window.HeroScreen) when one scroll takes the viewscreen to the
+// project's work panel. Reduced motion shows still stars and plain fades.
+window.HeroScreen = (() => {
   const hero = document.querySelector('[data-hero]');
   if (!hero) {
-    return;
+    return null;
   }
-  const slides = [...hero.querySelectorAll('[data-hero-slide]')];
-  const controls = hero.querySelector('[data-hero-controls]');
-  const backdropImage = hero.querySelector('.hero__image');
+  const screen = hero.querySelector('[data-viewscreen]');
+  const frame = screen.querySelector('[data-viewscreen-frame]');
+  const view = screen.querySelector('[data-viewscreen-view]');
+  const images = [...view.querySelectorAll('[data-viewscreen-image]')];
+  const slides = [...screen.querySelectorAll('[data-hero-slide]')];
+  const beacons = [...screen.querySelectorAll('[data-hero-beacon]')];
+  const marks = [...screen.querySelectorAll('[data-viewscreen-mark]')];
+  const pauseButton = screen.querySelector('[data-hero-pause]');
+  const flash = screen.querySelector('[data-viewscreen-flash]');
+  const counter = screen.querySelector('[data-viewscreen-count]');
+  const gauge = screen.querySelector('[data-viewscreen-gauge]');
+  const warpReadout = screen.querySelector('[data-viewscreen-warp]');
+  const receding = [...hero.querySelectorAll('[data-hero-recede]')];
+  const shields = [...hero.querySelectorAll('[data-hero-shield]')];
   const slideDuration = 7000;
+  const zoomDuration = 650;
   let activeIndex = 0;
+  let jumpTimers = [];
   let autoplayTimer = null;
-  // A blurred copy of the photo behind the particles, seen through the gaps between them.
-  let blurImage = null;
+  let isUserPaused = false;
+  let isHovering = false;
+  let hasKeyboardFocus = false;
   let isVisible = true;
+  let isZooming = false;
+  let isEngaging = false;
+  // True while the visitor is on the work panels after the zoom; the carousel holds still.
+  let isAway = false;
 
-  /* === Carousel === */
+  /* === Star field === */
 
-  controls.innerHTML = `
-    <div class="hero-pips">${slides.map((slide, index) => `<button class="hero-pip" type="button" aria-label="Show slide ${index + 1}"><span></span></button>`).join('')}</div>
-    <div class="button-row"><button class="hero-arrow" type="button" data-hero-step="-1" aria-label="Previous project">←</button><button class="hero-arrow" type="button" data-hero-step="1" aria-label="Next project">→</button></div>`;
-  const pips = [...controls.querySelectorAll('.hero-pip')];
-
-  function scheduleNext() {
-    window.clearTimeout(autoplayTimer);
-    if (Motion.reduceMotion) {
-      return;
-    }
-    autoplayTimer = window.setTimeout(() => {
-      if (isVisible && !hero.classList.contains('is-paused')) {
-        showSlide(activeIndex + 1);
-      } else {
-        scheduleNext();
-      }
-    }, slideDuration);
-  }
-
-  function showSlide(index) {
-    activeIndex = (index + slides.length) % slides.length;
-    const slide = slides[activeIndex];
-    slides.forEach((other) => other.classList.toggle('is-active', other === slide));
-    pips.forEach((pip, pipIndex) => {
-      pip.classList.remove('is-active');
-      void pip.offsetWidth; // restarts the fill animation
-      pip.classList.toggle('is-active', pipIndex === activeIndex);
-      pip.setAttribute('aria-current', pipIndex === activeIndex ? 'true' : 'false');
-    });
-    if (particles) {
-      particles.morph(slide.dataset.heroSlide);
-      showParticles(1800);
-    }
-    backdropImage.removeAttribute('srcset');
-    backdropImage.src = slide.dataset.heroImage;
-    if (blurImage) {
-      blurImage.src = slide.dataset.heroImage;
-    }
-    scheduleNext();
-  }
-
-  controls.addEventListener('click', (event) => {
-    const pip = event.target.closest('.hero-pip');
-    if (pip) {
-      showSlide(pips.indexOf(pip));
-    }
-    const step = event.target.closest('[data-hero-step]');
-    if (step) {
-      showSlide(activeIndex + Number(step.dataset.heroStep));
-    }
-  });
-  window.addEventListener('hero:step', (event) => showSlide(activeIndex + event.detail));
-
-  /* === Particles === */
-
-  const sampleWidth = 192;
-  const sampleHeight = 108;
-  const samples = {};
-  let particles = null;
-  let particleTimer = null;
-  let settleTimer = null;
-  // Changing slide: each particle flies to its new place on an ease-out curve, fast off the mark
-  // and gentle into place, after a short random delay.
-  const morphDelay = 400;
-  const morphDuration = 1300;
-  const morphEase = (t) => Math.sqrt(1 - (t - 1) * (t - 1)); // ease-out circ
-
-  // Swaps the photo for the particle picture full screen while it rebuilds or scatters. The swap is
-  // seamless because the particles fill their whole cells at the start and the end. Afterwards the
-  // particles fade out over the photo ("settling"), then shrink back to dots inside the lens.
-  function showParticles(duration) {
-    particles.fillCells();
-    hero.classList.remove('is-settling');
-    hero.classList.add('is-morphing');
-    window.clearTimeout(particleTimer);
-    window.clearTimeout(settleTimer);
-    particleTimer = window.setTimeout(() => {
-      hero.classList.replace('is-morphing', 'is-settling');
-      settleTimer = window.setTimeout(() => hero.classList.remove('is-settling'), 600);
-    }, duration);
-  }
-
-  function loadSample(key) {
-    return new Promise((resolve) => {
-      const source = window.HeroSamples && window.HeroSamples[key];
-      if (!source) {
-        resolve();
-        return;
-      }
-      const image = new Image();
-      image.onload = () => {
-        const sampleCanvas = document.createElement('canvas');
-        sampleCanvas.width = sampleWidth;
-        sampleCanvas.height = sampleHeight;
-        const sampleContext = sampleCanvas.getContext('2d');
-        sampleContext.drawImage(image, 0, 0, sampleWidth, sampleHeight);
-        samples[key] = sampleContext.getImageData(0, 0, sampleWidth, sampleHeight).data;
-        resolve();
-      };
-      image.onerror = resolve;
-      image.src = source;
-    });
-  }
-
-  // The full-size photos, so each particle can carry its own piece of the picture rather than one
-  // flat colour. They load in the background. Until one is ready, particles use flat colours.
-  // Opened from disk, the browser will not let a canvas read a photo: the lens then shows the photo
-  // through the dots instead, and the rebuild uses flat colours.
-  const photos = {};
-  // The pixelating lens around the pointer, in canvas pixels. The radius matches the mask in components.css.
-  const lens = { x: -9999, y: -9999, radius: 9 * parseFloat(getComputedStyle(document.documentElement).fontSize), isLeaving: false };
-
-  // Draws a photo over the whole canvas the way object-fit: cover draws the photo behind it.
-  function drawCover(target, photo, width, height) {
-    const scale = Math.max(width / photo.naturalWidth, height / photo.naturalHeight);
-    const drawWidth = photo.naturalWidth * scale;
-    const drawHeight = photo.naturalHeight * scale;
-    target.drawImage(photo, (width - drawWidth) / 2, (height - drawHeight) / 2, drawWidth, drawHeight);
-  }
-
-  function loadPhoto(key, onReady) {
-    const slide = slides.find((other) => other.dataset.heroSlide === key);
-    if (!slide || photos[key]) {
-      return;
-    }
-    photos[key] = new Image();
-    photos[key].onload = onReady;
-    photos[key].src = slide.dataset.heroImage;
-  }
-
-  function createParticles() {
-    const canvas = document.createElement('canvas');
-    canvas.className = 'hero__canvas';
-    canvas.setAttribute('aria-hidden', 'true');
+  // Stars stream out from a focus point (the middle of the viewscreen). At rest they drift slowly; a
+  // warp ramps the speed up and stretches each star into a streak, and most of them drop out so the
+  // streaks stay sparse. Behind the text, a soft-edged mask dims every star (streaks included) to half.
+  const stars = (() => {
+    const canvas = hero.querySelector('[data-hero-stars]');
     const context = canvas.getContext('2d');
-    hero.querySelector('.hero__shade').before(canvas);
-
+    const colours = ['201, 216, 233', '201, 216, 233', '241, 245, 248', '106, 163, 212', '123, 224, 165'];
+    const restSpeed = 0.3;
+    const shieldStrength = 0.5;
     let width = 0;
     let height = 0;
-    let cellSize = 8;
-    let columns = 0;
-    let rows = 0;
-    let count = 0;
-    let frameImage = null;
-    let pixels = null;
+    let ratio = 1;
+    let field = [];
+    let shieldBoxes = [];
+    let shieldFade = 1;
+    let mask = null;
+    let speed = restSpeed;
+    let boostSpeed = 0;
+    let boostUntil = 0;
     let isRunning = false;
-    // Position, velocity, target position, colour, target colour, size, target size, start delay, scroll spread.
-    let positionX, positionY, velocityX, velocityY, targetX, targetY;
-    let red, green, blue, targetRed, targetGreen, targetBlue, size, targetSize, startTime, spread;
-    // Where each particle's piece of the photo sits (top-left of its cell), now and before the last morph.
-    let sourceX, sourceY, oldSourceX, oldSourceY;
-    // Where each particle set off from on the last slide change.
-    let fromX, fromY;
-    // The photo drawn at canvas size, now and before the last morph. Null means flat colours.
-    let texture = null;
-    let oldTexture = null;
-    let textureKey = null;
-    const textureCanvas = document.createElement('canvas');
-    const textureContext = textureCanvas.getContext('2d', { willReadFrequently: true });
-    let canReadPhotos = true;
-    // How far the dots have grown to fill their cells: 1 matches the photo exactly, 0 is the halftone.
-    let fill = 1;
+    let focusX = 0.5;
+    let focusY = 0.5;
+    let aimX = 0.5;
+    let aimY = 0.5;
 
-    function readTexture(key) {
-      const photo = photos[key];
-      if (!canReadPhotos || !photo || !photo.complete || !photo.naturalWidth) {
-        return null;
-      }
-      textureCanvas.width = width;
-      textureCanvas.height = height;
-      drawCover(textureContext, photo, width, height);
-      try {
-        return new Uint32Array(textureContext.getImageData(0, 0, width, height).data.buffer);
-      } catch {
-        canReadPhotos = false; // opened from disk: the browser blocks reading the photo
-        return null;
-      }
-    }
+    // rank decides which stars stay at warp speed: only the lowest ranks are drawn when moving fast.
+    const spawn = (depth) => ({
+      x: Math.random() * 2 - 1,
+      y: Math.random() * 2 - 1,
+      z: depth,
+      rank: Math.random(),
+      colour: colours[Math.floor(Math.random() * colours.length)],
+    });
 
-    function build() {
-      width = canvas.width = hero.clientWidth;
-      height = canvas.height = hero.clientHeight;
-      cellSize = width < 700 ? 6 : width > 1900 ? 10 : 8;
-      columns = Math.ceil(width / cellSize);
-      rows = Math.ceil(height / cellSize);
-      count = columns * rows;
-      frameImage = context.createImageData(width, height);
-      pixels = new Uint32Array(frameImage.data.buffer);
-      [positionX, positionY, velocityX, velocityY, targetX, targetY, red, green, blue,
-        targetRed, targetGreen, targetBlue, size, targetSize, startTime, spread] = Array.from({ length: 16 }, () => new Float32Array(count));
-      [sourceX, sourceY, oldSourceX, oldSourceY] = Array.from({ length: 4 }, () => new Int32Array(count));
-      [fromX, fromY] = Array.from({ length: 2 }, () => new Float32Array(count));
-      texture = oldTexture = null;
-      textureKey = null;
-      for (let index = 0; index < count; index += 1) {
-        positionX[index] = targetX[index] = Math.random() * width;
-        positionY[index] = targetY[index] = Math.random() * height;
-        red[index] = targetRed[index] = 40;
-        green[index] = targetGreen[index] = 60;
-        blue[index] = targetBlue[index] = 80;
-        size[index] = targetSize[index] = 1;
-        spread[index] = 0.3 + Math.random() * 0.7;
-      }
-    }
-
-    function morph(key) {
-      const data = samples[key];
-      if (!data || !count) {
+    function buildMask() {
+      if (!shieldBoxes.length) {
+        mask = null;
         return;
       }
-      // The sample covers the canvas the way background-size: cover would.
-      const scale = Math.max(width / sampleWidth, height / sampleHeight);
-      const offsetX = (width - sampleWidth * scale) / 2;
-      const offsetY = (height - sampleHeight * scale) / 2;
-      const cellRed = new Float32Array(count);
-      const cellGreen = new Float32Array(count);
-      const cellBlue = new Float32Array(count);
-      const cellLight = new Float32Array(count);
-      const particleLight = new Float32Array(count);
-      for (let row = 0; row < rows; row += 1) {
-        for (let column = 0; column < columns; column += 1) {
-          const cell = row * columns + column;
-          const sampleX = Motion.clamp(Math.floor((column * cellSize + cellSize / 2 - offsetX) / scale), 0, sampleWidth - 1);
-          const sampleY = Motion.clamp(Math.floor((row * cellSize + cellSize / 2 - offsetY) / scale), 0, sampleHeight - 1);
-          const offset = (sampleY * sampleWidth + sampleX) * 4;
-          cellRed[cell] = data[offset];
-          cellGreen[cell] = data[offset + 1];
-          cellBlue[cell] = data[offset + 2];
-          cellLight[cell] = (0.2126 * data[offset] + 0.7152 * data[offset + 1] + 0.0722 * data[offset + 2]) / 255;
+      mask = mask || document.createElement('canvas');
+      mask.width = width;
+      mask.height = height;
+      const maskContext = mask.getContext('2d');
+      maskContext.fillStyle = '#000';
+      maskContext.shadowColor = '#000';
+      maskContext.shadowBlur = 60 * ratio;
+      shieldBoxes.forEach((box) => {
+        maskContext.fillRect(box.left * ratio, box.top * ratio, box.width * ratio, box.height * ratio);
+      });
+    }
+
+    function resize() {
+      ratio = Math.min(window.devicePixelRatio || 1, 2);
+      width = canvas.width = Math.round(canvas.clientWidth * ratio);
+      height = canvas.height = Math.round(canvas.clientHeight * ratio);
+      const count = Math.round(Math.min(900, (canvas.clientWidth * canvas.clientHeight) / 1600));
+      field = Array.from({ length: count }, () => spawn(0.05 + Math.random() * 0.95));
+      buildMask();
+      draw(0);
+    }
+
+    function draw(step) {
+      context.clearRect(0, 0, width, height);
+      focusX += (aimX - focusX) * 0.06;
+      focusY += (aimY - focusY) * 0.06;
+      const originX = focusX * width;
+      const originY = focusY * height;
+      const spread = Math.max(width, height) * 0.5;
+      const tail = step * (2 + speed * 0.35);
+      const rush = Motion.clamp((speed - restSpeed) / 12);
+      const density = 1 - 0.82 * rush;
+      context.lineCap = 'round';
+      field.forEach((star) => {
+        star.z -= step;
+        const headX = originX + (star.x / star.z) * spread;
+        const headY = originY + (star.y / star.z) * spread;
+        if (star.z <= 0.03 || headX < -50 || headX > width + 50 || headY < -50 || headY > height + 50) {
+          Object.assign(star, spawn(1));
+          return;
         }
-      }
-      for (let index = 0; index < count; index += 1) {
-        particleLight[index] = 0.2126 * targetRed[index] + 0.7152 * targetGreen[index] + 0.0722 * targetBlue[index];
-      }
-      const cellOrder = new Uint32Array(count).map((unused, index) => index).sort((a, b) => cellLight[a] - cellLight[b]);
-      const particleOrder = new Uint32Array(count).map((unused, index) => index).sort((a, b) => particleLight[a] - particleLight[b]);
-      const now = performance.now();
-      // Particles keep their old piece of photo until they set off, then carry the new one.
-      oldTexture = texture;
-      oldSourceX.set(sourceX);
-      oldSourceY.set(sourceY);
-      textureKey = key;
-      texture = readTexture(key);
-      if (!texture) {
-        loadPhoto(key, () => {
-          if (textureKey === key) {
-            texture = readTexture(key);
-          }
-        });
-      }
-      for (let rank = 0; rank < count; rank += 1) {
-        const particle = particleOrder[rank];
-        const cell = cellOrder[rank];
-        sourceX[particle] = (cell % columns) * cellSize;
-        sourceY[particle] = Math.floor(cell / columns) * cellSize;
-        targetX[particle] = sourceX[particle] + cellSize / 2;
-        targetY[particle] = sourceY[particle] + cellSize / 2;
-        targetRed[particle] = Math.min(255, cellRed[cell] * 1.12 + 6);
-        targetGreen[particle] = Math.min(255, cellGreen[cell] * 1.12 + 6);
-        targetBlue[particle] = Math.min(255, cellBlue[cell] * 1.12 + 6);
-        // Brighter cells get bigger dots, like a halftone print.
-        targetSize[particle] = Math.max(1.4, cellSize * (0.3 + 0.7 * cellLight[cell]));
-        startTime[particle] = now + Math.random() * morphDelay;
-        fromX[particle] = positionX[particle];
-        fromY[particle] = positionY[particle];
+        if (star.rank > density) {
+          return;
+        }
+        const tailZ = star.z + tail;
+        const nearness = 1 - star.z;
+        context.strokeStyle = `rgba(${star.colour}, ${Math.min(1, nearness * 1.3)})`;
+        context.lineWidth = (nearness * 2.2 + 0.4) * ratio;
+        context.beginPath();
+        context.moveTo(originX + (star.x / tailZ) * spread, originY + (star.y / tailZ) * spread);
+        context.lineTo(headX + 0.01, headY);
+        context.stroke();
+      });
+      if (mask && shieldFade > 0) {
+        context.globalCompositeOperation = 'destination-out';
+        context.globalAlpha = shieldStrength * shieldFade;
+        context.drawImage(mask, 0, 0);
+        context.globalCompositeOperation = 'source-over';
+        context.globalAlpha = 1;
       }
     }
 
-    function step(now) {
-      const scrollSpread = Motion.clamp(window.scrollY / height);
-      const spring = 0.045;
-      const damping = 0.84;
-      // Only draw what can be seen: the whole screen while the particles rebuild or scatter, the
-      // box around the lens while the pointer is over the photo, and nothing otherwise.
-      let clipLeft = 0;
-      let clipTop = 0;
-      let clipRight = width;
-      let clipBottom = height;
-      const isMorphing = hero.classList.contains('is-morphing');
-      const isFullScreen = isMorphing || hero.classList.contains('is-settling');
-      const isDrawing = isFullScreen || hero.classList.contains('is-looking');
-      // The dots fill their cells while full screen and while the lens closes, and shrink to the halftone otherwise.
-      const fillTarget = isFullScreen || lens.isLeaving ? 1 : 0;
-      fill = Math.abs(fillTarget - fill) < 0.02 ? fillTarget : fill + (fillTarget - fill) * 0.1;
-      if (lens.isLeaving && fill === 1) {
-        lens.isLeaving = false;
-        hero.classList.remove('is-looking');
-      }
-      if (!isFullScreen) {
-        const reach = lens.radius + cellSize * 2;
-        clipLeft = Math.max(0, Math.floor(lens.x - reach));
-        clipTop = Math.max(0, Math.floor(lens.y - reach));
-        clipRight = Math.min(width, Math.ceil(lens.x + reach));
-        clipBottom = Math.min(height, Math.ceil(lens.y + reach));
-      }
-      const hasClip = isDrawing && clipRight > clipLeft && clipBottom > clipTop;
-      if (hasClip) {
-        for (let row = clipTop; row < clipBottom; row += 1) {
-          pixels.fill(0, row * width + clipLeft, row * width + clipRight);
-        }
-      }
-      // In the lens the dots are smallest at the pointer and grow to fill their cells towards the
-      // edge, so the lens blends into the photo by its gaps closing rather than by fading.
-      const lensInner = lens.radius * 0.2;
-      const lensOuter = lens.radius * 0.85;
-      // A few random nudges keep the picture shimmering.
-      for (let nudge = 0; nudge < 30; nudge += 1) {
-        const index = Math.floor(Math.random() * count);
-        velocityX[index] += Math.random() - 0.5;
-        velocityY[index] += Math.random() - 0.5;
-      }
-      for (let index = 0; index < count; index += 1) {
-        const hasStarted = now > startTime[index];
-        const progress = (now - startTime[index]) / morphDuration;
-        if (progress > 0 && progress < 1) {
-          // Mid-flight on a slide change: follow the ease-out curve.
-          const eased = morphEase(progress);
-          positionX[index] = fromX[index] + (targetX[index] - fromX[index]) * eased;
-          positionY[index] = fromY[index] + (targetY[index] - fromY[index]) * eased;
-          velocityX[index] = 0;
-          velocityY[index] = 0;
-        } else {
-          // At rest (or scattered): a spring holds each particle to its place.
-          if (hasStarted) {
-            velocityX[index] += (targetX[index] - positionX[index]) * spring;
-            velocityY[index] += (targetY[index] - positionY[index]) * spring;
-          }
-          velocityX[index] *= damping;
-          velocityY[index] *= damping;
-          positionX[index] += velocityX[index];
-          positionY[index] += velocityY[index];
-        }
-        red[index] += (targetRed[index] - red[index]) * 0.05;
-        green[index] += (targetGreen[index] - green[index]) * 0.05;
-        blue[index] += (targetBlue[index] - blue[index]) * 0.05;
-        size[index] += (targetSize[index] - size[index]) * 0.08;
-
-        const centreY = positionY[index] - scrollSpread * spread[index] * height * 0.9;
-        let dotFill = fill;
-        let drawX = positionX[index];
-        let drawY = centreY;
-        if (!isFullScreen) {
-          const distance = Math.hypot(positionX[index] - lens.x, centreY - lens.y);
-          const edge = Motion.clamp((distance - lensInner) / (lensOuter - lensInner));
-          const edgeFill = edge * edge * (3 - 2 * edge);
-          dotFill = Math.max(fill, edgeFill);
-          // Towards the edge the dots also sit exactly in their cells, so no shimmer opens a gap there.
-          if (hasStarted) {
-            drawX += (targetX[index] - drawX) * edgeFill;
-            drawY += (targetY[index] - scrollSpread * spread[index] * height * 0.9 - drawY) * edgeFill;
-          }
-        }
-        const dotSize = Math.max(1, Math.min(cellSize, Math.round(size[index] + (cellSize - size[index]) * dotFill)));
-        const left = Math.floor(drawX - dotSize / 2);
-        const top = Math.floor(drawY - dotSize / 2);
-        if (!hasClip || left < clipLeft || top < clipTop || left + dotSize > clipRight || top + dotSize > clipBottom) {
-          continue;
-        }
-        const source = hasStarted ? texture : oldTexture;
-        if (source) {
-          // Copy the middle of the particle's cell from the photo, so it carries its piece of the picture.
-          const inset = (cellSize - dotSize) >> 1;
-          const fromX = Math.min((hasStarted ? sourceX : oldSourceX)[index] + inset, width - dotSize);
-          const fromY = Math.min((hasStarted ? sourceY : oldSourceY)[index] + inset, height - dotSize);
-          for (let line = 0, offset = top * width + left, from = fromY * width + fromX; line < dotSize; line += 1, offset += width, from += width) {
-            for (let column = 0; column < dotSize; column += 1) {
-              pixels[offset + column] = source[from + column];
-            }
-          }
-          continue;
-        }
-        // Pixels are little-endian ABGR.
-        const colour = 0xff000000 | (Math.floor(blue[index]) << 16) | (Math.floor(green[index]) << 8) | Math.floor(red[index]);
-        for (let line = 0, offset = top * width + left; line < dotSize; line += 1, offset += width) {
-          pixels.fill(colour, offset, offset + dotSize);
-        }
-      }
-      if (hasClip) {
-        context.putImageData(frameImage, 0, 0, clipLeft, clipTop, clipRight - clipLeft, clipBottom - clipTop);
-        // Opened from disk: show the photo through the dots in the lens instead of their flat colours.
-        const photo = photos[textureKey];
-        if (!texture && !isMorphing && !canReadPhotos && photo && photo.complete) {
-          context.save();
-          context.beginPath();
-          context.rect(clipLeft, clipTop, clipRight - clipLeft, clipBottom - clipTop);
-          context.clip();
-          context.globalCompositeOperation = 'source-in';
-          drawCover(context, photo, width, height);
-          context.restore();
-        }
-      }
-    }
-
-    function fillCells() {
-      fill = 1;
-    }
-
-    function frame() {
+    function frameLoop(now) {
       if (!isRunning) {
         return;
       }
-      step(performance.now());
-      requestAnimationFrame(frame);
+      const target = now < boostUntil ? Math.max(restSpeed, boostSpeed) : restSpeed;
+      speed += (target - speed) * (target > speed ? 0.12 : 0.045);
+      draw(0.0012 * speed);
+      updateGauge(speed - restSpeed);
+      requestAnimationFrame(frameLoop);
     }
 
-    function setRunning(shouldRun) {
-      if (shouldRun && !isRunning) {
-        isRunning = true;
-        requestAnimationFrame(frame);
-      } else if (!shouldRun) {
+    window.addEventListener('resize', resize);
+    resize();
+
+    return {
+      start() {
+        if (!isRunning && !Motion.reduceMotion) {
+          isRunning = true;
+          requestAnimationFrame(frameLoop);
+        }
+      },
+      stop() {
         isRunning = false;
-      }
-    }
-
-    function scatter(centreX = width / 2, centreY = height / 2, power = 40) {
-      for (let index = 0; index < count; index += 1) {
-        const distanceX = positionX[index] - centreX;
-        const distanceY = positionY[index] - centreY;
-        const distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY) + 0.01;
-        if (distance < 360) {
-          // A scattered particle leaves any slide-change flight and springs back instead.
-          startTime[index] = Math.min(startTime[index], performance.now() - morphDuration);
-          const push = (1 - distance / 360) * power;
-          velocityX[index] += (distanceX / distance) * push;
-          velocityY[index] += (distanceY / distance) * push;
+      },
+      warp(duration = 650, peak = 32) {
+        boostUntil = performance.now() + duration;
+        boostSpeed = peak;
+      },
+      aim(x, y) {
+        aimX = x;
+        aimY = y;
+        if (Motion.reduceMotion) {
+          focusX = x;
+          focusY = y;
+          draw(0);
         }
-      }
+      },
+      shield(boxes) {
+        shieldBoxes = boxes;
+        buildMask();
+        draw(0);
+      },
+      // 1 dims the stars behind the text fully; the zoom fades it out as the text fades away.
+      fadeShield(amount) {
+        shieldFade = amount;
+      },
+    };
+  })();
+
+  // The warp gauge on the right rail follows the star speed.
+  let shownWarp = '';
+  function updateGauge(boost) {
+    const level = Motion.clamp(boost / 34);
+    gauge.style.transform = `scaleY(${0.05 + level * 0.95})`;
+    const value = (1 + level * 8.9).toFixed(1);
+    if (value !== shownWarp) {
+      warpReadout.textContent = value;
+      shownWarp = value;
     }
-
-    build();
-    return { build, morph, setRunning, scatter, fillCells };
   }
 
-  function startParticles() {
-    particles = createParticles();
-    blurImage = document.createElement('img');
-    blurImage.className = 'hero__blur';
-    blurImage.alt = '';
-    blurImage.setAttribute('aria-hidden', 'true');
-    blurImage.src = backdropImage.currentSrc || backdropImage.src;
-    hero.querySelector('.hero__canvas').before(blurImage);
-    hero.classList.add('has-particles');
+  /* === Layout === */
 
-    hero.addEventListener('pointermove', (event) => {
-      // The lens opens with the photo and pixelates as the dots shrink.
-      if (!hero.classList.contains('is-looking')) {
-        particles.fillCells();
-      }
-      lens.isLeaving = false;
-      const bounds = hero.getBoundingClientRect();
-      lens.x = event.clientX - bounds.left;
-      lens.y = event.clientY - bounds.top;
-      hero.style.setProperty('--lens-x', `${lens.x}px`);
-      hero.style.setProperty('--lens-y', `${lens.y}px`);
-      hero.classList.add('is-looking', 'is-paused');
-    });
-    // The lens closes by growing the dots back into the photo, then hides.
-    hero.addEventListener('pointerleave', () => {
-      hero.classList.remove('is-paused');
-      lens.isLeaving = true;
-      window.setTimeout(() => {
-        if (lens.isLeaving) {
-          lens.isLeaving = false;
-          hero.classList.remove('is-looking');
-        }
-      }, 700);
-    });
-    hero.addEventListener('pointerdown', (event) => {
-      if (event.target.closest('a, button')) {
-        return;
-      }
-      const bounds = hero.getBoundingClientRect();
-      particles.scatter(event.clientX - bounds.left, event.clientY - bounds.top);
-      showParticles(1800);
-      Achievements.unlock('shock');
-    });
-    window.addEventListener('hero:scatter', () => {
-      particles.scatter(undefined, undefined, 70);
-      showParticles(1800);
-      Achievements.unlock('shock');
-    });
+  // The stars stream from the middle of the viewscreen, and dim behind the text. The frame's resting
+  // box is kept for the zoom.
+  let focus = { x: 0.5, y: 0.5 };
+  let frameBox = null;
+  function measure() {
+    if (isZooming) {
+      return;
+    }
+    frame.style.transform = '';
+    const heroBox = hero.getBoundingClientRect();
+    const viewBox = view.getBoundingClientRect();
+    focus = {
+      x: (viewBox.left + viewBox.width / 2 - heroBox.left) / heroBox.width,
+      y: (viewBox.top + viewBox.height / 2 - heroBox.top) / heroBox.height,
+    };
+    stars.aim(focus.x, focus.y);
+    frameBox = { left: viewBox.left - heroBox.left, top: viewBox.top - heroBox.top, width: viewBox.width, height: viewBox.height };
+    stars.shield(shields.map((element) => {
+      const box = element.getBoundingClientRect();
+      return { left: box.left - heroBox.left, top: box.top - heroBox.top, width: box.width, height: box.height };
+    }));
+  }
+  window.addEventListener('resize', measure);
+  document.fonts?.ready.then(measure);
 
-    // Rebuild only when the width changes: phones change the height as the address bar moves.
-    let lastWidth = window.innerWidth;
-    let resizeTimer = null;
-    window.addEventListener('resize', () => {
-      if (window.innerWidth === lastWidth) {
-        return;
-      }
-      lastWidth = window.innerWidth;
-      window.clearTimeout(resizeTimer);
-      resizeTimer = window.setTimeout(() => {
-        particles.build();
-        particles.morph(slides[activeIndex].dataset.heroSlide);
-      }, 200);
-    });
+  hero.addEventListener('pointermove', (event) => {
+    if (isZooming || isEngaging || event.pointerType === 'touch') {
+      return;
+    }
+    const box = hero.getBoundingClientRect();
+    const x = (event.clientX - box.left) / box.width;
+    const y = (event.clientY - box.top) / box.height;
+    stars.aim(focus.x + (x - focus.x) * 0.08, focus.y + (y - focus.y) * 0.08);
+  });
+  hero.addEventListener('pointerleave', () => stars.aim(focus.x, focus.y));
 
-    new IntersectionObserver((entries) => {
-      isVisible = entries[0].isIntersecting;
-      particles.setRunning(isVisible);
-    }).observe(hero);
+  // Moves the frame toward filling the window: 0 is at rest, 1 fills it (with a little to spare, so
+  // its edges are off screen). The hero is at the top of the window whenever this runs.
+  function zoomFrame(amount) {
+    if (!frameBox || amount <= 0) {
+      frame.style.transform = '';
+      return;
+    }
+    const fill = Math.max(hero.clientWidth / frameBox.width, window.innerHeight / frameBox.height) * 1.06;
+    const moveX = hero.clientWidth / 2 - (frameBox.left + frameBox.width / 2);
+    const moveY = window.innerHeight / 2 - (frameBox.top + frameBox.height / 2);
+    frame.style.transform = `translate(${moveX * amount}px, ${moveY * amount}px) scale(${1 + (fill - 1) * amount})`;
   }
 
-  if (Motion.reduceMotion || !window.HeroSamples) {
-    showSlide(0);
-    return;
+  /* === Carousel === */
+
+  // The hidden pictures load after the page, so the first one has the network to itself.
+  function loadImage(image) {
+    if (!image.dataset.src) {
+      return;
+    }
+    image.srcset = image.dataset.srcset;
+    image.src = image.dataset.src;
+    delete image.dataset.src;
+    delete image.dataset.srcset;
+  }
+  if (document.readyState === 'complete') {
+    images.forEach(loadImage);
+  } else {
+    window.addEventListener('load', () => images.forEach(loadImage));
   }
 
-  Promise.all(slides.map((slide) => loadSample(slide.dataset.heroSlide))).then(() => {
-    startParticles();
-    // While the title screen shows, the particles wait, then assemble as its doors open.
-    if (window.TitleScreen && window.TitleScreen.isActive) {
-      window.addEventListener('titlescreen:done', () => showSlide(0), { once: true });
-      showSlideInfoOnly();
+  function restartFill(beacon) {
+    beacon.setAttribute('aria-current', 'false');
+    void beacon.offsetWidth; // restarts the fill animation
+    beacon.setAttribute('aria-current', 'true');
+  }
+
+  // isInstant swaps the picture with no jump (used when zooming back out to the hero).
+  function showSlide(index, isInstant = false) {
+    const nextIndex = (index + slides.length) % slides.length;
+    if (nextIndex === activeIndex || isEngaging) {
+      return;
+    }
+    jumpTimers.forEach((timer) => window.clearTimeout(timer));
+    jumpTimers = [];
+    const leaving = images[activeIndex];
+    const arriving = images[nextIndex];
+    loadImage(arriving);
+    images.forEach((image) => {
+      if (image !== leaving) {
+        image.classList.remove('is-active', 'is-leaving');
+      }
+    });
+    leaving.classList.remove('is-active');
+    if (Motion.reduceMotion || isInstant) {
+      arriving.classList.add('is-active');
     } else {
-      showSlide(0);
+      leaving.classList.add('is-leaving');
+      screen.classList.add('is-jumping');
+      stars.warp();
+      jumpTimers.push(window.setTimeout(() => {
+        flash.classList.remove('is-on');
+        void flash.offsetWidth; // restarts the flash
+        flash.classList.add('is-on');
+        arriving.classList.add('is-active');
+        screen.classList.remove('is-jumping');
+      }, 380));
+      jumpTimers.push(window.setTimeout(() => leaving.classList.remove('is-leaving'), 900));
+    }
+    activeIndex = nextIndex;
+    slides.forEach((slide, slideIndex) => slide.classList.toggle('is-active', slideIndex === nextIndex));
+    marks.forEach((mark, markIndex) => mark.classList.toggle('is-on', markIndex === nextIndex));
+    beacons.forEach((beacon) => beacon.setAttribute('aria-current', 'false'));
+    restartFill(beacons[nextIndex]);
+    counter.textContent = `${String(nextIndex + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+    window.dispatchEvent(new CustomEvent('hero:change', { detail: slides[nextIndex].dataset.heroSlide }));
+    scheduleNext();
+  }
+
+  const isPaused = () => isUserPaused || isHovering || hasKeyboardFocus || !isVisible || document.hidden
+    || isZooming || isEngaging || isAway || Boolean(window.TitleScreen && window.TitleScreen.isActive);
+
+  function scheduleNext() {
+    window.clearTimeout(autoplayTimer);
+    screen.classList.toggle('is-paused', isPaused());
+    if (Motion.reduceMotion || isPaused()) {
+      return;
+    }
+    autoplayTimer = window.setTimeout(() => showSlide(activeIndex + 1), slideDuration);
+  }
+
+  // The fill bar restarts after a pause, so the timer does too.
+  function resume() {
+    restartFill(beacons[activeIndex]);
+    scheduleNext();
+  }
+
+  screen.style.setProperty('--slide-duration', `${slideDuration}ms`);
+  beacons.forEach((beacon, beaconIndex) => beacon.addEventListener('click', () => showSlide(beaconIndex)));
+  screen.querySelectorAll('[data-hero-step]').forEach((button) => {
+    button.addEventListener('click', () => showSlide(activeIndex + Number(button.dataset.heroStep)));
+  });
+  window.addEventListener('hero:step', (event) => showSlide(activeIndex + event.detail));
+  pauseButton.addEventListener('click', () => {
+    isUserPaused = !isUserPaused;
+    pauseButton.setAttribute('aria-pressed', String(isUserPaused));
+    pauseButton.setAttribute('aria-label', isUserPaused ? 'Play the slideshow' : 'Pause the slideshow');
+    pauseButton.textContent = isUserPaused ? '▶︎' : '❚❚';
+    if (isUserPaused) {
+      scheduleNext();
+    } else {
+      resume();
+    }
+  });
+  if (Motion.canHover) {
+    view.addEventListener('pointerenter', () => {
+      isHovering = true;
+      scheduleNext();
+    });
+    view.addEventListener('pointerleave', () => {
+      isHovering = false;
+      resume();
+    });
+  }
+  // Keyboard focus pauses the carousel; a mouse click on a button does not.
+  screen.addEventListener('focusin', (event) => {
+    if (event.target.matches(':focus-visible')) {
+      hasKeyboardFocus = true;
+      scheduleNext();
+    }
+  });
+  screen.addEventListener('focusout', (event) => {
+    if (!screen.contains(event.relatedTarget)) {
+      hasKeyboardFocus = false;
+      resume();
+    }
+  });
+  screen.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowRight') {
+      showSlide(activeIndex + 1);
+    }
+    if (event.key === 'ArrowLeft') {
+      showSlide(activeIndex - 1);
     }
   });
 
-  function showSlideInfoOnly() {
-    pips[0].classList.add('is-active');
+  // A click on the viewscreen does what a scroll does: on to the work panels (work-panels.js).
+  view.addEventListener('click', () => window.dispatchEvent(new Event('hero:enter')));
+
+  /* === Engage: opening a project warps into it, then follows the link === */
+
+  screen.querySelectorAll('[data-hero-open]').forEach((link) => link.addEventListener('click', (event) => {
+    if (Motion.reduceMotion || isEngaging || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) {
+      return;
+    }
+    event.preventDefault();
+    isEngaging = true;
+    hero.classList.add('is-engaging');
+    scheduleNext();
+    stars.warp(2000, 45);
+    zoomFrame(1);
+    window.setTimeout(() => {
+      window.location.href = link.href;
+    }, 820);
+  }));
+  // Coming back with the Back button shows the hero as it was.
+  window.addEventListener('pageshow', (event) => {
+    if (!event.persisted) {
+      return;
+    }
+    isEngaging = false;
+    hero.classList.remove('is-engaging');
+    zoomFrame(0);
+    scheduleNext();
+  });
+
+  /* === The zoom to the work panels (driven by work-panels.js) === */
+
+  function setRecede(amount) {
+    stars.fadeShield(1 - amount);
+    receding.forEach((element) => {
+      element.style.opacity = amount ? String(1 - amount) : '';
+      element.style.transform = amount ? `translateY(${amount * -24}px)` : '';
+    });
   }
+
+  // 0 is the hero at rest, 1 is the project filling the window. The zoom starts gently and rushes in
+  // at the end (zooming out, it starts fast and settles). The panel's shade fades in on the way.
+  function zoomStep(amount) {
+    frame.style.setProperty('--takeover', amount.toFixed(3));
+    zoomFrame(amount * amount * amount);
+    setRecede(Motion.clamp(amount * 3));
+  }
+
+  // A timer finishes the move too, in case the browser stops sending frames (a background tab).
+  function play(from, to) {
+    return new Promise((resolve) => {
+      const start = performance.now();
+      let isFinished = false;
+      const finish = () => {
+        if (isFinished) {
+          return;
+        }
+        isFinished = true;
+        zoomStep(to);
+        resolve();
+      };
+      const fallback = window.setTimeout(finish, zoomDuration + 200);
+      const tick = (now) => {
+        if (isFinished) {
+          return;
+        }
+        const progress = Motion.clamp((now - start) / zoomDuration);
+        zoomStep(from + (to - from) * progress);
+        if (progress < 1) {
+          requestAnimationFrame(tick);
+        } else {
+          window.clearTimeout(fallback);
+          finish();
+        }
+      };
+      tick(start);
+    });
+  }
+
+  // Zooms until the project fills the window, then land() moves the page to its panel and the hero
+  // resets out of sight.
+  async function zoomIn(land) {
+    isZooming = true;
+    scheduleNext();
+    stars.warp(zoomDuration + 200, 28);
+    Achievements.unlock('warp');
+    await play(0, 1);
+    land();
+    zoomStep(0);
+    isZooming = false;
+    isAway = true;
+    scheduleNext();
+  }
+
+  // Shows the project whose panel you left, fills the window with it, jump() moves the page back to
+  // the hero, then it zooms out.
+  async function zoomOut(key, jump) {
+    isZooming = true;
+    const keyIndex = slides.findIndex((slide) => slide.dataset.heroSlide === key);
+    if (keyIndex >= 0) {
+      showSlide(keyIndex, true);
+    }
+    scheduleNext();
+    zoomStep(1);
+    jump();
+    await play(1, 0);
+    isZooming = false;
+    isAway = false;
+    resume();
+  }
+
+  /* === Start === */
+
+  // A stardate for the viewscreen: the year and the day of the year.
+  const today = new Date();
+  const dayOfYear = Math.floor((today - new Date(today.getFullYear(), 0, 0)) / 86400000);
+  screen.querySelector('[data-viewscreen-stardate]').textContent = `Stardate ${today.getFullYear()}.${String(dayOfYear).padStart(3, '0')}`;
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      stars.stop();
+    } else if (isVisible) {
+      stars.start();
+    }
+    scheduleNext();
+  });
+  new IntersectionObserver(([entry]) => {
+    isVisible = entry.isIntersecting;
+    // Back on the hero by any route (Home key, the scroll bar): the carousel carries on.
+    if (entry.intersectionRatio > 0.5 && !isZooming) {
+      isAway = false;
+    }
+    if (isVisible) {
+      stars.start();
+    } else {
+      stars.stop();
+    }
+    scheduleNext();
+  }, { threshold: [0, 0.5] }).observe(hero);
+
+  measure();
+  window.dispatchEvent(new CustomEvent('hero:change', { detail: slides[0].dataset.heroSlide }));
+  // While the title screen shows, the carousel waits; as its doors open, the stars jump.
+  if (window.TitleScreen && window.TitleScreen.isActive) {
+    window.addEventListener('titlescreen:done', () => {
+      stars.warp(500, 28);
+      resume();
+    }, { once: true });
+  }
+
+  return {
+    canZoom: () => !Motion.reduceMotion,
+    activeKey: () => slides[activeIndex].dataset.heroSlide,
+    zoomIn,
+    zoomOut,
+  };
 })();
