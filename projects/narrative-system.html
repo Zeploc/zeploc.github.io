@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Narrative System — Alex Coultas, Game Engineer</title>
+  <meta name="description" content="A quest and narrative tool for Unreal Engine: quests laid out as a graph of nodes, each one a data asset with its own conditions, actions and side quests.">
+  <meta name="theme-color" content="#15181b">
+  <meta property="og:title" content="Narrative System — Alex Coultas, Game Engineer">
+  <meta property="og:description" content="A quest and narrative tool for Unreal Engine: quests laid out as a graph of nodes, each one a data asset with its own conditions, actions and side quests.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://zeploc.github.io/projects/narrative-system.html">
+  <meta property="og:site_name" content="Alex Coultas">
+  <meta property="og:image" content="https://zeploc.github.io/assets/img/previews/narrative-system.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="A narrative graph of custom quest nodes in Unreal">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@AlexCoultas">
+  <link rel="canonical" href="https://zeploc.github.io/projects/narrative-system.html">
+  <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="../assets/css/tokens.css">
+  <link rel="stylesheet" href="../assets/css/base.css">
+  <link rel="stylesheet" href="../assets/css/layout.css">
+  <link rel="stylesheet" href="../assets/css/components.css">
+  <script>document.documentElement.classList.add('js');</script>
+</head>
+<body class="page-project">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header" data-site-header>
+  <div class="site-header__inner">
+    <a class="site-header__brand" href="../index.html">Alex Coultas</a>
+    <div class="site-header__actions" data-header-actions>
+      <a class="header-button header-button--cv" href="../assets/docs/alex-coultas-cv.pdf" target="_blank" rel="noopener">CV</a>
+    </div>
+    <nav class="site-nav" aria-label="Main">
+      <ul class="site-nav__list" data-site-nav>
+          <li><a class="site-nav__link" href="../index.html#about">About</a></li>
+          <li><a class="site-nav__link" href="../index.html#experience">Experience</a></li>
+          <li><a class="site-nav__link" href="../index.html#work">Work</a></li>
+          <li><a class="site-nav__link" href="../index.html#clients">Clients</a></li>
+          <li><a class="site-nav__link" href="../index.html#side">Side projects</a></li>
+          <li><a class="site-nav__link" href="../index.html#plugins">Plugins</a></li>
+          <li><a class="site-nav__link" href="../index.html#archive">Archive</a></li>
+          <li><a class="site-nav__link" href="../index.html#resources">Resources</a></li>
+      </ul>
+    </nav>
+  </div>
+  <div class="site-header__progress" aria-hidden="true"><span class="site-header__progress-fill" data-scroll-progress></span></div>
+</header>
+<main id="main" class="project">
+  <div class="project-hero"><img class="project-hero__image" src="../assets/img/narrative-system/custom-nodes-1280.webp" srcset="../assets/img/narrative-system/custom-nodes-640.webp 640w, ../assets/img/narrative-system/custom-nodes-1280.webp 1280w, ../assets/img/narrative-system/custom-nodes-1675.webp 1675w" sizes="100vw" width="1675" height="1125" alt="A narrative graph in Unreal of custom quest nodes linked by labelled arrows" decoding="async" fetchpriority="high"></div>
+  <div class="project__body">
+    <a class="back-link" href="../index.html#plugins">← All plugins</a>
+    <p class="kicker">Plugin · Unreal plugin · work in progress</p>
+    <h1 class="project__title">Narrative System</h1>
+    <p class="project__lead">A quest and narrative tool for Unreal Engine that we built as a team of two. Quests are laid out as a graph of nodes, and each node is its own data asset that holds what it does on entry, the conditions to move on, and the side quests it starts. We started from the open-source Generic Graph plugin and reworked it into a narrative graph editor, with a runtime subsystem that follows each active quest through the graph.</p>
+    <dl class="facts"><div class="facts__item"><dt>Type</dt><dd>Unreal Engine 5.4 plugin</dd></div>
+<div class="facts__item"><dt>Starting point</dt><dd>The Generic Graph plugin</dd></div>
+<div class="facts__item"><dt>Status</dt><dd>Work in progress, 2024</dd></div>
+<div class="facts__item"><dt>Team</dt><dd>Two of us, with Sebastian Tengdahl</dd></div></dl>
+    <div class="project-single"><h2 class="label">What we built</h2><ul class="did-list"><li>A narrative graph editor, using the open-source Generic Graph plugin as a starting point</li><li>Each graph node creates its own data asset; renaming the node renames the asset, and deleting it deletes the asset</li><li>Linking nodes writes the progress options into the asset; unlinking removes them</li><li>Progress conditions per link: a gameplay tag query on an actor, or a delay; no condition moves on straight away</li><li>Actions on entering and leaving a node, such as setting gameplay tags on an actor</li><li>Nodes that start side quests, picked straight from the graph</li><li>Custom Slate nodes and a details customisation, so a node can be edited without leaving the graph</li><li>Labels on links for notes, Auto Arrange, and Validate Graph to refresh names and links</li></ul></div>
+    <section class="project-section reveal"><h2 class="label">The plan</h2><p class="project-section__note">Before any code, we sketched how a quest flows: quest starts, branches that split the story, merges that bring it back together, and a map from each node to its data asset.</p><div class="gallery gallery--full" data-gallery><figure class="gallery__item">
+          <a class="gallery__link" href="../assets/img/narrative-system/plan-1760.webp" data-lightbox="Planning the shape of a quest"><img src="../assets/img/narrative-system/plan-1280.webp" srcset="../assets/img/narrative-system/plan-640.webp 640w, ../assets/img/narrative-system/plan-1280.webp 1280w, ../assets/img/narrative-system/plan-1760.webp 1760w" sizes="(min-width: 80rem) 75rem, 100vw" width="1760" height="531" alt="A planning diagram of coloured boxes: a start node, quest starts, a branch, plain nodes, a merge and insert-node slots" loading="lazy" decoding="async"></a>
+          <figcaption class="gallery__caption">Planning the shape of a quest</figcaption></figure></div></section><section class="project-section reveal"><h2 class="label">Early development</h2><p class="project-section__note">We used the open-source Generic Graph plugin as our starting point, then renamed and reworked it into a narrative graph, one node type at a time.</p><div class="gallery gallery--wide" data-gallery><figure class="gallery__item">
+          <a class="gallery__link" href="../assets/img/narrative-system/early-graph-1213.webp" data-lightbox="The first graph"><img src="../assets/img/narrative-system/early-graph-1213.webp" srcset="../assets/img/narrative-system/early-graph-640.webp 640w, ../assets/img/narrative-system/early-graph-1213.webp 1213w" sizes="(min-width: 64rem) 50vw, 100vw" width="1213" height="613" alt="An early graph in Unreal: a Start Quest node linked to a Branch Node, which links to three Quest Nodes" loading="lazy" decoding="async"></a>
+          <figcaption class="gallery__caption">The first graph</figcaption></figure>
+<figure class="gallery__item">
+          <a class="gallery__link" href="../assets/img/narrative-system/node-design-948.webp" data-lightbox="The node design we aimed for"><img src="../assets/img/narrative-system/node-design-948.webp" srcset="../assets/img/narrative-system/node-design-640.webp 640w, ../assets/img/narrative-system/node-design-948.webp 948w" sizes="(min-width: 64rem) 50vw, 100vw" width="948" height="528" alt="A node mock-up labelled with enter executions, exit executions, progress conditions and quests to start" loading="lazy" decoding="async"></a>
+          <figcaption class="gallery__caption">The node design we aimed for</figcaption></figure>
+<figure class="gallery__item">
+          <a class="gallery__link" href="../assets/img/narrative-system/edge-labels-1022.webp" data-lightbox="Named nodes and labelled links"><img src="../assets/img/narrative-system/edge-labels-1022.webp" srcset="../assets/img/narrative-system/edge-labels-640.webp 640w, ../assets/img/narrative-system/edge-labels-1022.webp 1022w" sizes="(min-width: 64rem) 50vw, 100vw" width="1022" height="572" alt="A branch node whose links lead to Quest Node, Wait for second action and Respond to second interaction, with labels on the links" loading="lazy" decoding="async"></a>
+          <figcaption class="gallery__caption">Named nodes and labelled links</figcaption></figure>
+<figure class="gallery__item">
+          <a class="gallery__link" href="../assets/img/narrative-system/early-details-1525.webp" data-lightbox="A node and its details"><img src="../assets/img/narrative-system/early-details-1280.webp" srcset="../assets/img/narrative-system/early-details-640.webp 640w, ../assets/img/narrative-system/early-details-1280.webp 1280w, ../assets/img/narrative-system/early-details-1525.webp 1525w" sizes="(min-width: 64rem) 50vw, 100vw" width="1525" height="586" alt="The selected Branch Node beside its details: the node class, executions, an On tag query condition, the owning quest and the node index" loading="lazy" decoding="async"></a>
+          <figcaption class="gallery__caption">A node and its details</figcaption></figure></div></section><section class="project-section reveal"><h2 class="label">Coming together</h2><p class="project-section__note">Each node on the graph is a view of its own data asset. Linking two nodes writes the link into the asset, so the asset is always what the game runs.</p><div class="gallery gallery--wide" data-gallery><figure class="gallery__item">
+          <a class="gallery__link" href="../assets/img/narrative-system/custom-nodes-1675.webp" data-lightbox="Custom nodes across a whole quest"><img src="../assets/img/narrative-system/custom-nodes-1280.webp" srcset="../assets/img/narrative-system/custom-nodes-640.webp 640w, ../assets/img/narrative-system/custom-nodes-1280.webp 1280w, ../assets/img/narrative-system/custom-nodes-1675.webp 1675w" sizes="(min-width: 64rem) 50vw, 100vw" width="1675" height="1125" alt="A larger narrative graph of custom nodes with titles, descriptions and start quest slots, including branches, a merge and separate chains" loading="lazy" decoding="async"></a>
+          <figcaption class="gallery__caption">Custom nodes across a whole quest</figcaption></figure>
+<figure class="gallery__item">
+          <a class="gallery__link" href="../assets/img/narrative-system/node-data-asset-1408.webp" data-lightbox="The data asset behind a node"><img src="../assets/img/narrative-system/node-data-asset-1280.webp" srcset="../assets/img/narrative-system/node-data-asset-640.webp 640w, ../assets/img/narrative-system/node-data-asset-1280.webp 1280w, ../assets/img/narrative-system/node-data-asset-1408.webp 1408w" sizes="(min-width: 64rem) 50vw, 100vw" width="1408" height="790" alt="The Branch Node data asset: enter executions, three progress nodes each with a condition and a node to progress to, and the owning quest" loading="lazy" decoding="async"></a>
+          <figcaption class="gallery__caption">The data asset behind a node</figcaption></figure></div></section><section class="project-section reveal"><h2 class="label">Working in the graph</h2><p class="project-section__note">Validate Graph walks the graph from each quest, refreshes node names and links, and rebuilds it. A chain with no parent is its own quest, ready to be started as a side quest.</p><div class="gallery gallery--wide" data-gallery><figure class="gallery__item">
+          <a class="gallery__link" href="../assets/img/narrative-system/toolbar-679.webp" data-lightbox="Auto arrange, save, load and validate"><img src="../assets/img/narrative-system/toolbar-679.webp" srcset="../assets/img/narrative-system/toolbar-640.webp 640w, ../assets/img/narrative-system/toolbar-679.webp 679w" sizes="(min-width: 64rem) 50vw, 100vw" width="679" height="162" alt="The graph toolbar with Auto Arrange, Save Graph, Load Graph and Validate Graph buttons" loading="lazy" decoding="async"></a>
+          <figcaption class="gallery__caption">Auto arrange, save, load and validate</figcaption></figure>
+<figure class="gallery__item">
+          <a class="gallery__link" href="../assets/img/narrative-system/edit-node-1192.webp" data-lightbox="Click a node to edit it"><img src="../assets/img/narrative-system/edit-node-1192.webp" srcset="../assets/img/narrative-system/edit-node-640.webp 640w, ../assets/img/narrative-system/edit-node-1192.webp 1192w" sizes="(min-width: 64rem) 50vw, 100vw" width="1192" height="449" alt="The Wait for second action node selected, with its node class, data asset and editor settings in the details panel" loading="lazy" decoding="async"></a>
+          <figcaption class="gallery__caption">Click a node to edit it</figcaption></figure>
+<figure class="gallery__item">
+          <a class="gallery__link" href="../assets/img/narrative-system/overall-graph-1499.webp" data-lightbox="A quest from start to merge"><img src="../assets/img/narrative-system/overall-graph-1280.webp" srcset="../assets/img/narrative-system/overall-graph-640.webp 640w, ../assets/img/narrative-system/overall-graph-1280.webp 1280w, ../assets/img/narrative-system/overall-graph-1499.webp 1499w" sizes="(min-width: 64rem) 50vw, 100vw" width="1499" height="500" alt="A full quest graph from First Node through a branch, three paths and a merge" loading="lazy" decoding="async"></a>
+          <figcaption class="gallery__caption">A quest from start to merge</figcaption></figure>
+<figure class="gallery__item">
+          <a class="gallery__link" href="../assets/img/narrative-system/side-quests-1323.webp" data-lightbox="Separate chains for side quests"><img src="../assets/img/narrative-system/side-quests-1280.webp" srcset="../assets/img/narrative-system/side-quests-640.webp 640w, ../assets/img/narrative-system/side-quests-1280.webp 1280w, ../assets/img/narrative-system/side-quests-1323.webp 1323w" sizes="(min-width: 64rem) 50vw, 100vw" width="1323" height="1031" alt="The main quest above two separate chains: wait to gaze at the Tesla machine, and wait to turn it on" loading="lazy" decoding="async"></a>
+          <figcaption class="gallery__caption">Separate chains for side quests</figcaption></figure></div></section><section class="project-section reveal"><h2 class="label">Tracking progress</h2><p class="project-section__note">To answer "has the story passed this point?", each node needs to know where it sits in its quest, even after branches and merges.</p><div class="gallery gallery--natural" data-gallery><figure class="gallery__item">
+          <a class="gallery__link" href="../assets/img/narrative-system/progress-notes-356.webp" data-lightbox="Planning notes"><img src="../assets/img/narrative-system/progress-notes-356.webp" srcset="../assets/img/narrative-system/progress-notes-356.webp 356w" sizes="(min-width: 40rem) 356px, 100vw" width="356" height="766" alt="Notes on what the manager and each node store, and how to check whether a quest has passed a node" loading="lazy" decoding="async"></a>
+          <figcaption class="gallery__caption">Planning notes</figcaption></figure>
+<figure class="gallery__item">
+          <a class="gallery__link" href="../assets/img/narrative-system/code-active-quest-442.webp" data-lightbox="The planned active quest"><img src="../assets/img/narrative-system/code-active-quest-442.webp" srcset="../assets/img/narrative-system/code-active-quest-442.webp 442w" sizes="(min-width: 40rem) 442px, 100vw" width="442" height="283" alt="C++: an FActiveQuest struct with the current node and a quest cursor, the index from the start node" loading="lazy" decoding="async"></a>
+          <figcaption class="gallery__caption">The planned active quest</figcaption></figure>
+<figure class="gallery__item">
+          <a class="gallery__link" href="../assets/img/narrative-system/code-branch-indexes-673.webp" data-lightbox="Planned branch indexes"><img src="../assets/img/narrative-system/code-branch-indexes-673.webp" srcset="../assets/img/narrative-system/code-branch-indexes-640.webp 640w, ../assets/img/narrative-system/code-branch-indexes-673.webp 673w" sizes="(min-width: 40rem) 673px, 100vw" width="673" height="174" alt="C++: a map of branch nodes to their live index in a quest, and a map of active quests keyed by start node" loading="lazy" decoding="async"></a>
+          <figcaption class="gallery__caption">Planned branch indexes</figcaption></figure></div><dl class="tech-list"><div class="tech-list__row"><dt>The plan</dt><dd>A cursor for each active quest, counted from its start node, plus a live index for each branch.</dd></div><div class="tech-list__row"><dt>The code now</dt><dd>Simpler: the subsystem maps each quest to its current node, keeps a list of completed quests, and keeps a live index for each branch node. The cursor struct is commented out.</dd></div><div class="tech-list__row"><dt>Each node stores</dt><dd>Its owning quest, its index in the quest, and the branch nodes before it. That is a list, so a merge can follow more than one branch. The early asset called the index a chain index.</dd></div><div class="tech-list__row"><dt>Still to write</dt><dd>Updating the live indexes at branches and merges, and the query that checks whether a quest has passed a node.</dd></div></dl></section><section class="project-section reveal"><h2 class="label">Starting side quests</h2><p class="project-section__note">A node can start other quests when the story reaches it. Press + on the node, then pick the quest straight from the graph.</p><div class="gallery gallery--natural" data-gallery><figure class="gallery__item">
+          <a class="gallery__link" href="../assets/img/narrative-system/start-quests-wip-436.webp" data-lightbox="Start quest slots, in progress"><img src="../assets/img/narrative-system/start-quests-wip-436.webp" srcset="../assets/img/narrative-system/start-quests-wip-436.webp 436w" sizes="(min-width: 40rem) 436px, 100vw" width="436" height="214" alt="A node with three empty start quest slots, each with a remove button, and an add button" loading="lazy" decoding="async"></a>
+          <figcaption class="gallery__caption">Start quest slots, in progress</figcaption></figure>
+<figure class="gallery__item">
+          <a class="gallery__link" href="../assets/img/narrative-system/start-quests-linked-819.webp" data-lightbox="Quests linked to a node"><img src="../assets/img/narrative-system/start-quests-linked-819.webp" srcset="../assets/img/narrative-system/start-quests-linked-640.webp 640w, ../assets/img/narrative-system/start-quests-linked-819.webp 819w" sizes="(min-width: 40rem) 819px, 100vw" width="819" height="381" alt="The Wait for second action node listing three quests it starts, with an add button" loading="lazy" decoding="async"></a>
+          <figcaption class="gallery__caption">Quests linked to a node</figcaption></figure>
+<figure class="gallery__item">
+          <a class="gallery__link" href="../assets/img/narrative-system/side-quest-linked-453.webp" data-lightbox="A node starting a side quest"><img src="../assets/img/narrative-system/side-quest-linked-453.webp" srcset="../assets/img/narrative-system/side-quest-linked-453.webp 453w" sizes="(min-width: 40rem) 453px, 100vw" width="453" height="523" alt="A Quest Node that starts Side_Quest_Node, above the side quest chain" loading="lazy" decoding="async"></a>
+          <figcaption class="gallery__caption">A node starting a side quest</figcaption></figure></div></section><section class="project-section reveal"><h2 class="label">Progress nodes in the details panel</h2><p class="project-section__note">An early custom details panel. Each node the quest can move on to sits beside the condition that moves it there.</p><div class="gallery gallery--single" data-gallery><figure class="gallery__item">
+          <a class="gallery__link" href="../assets/img/narrative-system/progress-nodes-details-813.webp" data-lightbox="Each link with its condition"><img src="../assets/img/narrative-system/progress-nodes-details-813.webp" srcset="../assets/img/narrative-system/progress-nodes-details-640.webp 640w, ../assets/img/narrative-system/progress-nodes-details-813.webp 813w" sizes="(min-width: 40rem) 40rem, 100vw" width="813" height="596" alt="A custom details panel listing each linked node beside its condition: an On tag query on the player, and two delays" loading="lazy" decoding="async"></a>
+          <figcaption class="gallery__caption">Each link with its condition</figcaption></figure></div></section><section class="project-section reveal"><h2 class="label">How it works</h2><dl class="tech-list"><div class="tech-list__row"><dt>Runtime subsystem</dt><dd>A game instance subsystem starts quests, enters nodes and moves them on. It only moves a quest on from its current node, and logs each step to its own log category.</dd></div><div class="tech-list__row"><dt>Data asset nodes</dt><dd>Quest nodes are primary data assets. The first node in a chain owns the quest, and every node after it is told which quest it belongs to.</dd></div><div class="tech-list__row"><dt>Conditions and executions</dt><dd>Instanced, Blueprintable classes, so new ones can be added in Blueprints or C++. The tag query condition listens for tag changes on the actor&#x27;s ability system component.</dd></div><div class="tech-list__row"><dt>Two modules</dt><dd>A runtime module for the nodes and subsystem, and an editor module for the node factory and details customisation.</dd></div><div class="tech-list__row"><dt>Save and load</dt><dd>Save Graph and Load Graph are a first test of writing the graph to binary.</dd></div></dl></section>
+    <ul class="tag-list" aria-label="Tags"><li>Type.Plugin</li><li>Topic.Tools</li><li>Topic.Gameplay</li><li>Source.Mine</li></ul>
+
+
+    <nav class="project-pager" aria-label="More projects">
+      <a class="project-pager__link" href="sky-camera-system.html"><span class="project-pager__label">← Previous</span>Sky Camera System</a>
+      <a class="project-pager__link project-pager__link--next" href="kyoryu.html"><span class="project-pager__label">Next →</span>Kyōryū</a>
+    </nav>
+  </div>
+</main>
+<footer class="site-footer" id="end">
+  <div class="site-footer__marquee" aria-hidden="true">
+    <div class="site-footer__track"><span>Let's make</span><span class="text-outline">something</span><span>✦</span></div>
+    <div class="site-footer__track"><span>Let's make</span><span class="text-outline">something</span><span>✦</span></div>
+  </div>
+  <div class="site-footer__row">
+    <ul class="site-footer__links">
+      <li><a class="button button--ghost" href="../assets/docs/alex-coultas-cv.pdf" target="_blank" rel="noopener">CV (PDF)</a></li>
+      <li><a class="button button--ghost" href="https://x.com/AlexCoultas" target="_blank" rel="noopener">@AlexCoultas</a></li>
+      <li><a class="button button--ghost" href="https://github.com/Zeploc" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a class="button button--ghost" href="https://skywardstudios.co.nz" target="_blank" rel="noopener">Skyward Studios</a></li>
+    </ul>
+    <p class="site-footer__note">© 2026 Alex Coultas · <span class="js-only">Press <kbd>~</kbd> for the console</span></p>
+  </div>
+</footer>
+<script src="../assets/js/motion.js" defer></script>
+<script src="../assets/js/achievements.js" defer></script>
+<script src="../assets/js/dev-console.js" defer></script>
+<script src="../assets/js/site-header.js" defer></script>
+<script src="../assets/js/reveal.js" defer></script>
+<script src="../assets/js/lightbox.js" defer></script>
+<script src="../assets/js/video-embed.js" defer></script>
+<script src="../assets/js/project-keys.js" defer></script>
+</body>
+</html>

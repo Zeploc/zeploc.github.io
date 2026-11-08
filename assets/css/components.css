@@ -3362,7 +3362,7 @@ html:not(.js) .hero-slide + .hero-slide {
   margin-top: var(--space-l);
 }
 
-/* Touch screens snap to the work panels instead of the wheel stepping in work-panels.js. */
+/* Touch screens snap to each screen and chapter instead of the wheel stepping in work-panels.js. */
 @media (hover: none) {
   html:has(.work-panels) {
     scroll-snap-type: y proximity;
@@ -3377,6 +3377,21 @@ html:not(.js) .hero-slide + .hero-slide {
   .timeline__snap {
     scroll-snap-align: start;
     scroll-snap-stop: always;
+  }
+
+  /* Each chapter after the timeline snaps with its heading just under the header, where a wheel
+     scroll lands it (work-panels.js). A tall chapter scrolls freely between its snap points.
+     The margin adds to the page's scroll-padding-top (one header row). Below 80rem the menu is
+     a second header row, one tap target tall. */
+  .section--chapter > .section-head {
+    scroll-snap-align: start;
+    scroll-margin-top: calc(var(--tap) + var(--space-l));
+  }
+}
+
+@media (hover: none) and (min-width: 80rem) {
+  .section--chapter > .section-head {
+    scroll-margin-top: var(--space-l);
   }
 }
 
@@ -3575,6 +3590,12 @@ html:not(.js) .hero-slide + .hero-slide {
   background: radial-gradient(70% 70% at 50% 60%, #6b2e12, #140906 75%);
 }
 
+/* University tiles on the home page, until they have thumbnails. */
+.art--uni,
+.art--jam {
+  background: linear-gradient(140deg, #25415c, #0d1218);
+}
+
 /* University and jam tiles: quieter than the main projects. */
 .uni-grid {
   display: grid;
@@ -3622,10 +3643,6 @@ html:not(.js) .hero-slide + .hero-slide {
   color: var(--colour-text-muted);
 }
 
-.university__jams {
-  margin-top: var(--space-3xl);
-}
-
 .project-single .did-list {
   max-width: 46rem;
 }
@@ -3637,4 +3654,28 @@ html:not(.js) .hero-slide + .hero-slide {
 .gallery--full .gallery__link img {
   aspect-ratio: auto;
   object-fit: contain;
+}
+
+/* Small screenshots (code, notes, single nodes) at their own size, side by side, so they are not blown up. */
+.gallery--natural {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.gallery--natural .gallery__item {
+  flex: 0 1 auto;
+  max-width: 100%;
+}
+
+.gallery--natural .gallery__link img {
+  width: auto;
+  max-width: 100%;
+  height: auto;
+  aspect-ratio: auto;
+  object-fit: contain;
+}
+
+.gallery + .tech-list {
+  margin-top: var(--space-xl);
 }

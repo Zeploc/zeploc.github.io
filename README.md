@@ -31,7 +31,8 @@ Search the HTML for `TODO` to find each gap.
   - Radar: the four simulator clips in `Radar/`
 - [ ] **Placeholder tiles** — project pages show dashed "Screenshot / Video / Photo coming soon" tiles (search for `data-placeholder`). Each says what to capture: Dotzi, Radar, Atlas, Sky Engine, Gameplay Flow, UnderForge and every client page.
 - [ ] **Client work** (Buildmedia) — screenshots and a clip for each of the seven client pages (`projects/toyota.html` and the others).
-- [ ] **University projects and the game jam** — a thumbnail for each tile on `projects/university.html` (Hardlight, Stolen Time, TossPots, Painted Wings, Portal, Skyward Space Project).
+- [ ] **University projects** — a thumbnail for each tile on `projects/university.html` and in Chapter 05 on the home page (Hardlight, Stolen Time, TossPots, Painted Wings, Portal).
+- [ ] **Skyward Space Project** — a thumbnail for the home page and archive cards, and screenshots for `projects/skyward-space-project.html`.
 - [ ] **Cambrian Carnage** — nothing about it was found in the projects, videos or OneDrive folders; send the write-up and media.
 - [ ] **Gameplay Flow** — a link if the GitHub repository becomes public (it is private now).
 - [ ] **Kyōryū** — clips of the systems I built, once they can be shown. The key art comes from kyoryuofficial.com; check it is fine to use.

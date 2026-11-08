@@ -26,6 +26,7 @@ ABILITY_WIDTH = 520
 MYTHOS = 'Mythos Party'
 MYTHOS_EARLY = 'Mythos Party/Old Content (from uni)'
 HTTYD = 'HTTYD'
+NARRATIVE = 'Narrative System'
 
 # Output folder, output name, source file (relative to content/), and optional widths.
 STILLS = [
@@ -98,6 +99,11 @@ STILLS = [
     ('radar', 'clock-faces', 'Radar/Docs/clock-faces.png', (640, 1028)),
     ('radar', 'web-ui', 'Radar/Docs/web-ui-main-tabs.png', (640, 1280)),
     ('radar', 'first-run-setup', 'Radar/Docs/first-run-setup.png', (640, 1280)),
+] + [
+    ('narrative-system', name, f'{NARRATIVE}/{name}.png') for name in (
+        'plan', 'early-graph', 'node-design', 'edge-labels', 'early-details', 'custom-nodes', 'node-data-asset',
+        'progress-notes', 'code-active-quest', 'code-branch-indexes', 'toolbar', 'edit-node', 'overall-graph',
+        'side-quests', 'start-quests-wip', 'start-quests-linked', 'side-quest-linked', 'progress-nodes-details')
 ]
 
 ANIMATIONS = [
@@ -137,6 +143,7 @@ PREVIEWS = [
     ('sky-engine', 'Sky Engine/Sky Engine - Editor.png'),
     ('atlas', 'Atlas (Taro)/frames/atlas-restarting-1.png'),
     ('radar', 'Radar/Docs/display-screens.png'),
+    ('narrative-system', f'{NARRATIVE}/custom-nodes.png'),
 ]
 
 def resized(image, width):

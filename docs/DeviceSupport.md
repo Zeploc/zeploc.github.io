@@ -128,6 +128,7 @@ Record the result here:
 - **The hero star field is the heaviest part of the site.** Check the frame rate on a mid-range phone (console: `stat fps`). Smaller screens draw fewer stars.
 - **One scroll from the hero zooms into the viewscreen** and lands on that project's work panel; one scroll up from the first panel zooms back out. It only runs when the hero fits the window (laptops); smaller windows scroll the hero as normal. Check both ways.
 - **The work panels step one screen per scroll with a wheel or trackpad.** Touch screens use CSS scroll snapping instead. Check both.
+- **One scroll moves from one chapter to the next after the timeline** (Client work to Resources). A chapter taller than the window scrolls as normal until its end is in view, then the next scroll moves on. Touch screens snap to each chapter heading. Check both ways, on a short laptop window too.
 
 - **iPhone Safari zooms in on a form field** with text smaller than 16px. Form fields use at least `1rem`.
 - **iPhone Safari does not autoplay video** unless it is `muted` and `playsinline`.
