@@ -169,6 +169,25 @@
   background: var(--colour-line);
 }
 
+/* A subhead that a link lands on clears the header. This margin adds to the page's
+   scroll-padding-top (one header row). Below 80rem the menu is a second header row. */
+.subhead[id] {
+  scroll-margin-top: calc(var(--tap) + var(--space-l));
+}
+
+@media (min-width: 80rem) {
+  .subhead[id] {
+    scroll-margin-top: var(--space-l);
+  }
+}
+
+/* A short line under a subhead, before its cards. */
+.subhead-text {
+  max-width: 40rem;
+  margin: calc(-1 * var(--space-xs)) 0 var(--space-m);
+  color: var(--colour-text-muted);
+}
+
 .js .reveal {
   opacity: 0;
   transform: translateY(1.75rem);
@@ -2049,11 +2068,6 @@ html:not(.js) .hero-slide + .hero-slide {
   color: var(--colour-text-muted);
 }
 
-.job__projects b {
-  font-weight: 500;
-  color: var(--colour-pale);
-}
-
 .experience__hint {
   display: none;
   margin-top: var(--space-xs);
@@ -2860,6 +2874,11 @@ html:not(.js) .hero-slide + .hero-slide {
     margin-top: -20vh;
   }
 
+  /* Pages without a hero keep their top gap. */
+  .project__body--top {
+    margin-top: var(--space-2xl);
+  }
+
   .project-columns {
     grid-template-columns: 1.2fr 1fr;
     gap: var(--space-2xl);
@@ -3590,57 +3609,11 @@ html:not(.js) .hero-slide + .hero-slide {
   background: radial-gradient(70% 70% at 50% 60%, #6b2e12, #140906 75%);
 }
 
-/* University tiles on the home page, until they have thumbnails. */
+/* University, jam and other game tiles, until they have thumbnails. */
 .art--uni,
-.art--jam {
+.art--jam,
+.art--game {
   background: linear-gradient(140deg, #25415c, #0d1218);
-}
-
-/* University and jam tiles: quieter than the main projects. */
-.uni-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
-  gap: var(--space-m);
-  margin-top: var(--space-xl);
-}
-
-.uni-card {
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  background: var(--colour-surface);
-  border: 1px solid var(--colour-line);
-  border-radius: var(--radius-m);
-}
-
-.uni-card__media {
-  display: grid;
-  place-items: center;
-  aspect-ratio: 16 / 9;
-  background: linear-gradient(140deg, #25415c, #111);
-}
-
-.uni-card__body {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-xs);
-  padding: var(--space-m);
-  font-size: var(--text-s);
-}
-
-.uni-card__title {
-  font-size: var(--text-l);
-}
-
-.uni-card__role {
-  color: var(--colour-text-muted);
-}
-
-.uni-card__engine {
-  margin-top: auto;
-  font-family: var(--font-mono);
-  font-size: var(--text-xs);
-  color: var(--colour-text-muted);
 }
 
 .project-single .did-list {

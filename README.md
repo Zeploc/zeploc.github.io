@@ -31,9 +31,8 @@ Search the HTML for `TODO` to find each gap.
   - Radar: the four simulator clips in `Radar/`
 - [ ] **Placeholder tiles** — project pages show dashed "Screenshot / Video / Photo coming soon" tiles (search for `data-placeholder`). Each says what to capture: Dotzi, Radar, Atlas, Sky Engine, Gameplay Flow, UnderForge and every client page.
 - [ ] **Client work** (Buildmedia) — screenshots and a clip for each of the seven client pages (`projects/toyota.html` and the others).
-- [ ] **University projects** — a thumbnail for each tile on `projects/university.html` and in Chapter 05 on the home page (Hardlight, Stolen Time, TossPots, Painted Wings, Portal).
+- [ ] **University projects** — a thumbnail and screenshots for each project page (`projects/hardlight.html`, `stolen-time.html`, `tosspots.html`, `painted-wings.html`, `portal.html`), shown in Chapter 05 on the home page and in the archive.
 - [ ] **Skyward Space Project** — a thumbnail for the home page and archive cards, and screenshots for `projects/skyward-space-project.html`.
-- [ ] **Cambrian Carnage** — nothing about it was found in the projects, videos or OneDrive folders; send the write-up and media.
 - [ ] **Gameplay Flow** — a link if the GitHub repository becomes public (it is private now).
 - [ ] **Kyōryū** — clips of the systems I built, once they can be shown. The key art comes from kyoryuofficial.com; check it is fine to use.
 - [ ] **Mythos Party** — the development dates.
@@ -41,6 +40,12 @@ Search the HTML for `TODO` to find each gap.
 - [ ] **VRAF** — a clip of the physics interactions and what I built.
 - [ ] **SuperHorse** — the Steam link when the store page is live.
 - [ ] **Kinetic, Lifeline, Retail Simulator, Dotzi** — screenshots or clips.
+- [ ] **Untitled Emu Game** — the event it was made for, the final name, the team, my role, and screenshots or a clip.
+- [ ] **Cambrian Carnage** — a larger thumbnail and screenshots, the Unreal Engine version and the gameplay systems I built. The GitHub repository is empty.
+- [ ] **Trithym** — the team, my role and screenshots.
+- [ ] **Profit Loss Prototype** — what it is about, its final name, what I built and screenshots. The repository is one commit of a top-down template with the Sky Ability System.
+- [ ] **Minigolf** — a thumbnail and screenshots.
+- [ ] **Hyperion Labs** — waiting on the "KRATZ" notes in Notion.
 
 ## Add or change a project
 
@@ -61,7 +66,7 @@ Search the HTML for `TODO` to find each gap.
 
 ```
 index.html               Home page
-projects/                One page per project, plus university.html
+projects/                One page per project
 pages/                   GAS talk resources, and a redirect from the old portfolio page
 404.html                 "Page not found" page for GitHub Pages
 assets/css/              tokens.css, base.css, layout.css, components.css
