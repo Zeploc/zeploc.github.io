@@ -1527,6 +1527,11 @@ html:not(.js) .hero-slide + .hero-slide {
     grid-column: span 2;
     min-height: 26rem;
   }
+
+  /* The big first card fills a row, so with an even number of cards the last one is alone on its row. It spans both columns. */
+  .side-card--big:first-child ~ .side-card:last-child:nth-child(even) {
+    grid-column: span 2;
+  }
 }
 
 @media (min-width: 64rem) {
@@ -1545,6 +1550,11 @@ html:not(.js) .hero-slide + .hero-slide {
 
   .side-card--wide {
     grid-column: span 2;
+  }
+
+  /* Four columns: the last card goes back to its own width. */
+  .side-card--big:first-child ~ .side-card:last-child:nth-child(even):not(.side-card--wide) {
+    grid-column: auto;
   }
 }
 
@@ -2757,6 +2767,10 @@ html:not(.js) .hero-slide + .hero-slide {
 .project-columns {
   display: grid;
   gap: var(--space-xl);
+}
+
+.project-columns p + p {
+  margin-top: var(--space-s);
 }
 
 .quote {

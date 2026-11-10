@@ -45,7 +45,7 @@ Search the HTML for `TODO` to find each gap.
 - [ ] **Trithym** — the team, my role and screenshots.
 - [ ] **Profit Loss Prototype** — what it is about, its final name, what I built and screenshots. The repository is one commit of a top-down template with the Sky Ability System.
 - [ ] **Minigolf** — a thumbnail and screenshots.
-- [ ] **Hyperion Labs** — waiting on the "KRATZ" notes in Notion.
+- [ ] **Hyperion Labs** — a thumbnail, screenshots or a clip, and the inspiration images (Iron Man films and Marvel’s Iron Man VR) with a credit for each.
 
 ## Add or change a project
 

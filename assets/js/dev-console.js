@@ -4,7 +4,7 @@
   const projects = ['kyoryu', 'wanderer', 'mythos-party', 'vraf', 'toyota', 'te-awa-lakes', 'realspace', 'fisher-paykel',
     'spark-simulator', 'spark-boat-builder', 'wellington-digital-twin', 'superhorse', 'httyd', 'kinetic', 'lifeline',
     'retail-simulator', 'underforge', 'sky-engine', 'skyward-space-project', 'untitled-emu-game', 'cambrian-carnage',
-    'trithym', 'profit-loss-prototype', 'minigolf', 'atlas', 'radar', 'dotzi',
+    'trithym', 'profit-loss-prototype', 'minigolf', 'hyperion-labs', 'atlas', 'radar', 'dotzi',
     'sky-ability-system', 'gameplay-flow', 'sky-camera-system', 'narrative-system', 'hardlight', 'stolen-time', 'tosspots',
     'painted-wings', 'portal'];
   const sections = ['top', 'about', 'experience', 'work', 'clients', 'side', 'plugins', 'archive', 'resources', 'talk', 'end'];
