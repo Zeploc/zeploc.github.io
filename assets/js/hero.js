@@ -1,5 +1,5 @@
 // The hero: my name and who I am beside a ship's viewscreen of featured projects. A star field fills
-// the hero and streams out of the viewscreen; each project arrives in it with a warp jump. Previous,
+// the hero and streams out of the viewscreen, and each project arrives in it with a warp jump. Previous,
 // next and project buttons pick one, and it moves on by itself every few seconds. Opening a project
 // warps into it, and a click on the viewscreen moves on to the work panels.
 // work-panels.js asks for the zoom (window.HeroScreen) when one scroll takes the viewscreen to the
@@ -34,12 +34,12 @@ window.HeroScreen = (() => {
   let isVisible = true;
   let isZooming = false;
   let isEngaging = false;
-  // True while the visitor is on the work panels after the zoom; the carousel holds still.
+  // True while the visitor is on the work panels after the zoom, so the carousel holds still.
   let isAway = false;
 
   /* === Star field === */
 
-  // Stars stream out from a focus point (the middle of the viewscreen). At rest they drift slowly; a
+  // Stars stream out from a focus point (the middle of the viewscreen). At rest they drift slowly. A
   // warp ramps the speed up and stretches each star into a streak, and most of them drop out so the
   // streaks stay sparse. Behind the text, a soft-edged mask dims every star (streaks included) to half.
   const stars = (() => {
@@ -182,7 +182,7 @@ window.HeroScreen = (() => {
         buildMask();
         draw(0);
       },
-      // 1 dims the stars behind the text fully; the zoom fades it out as the text fades away.
+      // 1 dims the stars behind the text fully. The zoom fades it out as the text fades away.
       fadeShield(amount) {
         shieldFade = amount;
       },
@@ -363,7 +363,7 @@ window.HeroScreen = (() => {
       resume();
     });
   }
-  // Keyboard focus pauses the carousel; a mouse click on a button does not.
+  // Keyboard focus pauses the carousel, but a mouse click on a button does not.
   screen.addEventListener('focusin', (event) => {
     if (event.target.matches(':focus-visible')) {
       hasKeyboardFocus = true;
@@ -527,7 +527,7 @@ window.HeroScreen = (() => {
 
   measure();
   window.dispatchEvent(new CustomEvent('hero:change', { detail: slides[0].dataset.heroSlide }));
-  // While the title screen shows, the carousel waits; as its doors open, the stars jump.
+  // While the title screen shows, the carousel waits. As its doors open, the stars jump.
   if (window.TitleScreen && window.TitleScreen.isActive) {
     window.addEventListener('titlescreen:done', () => {
       stars.warp(500, 28);

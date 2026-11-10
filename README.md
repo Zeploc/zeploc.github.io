@@ -34,7 +34,7 @@ Search the HTML for `TODO` to find each gap.
 - [ ] **University projects** — a thumbnail and screenshots for each project page (`projects/hardlight.html`, `stolen-time.html`, `tosspots.html`, `painted-wings.html`, `portal.html`), shown in Chapter 05 on the home page and in the archive.
 - [ ] **Skyward Space Project** — a thumbnail for the home page and archive cards, and screenshots for `projects/skyward-space-project.html`.
 - [ ] **Gameplay Flow** — a link if the GitHub repository becomes public (it is private now).
-- [ ] **Kyōryū** — clips of the systems I built, once they can be shown. The key art comes from kyoryuofficial.com; check it is fine to use.
+- [ ] **Kyōryū** — clips of the systems I built, once they can be shown. The key art comes from kyoryuofficial.com, so check it is fine to use.
 - [ ] **Mythos Party** — the development dates.
 - [ ] **Skyward Studios timeline entry** — check the dates ("Since 2019"), the role, the five items and the highlighted skills (all guessed) in the experience timeline.
 - [ ] **VRAF** — a clip of the physics interactions and what I built.
@@ -73,7 +73,7 @@ assets/css/              tokens.css, base.css, layout.css, components.css
 assets/js/               One script per behaviour (hero, kiosk, work panels, archive, console, …)
 assets/img/              Optimised images, one folder per project, and link previews
 assets/docs/             The public CV (alex-coultas-cv.pdf), linked from the header and footer
-assets/fonts/            Self-hosted fonts (Space Grotesk, JetBrains Mono; SIL Open Font License)
+assets/fonts/            Self-hosted fonts (Space Grotesk and JetBrains Mono, SIL Open Font License)
 docs/                    Coding standards and device support
 tools/                   Frame extractor, image optimiser and device screenshot scripts
 content/                 Original media and the source CV (not published)

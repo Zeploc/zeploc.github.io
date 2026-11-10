@@ -1,5 +1,5 @@
 // Achievements: small, hidden goals across the site. Other scripts call Achievements.unlock('id').
-// Unlocked goals are remembered in local storage; a trophy button in the header lists them.
+// Unlocked goals are remembered in local storage, and a trophy button in the header lists them.
 window.Achievements = (() => {
   const storageKey = 'alex-coultas-achievements';
   const goals = [

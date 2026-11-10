@@ -29,7 +29,7 @@ The standards are based on the [MDN guidelines](https://developer.mozilla.org/en
 ## Guiding Principles
 
 - **Mobile first.** Write the phone layout first. Add to it for larger screens with `min-width` media queries.
-- **Content works without JavaScript.** Every project, link and piece of text is in the HTML. JavaScript adds polish; it does not hold content.
+- **Content works without JavaScript.** Every project, link and piece of text is in the HTML. JavaScript adds polish, but it does not hold content.
 - **Readable over clever.** The next person to edit the site may not be a web developer. Plain, obvious code wins.
 - **One source of truth.** A colour, a font size or a spacing value is defined once, as a token, and used everywhere.
 - **Keep it light.** No framework, library or build tool without agreement. Each one is a design decision (see [CLAUDE.md](../CLAUDE.md#decisions)).
@@ -119,7 +119,7 @@ Use a light **BEM** style: `block`, `block__element`, `block--modifier`.
 - **Never block zoom.** Do not add `maximum-scale` or `user-scalable=no` to the viewport tag.
 - **Use landmarks:** one `<header>`, one `<nav>` for the main menu, one `<main>`, one `<footer>`. Put each content block in a `<section>` with a heading.
 - **One `<h1>` per page.** Headings go in order: do not skip from `<h2>` to `<h4>`.
-- **A link goes somewhere; a button does something.** Use `<a href>` for navigation and `<button type="button">` for actions. Never put a click handler on a `<div>`.
+- **A link goes somewhere and a button does something.** Use `<a href>` for navigation and `<button type="button">` for actions. Never put a click handler on a `<div>`.
 - **Use native elements first.** `<details>`/`<summary>` for "View details" toggles, `<dialog>` for pop-ups, `<video>` for clips.
 - **External links** that open a new tab use `target="_blank" rel="noopener"`. Use a new tab only for external sites and PDFs.
 - **No inline styles** and **no inline event handlers** (`onclick=""`). Styles go in CSS, behaviour in JS files. Scripts may set custom properties and transforms on elements at run time.
@@ -154,7 +154,7 @@ All design values are custom properties in `tokens.css`. Components use the toke
 ```
 
 - **A hex value or a font name outside `tokens.css` is a defect.**
-- **Spacing comes from the spacing scale.** If no step fits, add a step; do not invent a one-off value.
+- **Spacing comes from the spacing scale.** If no step fits, add a step. Do not invent a one-off value.
 
 ### Rules
 
@@ -213,7 +213,7 @@ Use these breakpoints, mobile first. They are named in `tokens.css` as comments,
 Phones and tablets have no hover and no cursor. Some laptops have both touch and a mouse. Each interaction must work with a finger, a mouse and a keyboard.
 
 - **Touch targets are at least 44 × 44px.** Use padding to grow a small link or icon. Leave at least 8px between targets.
-- **Never hide content or actions behind hover only.** A hover preview is an extra; the same content must be reachable with a tap or a focus.
+- **Never hide content or actions behind hover only.** A hover preview is an extra, and the same content must be reachable with a tap or a focus.
 - **Put hover effects inside a hover query,** so a tap does not leave a "stuck" hover state on a phone:
 
   ```css
@@ -224,7 +224,7 @@ Phones and tablets have no hover and no cursor. Some laptops have both touch and
   }
   ```
 
-- **Every interactive element shows a focus outline.** Style `:focus-visible`; never set `outline: none` without a replacement.
+- **Every interactive element shows a focus outline.** Style `:focus-visible`. Never set `outline: none` without a replacement.
 - **Tab order follows the visual order.** Do not use a positive `tabindex`.
 - **Keyboard shortcuts** (such as the arrow keys in concept 02) are extras. The same action needs a visible control.
 - **Horizontal carousels** support swipe, buttons and the keyboard. They use `scroll-snap`, not a JavaScript drag library.
@@ -374,11 +374,11 @@ Check each change against this list:
 - [ ] No horizontal scroll from 320px to 2560px wide, in portrait and landscape.
 - [ ] Mobile-first CSS with `min-width` breakpoints only.
 - [ ] Colours, fonts and spacing come from `tokens.css`.
-- [ ] Hover effects are inside `@media (hover: hover)`; nothing depends on hover only.
-- [ ] Touch targets are at least 44 × 44px; focus is visible; the keyboard reaches everything.
+- [ ] Hover effects are inside `@media (hover: hover)`, and nothing depends on hover only.
+- [ ] Touch targets are at least 44 × 44px, focus is visible and the keyboard reaches everything.
 - [ ] Images have `srcset`, `width`, `height`, `alt` and lazy loading below the first screen.
 - [ ] Animations respect `prefers-reduced-motion`.
-- [ ] The HTML validates; one `<h1>`; headings in order.
-- [ ] No inline styles or handlers; JS uses `data-` hooks; no console errors.
+- [ ] The HTML validates, with one `<h1>` and headings in order.
+- [ ] No inline styles or handlers, JS uses `data-` hooks and there are no console errors.
 - [ ] No new library, framework or build tool without agreement.
 - [ ] The [device checks](DeviceSupport.md#checks-for-each-change) pass.

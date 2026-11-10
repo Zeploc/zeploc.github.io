@@ -1,7 +1,7 @@
 // The main projects as full-screen panels that stack. Each one sinks back as the next slides over it.
 // With a mouse wheel, trackpad or keyboard, one scroll moves cleanly through the opening screens:
 // the hero, each panel, About, the experience timeline, then each chapter after it (client work to
-// resources). Inside the timeline, experience-timeline.js takes over and steps role by role; leaving
+// resources). Inside the timeline, experience-timeline.js takes over and steps role by role. Leaving
 // either end of it comes back here. A chapter taller than the window scrolls as normal until its end
 // is in view, then the next scroll moves on to the next chapter (and the same going up).
 // Between the hero and the first panel the move is a zoom (hero.js): the viewscreen grows until its
@@ -15,7 +15,7 @@
   if (!section) {
     return;
   }
-  // In page order at the start; currentPanels() gives the order after the hero has rearranged them.
+  // In page order at the start, while currentPanels() gives the order after the hero has rearranged them.
   const panels = [...section.querySelectorAll('.work-panel')];
   const currentPanels = () => [...section.querySelectorAll('.work-panel')];
   const quietGap = 180;

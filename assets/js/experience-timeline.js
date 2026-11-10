@@ -134,7 +134,7 @@
     }
     list.style.setProperty('--timeline-fill', `${Math.max(0, end - list.getBoundingClientRect().top)}px`);
 
-    // Up on the About screen every skill is lit; from the timeline on, only the role in view's.
+    // Up on the About screen every skill is lit. From the timeline on, only the role in view's skills are lit.
     // The skills switch to the next role once it is most of the way in.
     const isOnAbout = stops.length > 0 && y < stops[0] - window.innerHeight * 0.5;
     const shown = progress >= skillSwitch ? active + 1 : active;

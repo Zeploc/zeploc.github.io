@@ -406,7 +406,7 @@
 
 /* === Hero: my name and who I am beside a viewscreen of featured projects === */
 
-/* A star field fills the hero and streams out of the viewscreen; each project arrives in it with a
+/* A star field fills the hero and streams out of the viewscreen, and each project arrives in it with a
    warp jump. One scroll (work-panels.js) zooms the viewscreen until the project fills the window,
    then the page lands on that project's work panel. hero.js runs the stars, the jumps and the zoom. */
 .hero {
@@ -624,7 +624,7 @@
   opacity: calc(1 - var(--takeover, 0));
 }
 
-/* Each picture waits small and blurred; the active one grows into place, and the one leaving rushes
+/* Each picture waits small and blurred. The active one grows into place, and the one leaving rushes
    past. With no script, the first picture shows. */
 .viewscreen__image {
   position: absolute;
@@ -1912,7 +1912,7 @@ html:not(.js) .hero-slide + .hero-slide {
 
 /* Above the line: a stacked row's transform traps the dot's own z-index inside the row.
    experience-timeline.js sets --focus (0–1) as a role comes into view. The dot lights first, then
-   the year fills, then the card's outline brightens; a role being left lets them go in reverse. */
+   the year fills, then the card's outline brightens. A role being left lets them go in reverse. */
 .timeline__row {
   --focus: 0;
   --focus-dot: clamp(0, var(--focus) / 0.4, 1);
@@ -1948,7 +1948,7 @@ html:not(.js) .hero-slide + .hero-slide {
   transition: color var(--duration-fast), background var(--duration-fast), transform var(--duration-fast) var(--ease-out);
 }
 
-/* The company logo fills the dot; the ring and glow still show the dot's state. */
+/* The company logo fills the dot, but the ring and glow still show the dot's state. */
 .timeline__logo {
   width: 100%;
   height: 100%;
@@ -2150,7 +2150,7 @@ html:not(.js) .hero-slide + .hero-slide {
 }
 
 /* Laptops and up: cards on the left of the line, the toolkit pinned on the right. As you scroll,
-   each role glides to the middle of the screen; earlier cards stack at the top once they reach it,
+   each role glides to the middle of the screen. Earlier cards stack at the top once they reach it,
    and the toolkit lights the skills of the role in view. experience-timeline.js moves the rows. */
 @media (min-width: 64rem) {
   .intro-split {
@@ -2236,7 +2236,7 @@ html:not(.js) .hero-slide + .hero-slide {
     display: block;
   }
 
-  /* Tiles the role in view didn't use fade back; the ones it did use light up in their group's colour. */
+  /* Tiles the role in view didn't use fade back, and the ones it did use light up in their group's colour. */
   .bring.is-filtering .bring__tile {
     opacity: 0.38;
   }

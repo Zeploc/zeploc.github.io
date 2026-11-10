@@ -125,7 +125,7 @@ def main():
         video = CONTENT / source
         width, height, length = mp4_size_and_length(video)
         scale = min(1, MAX_WIDTH / width)
-        # Even sizes; odd ones leave a one-pixel seam in some screenshots.
+        # Even sizes, because odd ones leave a one-pixel seam in some screenshots.
         width, height = round(width * scale / 2) * 2, round(height * scale / 2) * 2
         target = video.parent / 'frames'
         target.mkdir(exist_ok=True)

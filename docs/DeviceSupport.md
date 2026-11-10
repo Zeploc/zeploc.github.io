@@ -81,7 +81,7 @@ tools\Capture-Devices.bat index.html projects\superhorse.html
 tools\Capture-Devices.bat -FullPage index.html
 ```
 
-- The images go to `screenshots\<page>\<device>.png`. The folder is for checks only; do not publish it.
+- The images go to `screenshots\<page>\<device>.png`. The folder is for checks only, so do not publish it.
 - **The screenshots use reduced motion,** so each one shows the page after its entrance animations. Check the animations themselves in a normal browser.
 - **The screenshots show the CSS layout only.** They do not show touch, Safari, the phone's browser bars or the pixel density. Use DevTools and a real device for those.
 - **Headless Chrome may not load `loading="lazy"` images in time,** so a thumbnail can look empty in a full-page image. If one does, check that page in a normal browser before you treat it as a bug.
@@ -126,7 +126,7 @@ Record the result here:
 ## Known Device Behaviour
 
 - **The hero star field is the heaviest part of the site.** Check the frame rate on a mid-range phone (console: `stat fps`). Smaller screens draw fewer stars.
-- **One scroll from the hero zooms into the viewscreen** and lands on that project's work panel; one scroll up from the first panel zooms back out. It only runs when the hero fits the window (laptops); smaller windows scroll the hero as normal. Check both ways.
+- **One scroll from the hero zooms into the viewscreen** and lands on that project's work panel. One scroll up from the first panel zooms back out. It only runs when the hero fits the window (laptops), and smaller windows scroll the hero as normal. Check both ways.
 - **The work panels step one screen per scroll with a wheel or trackpad.** Touch screens use CSS scroll snapping instead. Check both.
 - **One scroll moves from one chapter to the next after the timeline** (Client work to Resources). A chapter taller than the window scrolls as normal until its end is in view, then the next scroll moves on. Touch screens snap to each chapter heading. Check both ways, on a short laptop window too.
 

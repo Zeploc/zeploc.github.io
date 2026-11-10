@@ -26,7 +26,7 @@ window.Motion = (() => {
       try {
         window.localStorage.setItem(key, JSON.stringify(value));
       } catch {
-        // Storage is blocked; nothing to remember.
+        // Storage is blocked, so there is nothing to remember.
       }
     },
   };

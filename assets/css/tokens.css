@@ -80,7 +80,7 @@
   --duration-m: 0.45s;
   --duration-slow: 0.8s;
 
-  /* Breakpoints (for reference; custom properties do not work in media queries):
+  /* Breakpoints (for reference only, as custom properties do not work in media queries):
      tablet  @media (min-width: 40rem)
      laptop  @media (min-width: 64rem)
      desktop @media (min-width: 80rem) */

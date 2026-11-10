@@ -93,7 +93,7 @@
       item.classList.toggle('is-hidden', !isMatch);
       resultCount += isMatch ? 1 : 0;
     });
-    // Cards that stay glide to their new places; new ones fade in.
+    // Cards that stay glide to their new places, and new ones fade in.
     if (!Motion.reduceMotion) {
       items.forEach((item) => {
         if (item.classList.contains('is-hidden')) {

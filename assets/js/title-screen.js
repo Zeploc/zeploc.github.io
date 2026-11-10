@@ -95,7 +95,7 @@ window.TitleScreen = (() => {
     try {
       window.sessionStorage.setItem(sessionKey, '1');
     } catch {
-      // Storage is blocked; the screen shows again next time.
+      // Storage is blocked, so the screen shows again next time.
     }
     window.setTimeout(() => {
       screen.classList.add('is-leaving');
