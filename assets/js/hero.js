@@ -25,6 +25,8 @@ window.HeroScreen = (() => {
   const shields = [...hero.querySelectorAll('[data-hero-shield]')];
   const slideDuration = 7000;
   const zoomDuration = 650;
+  // Before the zoom, the stars charge for a moment, so the jump builds up.
+  const chargeDuration = 350;
   let activeIndex = 0;
   let jumpTimers = [];
   let autoplayTimer = null;
@@ -40,8 +42,10 @@ window.HeroScreen = (() => {
   /* === Star field === */
 
   // Stars stream out from a focus point (the middle of the viewscreen). At rest they drift slowly. A
-  // warp ramps the speed up and stretches each star into a streak, and most of them drop out so the
-  // streaks stay sparse. Behind the text, a soft-edged mask dims every star (streaks included) to half.
+  // warp builds up like a jump to light speed: an optional charge slows the stars and draws them into
+  // short streaks, then the speed climbs slowly and rushes to its peak, holds, and eases back to rest.
+  // At speed each star stretches into a streak, and most of them drop out so the streaks stay sparse.
+  // Behind the text, a soft-edged mask dims every star (streaks included) to half.
   const stars = (() => {
     const canvas = hero.querySelector('[data-hero-stars]');
     const context = canvas.getContext('2d');
@@ -56,8 +60,10 @@ window.HeroScreen = (() => {
     let shieldFade = 1;
     let mask = null;
     let speed = restSpeed;
-    let boostSpeed = 0;
-    let boostUntil = 0;
+    // The warp in progress: when it started and the length of each phase in milliseconds.
+    let jump = null;
+    // 0 to 1 while a warp charges. It slows the stars and stretches them into short streaks.
+    let charge = 0;
     let isRunning = false;
     let focusX = 0.5;
     let focusY = 0.5;
@@ -107,7 +113,7 @@ window.HeroScreen = (() => {
       const originX = focusX * width;
       const originY = focusY * height;
       const spread = Math.max(width, height) * 0.5;
-      const tail = step * (2 + speed * 0.35);
+      const tail = step * (2 + speed * 0.35) + charge * 0.06;
       const rush = Motion.clamp((speed - restSpeed) / 12);
       const density = 1 - 0.82 * rush;
       context.lineCap = 'round';
@@ -144,11 +150,36 @@ window.HeroScreen = (() => {
       if (!isRunning) {
         return;
       }
-      const target = now < boostUntil ? Math.max(restSpeed, boostSpeed) : restSpeed;
-      speed += (target - speed) * (target > speed ? 0.12 : 0.045);
+      updateJump(now);
       draw(0.0012 * speed);
-      updateGauge(speed - restSpeed);
+      updateGauge(Math.max(speed - restSpeed, charge * 5));
       requestAnimationFrame(frameLoop);
+    }
+
+    // Charge: the stars slow to a crawl and stretch. Ramp: the speed climbs slowly, then rushes to
+    // the peak (an ease-in). Hold: full speed. After that the speed eases back to rest.
+    const smooth = (value) => value * value * (3 - 2 * value);
+    function updateJump(now) {
+      if (!jump) {
+        speed += (restSpeed - speed) * 0.045;
+        charge += (0 - charge) * 0.2;
+        return;
+      }
+      const time = now - jump.start;
+      if (time < jump.charge) {
+        charge = smooth(time / jump.charge);
+        speed = jump.from + (restSpeed * 0.25 - jump.from) * charge;
+      } else if (time < jump.charge + jump.ramp) {
+        const progress = (time - jump.charge) / jump.ramp;
+        const from = jump.charge ? restSpeed * 0.25 : jump.from;
+        speed = Math.max(speed, from + (jump.peak - from) * progress * progress * progress);
+        charge = jump.charge ? 1 - progress : charge * 0.8;
+      } else if (time < jump.charge + jump.ramp + jump.hold) {
+        speed = jump.peak;
+        charge = 0;
+      } else {
+        jump = null;
+      }
     }
 
     window.addEventListener('resize', resize);
@@ -164,9 +195,8 @@ window.HeroScreen = (() => {
       stop() {
         isRunning = false;
       },
-      warp(duration = 650, peak = 32) {
-        boostUntil = performance.now() + duration;
-        boostSpeed = peak;
+      warp({ charge: chargeTime = 0, ramp = 250, hold = 400, peak = 32 } = {}) {
+        jump = { start: performance.now(), from: speed, charge: chargeTime, ramp, hold, peak };
       },
       aim(x, y) {
         aimX = x;
@@ -235,7 +265,8 @@ window.HeroScreen = (() => {
     const box = hero.getBoundingClientRect();
     const x = (event.clientX - box.left) / box.width;
     const y = (event.clientY - box.top) / box.height;
-    stars.aim(focus.x + (x - focus.x) * 0.08, focus.y + (y - focus.y) * 0.08);
+    // The focus moves away from the cursor, so the stars stream toward it, as if the ship turns that way.
+    stars.aim(focus.x - (x - focus.x) * 0.08, focus.y - (y - focus.y) * 0.08);
   });
   hero.addEventListener('pointerleave', () => stars.aim(focus.x, focus.y));
 
@@ -298,7 +329,8 @@ window.HeroScreen = (() => {
     } else {
       leaving.classList.add('is-leaving');
       screen.classList.add('is-jumping');
-      stars.warp();
+      // The stars peak as the flash lands.
+      stars.warp({ charge: 150, ramp: 230, hold: 350 });
       jumpTimers.push(window.setTimeout(() => {
         flash.classList.remove('is-on');
         void flash.offsetWidth; // restarts the flash
@@ -398,7 +430,7 @@ window.HeroScreen = (() => {
     isEngaging = true;
     hero.classList.add('is-engaging');
     scheduleNext();
-    stars.warp(2000, 45);
+    stars.warp({ ramp: 300, hold: 1700, peak: 45 });
     zoomFrame(1);
     window.setTimeout(() => {
       window.location.href = link.href;
@@ -426,15 +458,18 @@ window.HeroScreen = (() => {
   }
 
   // 0 is the hero at rest, 1 is the project filling the window. The zoom starts gently and rushes in
-  // at the end (zooming out, it starts fast and settles). The panel's shade fades in on the way.
-  function zoomStep(amount) {
+  // at the end (zooming out, it starts fast and settles). The panel's shade fades in on the way, and
+  // the text recedes in the first third unless recede says otherwise.
+  function zoomStep(amount, recede = Motion.clamp(amount * 3)) {
     frame.style.setProperty('--takeover', amount.toFixed(3));
     zoomFrame(amount * amount * amount);
-    setRecede(Motion.clamp(amount * 3));
+    setRecede(recede);
   }
 
-  // A timer finishes the move too, in case the browser stops sending frames (a background tab).
-  function play(from, to) {
+  // delay holds the frame still while the stars charge. The text starts to recede during the charge,
+  // so the scroll shows at once. A timer finishes the move too, in case the browser stops sending
+  // frames (a background tab).
+  function play(from, to, delay = 0) {
     return new Promise((resolve) => {
       const start = performance.now();
       let isFinished = false;
@@ -446,13 +481,15 @@ window.HeroScreen = (() => {
         zoomStep(to);
         resolve();
       };
-      const fallback = window.setTimeout(finish, zoomDuration + 200);
+      const fallback = window.setTimeout(finish, delay + zoomDuration + 200);
       const tick = (now) => {
         if (isFinished) {
           return;
         }
-        const progress = Motion.clamp((now - start) / zoomDuration);
-        zoomStep(from + (to - from) * progress);
+        const elapsed = now - start;
+        const progress = Motion.clamp((elapsed - delay) / zoomDuration);
+        const recede = delay ? Motion.clamp(elapsed / (delay + zoomDuration / 3)) : undefined;
+        zoomStep(from + (to - from) * progress, recede);
         if (progress < 1) {
           requestAnimationFrame(tick);
         } else {
@@ -469,9 +506,9 @@ window.HeroScreen = (() => {
   async function zoomIn(land) {
     isZooming = true;
     scheduleNext();
-    stars.warp(zoomDuration + 200, 28);
+    stars.warp({ charge: chargeDuration, ramp: 500, hold: 400, peak: 28 });
     Achievements.unlock('warp');
-    await play(0, 1);
+    await play(0, 1, chargeDuration);
     land();
     zoomStep(0);
     isZooming = false;
@@ -530,7 +567,7 @@ window.HeroScreen = (() => {
   // While the title screen shows, the carousel waits. As its doors open, the stars jump.
   if (window.TitleScreen && window.TitleScreen.isActive) {
     window.addEventListener('titlescreen:done', () => {
-      stars.warp(500, 28);
+      stars.warp({ ramp: 200, hold: 300, peak: 28 });
       resume();
     }, { once: true });
   }
